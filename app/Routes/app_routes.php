@@ -6,6 +6,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 use Vanier\Api\Controllers\AboutController;
+use Vanier\Api\Controllers\DraftController;
 use Vanier\Api\Helpers\DateTimeHelper;
 
 // Import the app instance into this file's scope.
@@ -17,9 +18,10 @@ global $app;
 
 //* ROUTE: GET /
 $app->get('/', [AboutController::class, 'handleAboutWebService']);
-
+//* ROUTE: GET / Draf
+$app->get('/draft', [DraftController::class, 'getAllDraftStats']); 
 //* ROUTE: GET /hello
-$app->get('/hello', function (Request $request, Response $response, $args) {
+$app->get('/hello', function (Request $request, Ressponse $response, $args) {
 
     $now = DateTimeHelper::getDateAndTime(DateTimeHelper::D_M_Y);
     $response->getBody()->write("Reporting! Hello there! The current time is: " . $now);
