@@ -3,27 +3,28 @@
 namespace Vanier\Api\Controllers;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Vanier\Api\Models\DraftModel;
+use Vanier\Api\Models\TeamModel;
 use Vanier\Api\Exceptions\HttpInvalidInputExecption;
-class DraftController extends BaseController
+class TeamController extends BaseController
 {
-    private $draft_model = null;
+
+    private $team_model = null;
     public function __construct()
     {
-        $this->draft_model= new DraftModel;
+        $this->team_model= new TeamModel;
     }
-    public function handleGetDraft(Request $request, Response $response, array $uri_args): Response
+    public function handleGetAllTeams(Request $request, Response $response, array $uri_args): Response
     {
         //we get the values to after pass it to the model and do pagination
         $filters = $request->getQueryParams();
 
         //TODO: validate the paginaton params
-        $this->draft_model->setPaginationOptions(
+        $this->team_model->setPaginationOptions(
             $filters["page"] ?? 4,
             $filters["page_size"] ?? 10,
         );
-        $drafts = $this->draft_model->getAllDraftStats($filters);
+        $teams = $this->team_model->getAllTeams($filters);
 
-        return $this->makeResponse($response, $drafts);
+        return $this->makeResponse($response, $teams);
     }
 }

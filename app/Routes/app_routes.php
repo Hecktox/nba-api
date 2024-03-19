@@ -8,6 +8,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Vanier\Api\Controllers\AboutController;
 use Vanier\Api\Controllers\DraftController;
 use Vanier\Api\Helpers\DateTimeHelper;
+use Vanier\Api\Controllers\TeamController;
 
 // Import the app instance into this file's scope.
 global $app;
@@ -18,8 +19,10 @@ global $app;
 
 //* ROUTE: GET /
 $app->get('/', [AboutController::class, 'handleAboutWebService']);
-//* ROUTE: GET / Draf
-$app->get('/draft', [DraftController::class, 'getAllDraftStats']); 
+//* ROUTE: GET /Draf
+$app->get('/draft', [DraftController::class, 'handleGetDraft']); 
+//* ROUTE: GET /Team
+$app->get('/team', [TeamController::class, 'handleGetAllTeams']);
 //* ROUTE: GET /hello
 $app->get('/hello', function (Request $request, Ressponse $response, $args) {
 
