@@ -23,8 +23,9 @@ $app->get('/', [AboutController::class, 'handleAboutWebService']);
 $app->get('/draft', [DraftController::class, 'handleGetDraft']); 
 //* ROUTE: GET /Team
 $app->get('/team', [TeamController::class, 'handleGetAllTeams']);
+
 //* ROUTE: GET /hello
-$app->get('/hello', function (Request $request, Ressponse $response, $args) {
+$app->get('/hello', function (Request $request, Response $response, $args) {
 
     $now = DateTimeHelper::getDateAndTime(DateTimeHelper::D_M_Y);
     $response->getBody()->write("Reporting! Hello there! The current time is: " . $now);
