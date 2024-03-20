@@ -65,4 +65,57 @@ class DraftModel extends BaseModel
         }
         return (array) $this->paginate($sql, $filter_value);
     }
+    public function getDraftPersonId($person_id,array $filters): array
+    {
+        $result = array();
+        $sql = "SELECT * FROM draft_history WHERE person_id = :person_id";
+        $filter_value = ["person_id" => $person_id];
+        //filtering
+        if (isset($filters["first_name"])) {
+            $sql .= " AND first_name LIKE CONCAT( :first_name, '%')";
+            $filter_value["first_name"] = $filters["first_name"];
+        }
+        if (isset($filters["last_name"])) {
+            $sql .= " AND last_name LIKE CONCAT( :last_name, '%')";
+            $filter_value["last_name"] = $filters["last_name"];
+        }
+        if (isset($filters["player_name"])) {
+            $sql .= " AND player_name LIKE CONCAT( :player_name, '%')";
+            $filter_value["player_name"] = $filters["player_name"];
+        }
+        if (isset($filters["position"])) {
+            $sql .= " AND position LIKE CONCAT( :position, '%')";
+            $filter_value["position"] = $filters["position"];
+        }
+       
+        $result["res"] = $this->paginate($sql,$filter_value);
+        return $result;
+    }
+    public function getDraftTeamId($team_id,array $filters): array
+    {
+        $result = array();
+        $sql = "SELECT * FROM draft_history WHERE team_id = :team_id";
+        $filter_value = ["team_id" => $team_id];
+        //filtering
+        if (isset($filters["first_name"])) {
+            $sql .= " AND first_name LIKE CONCAT( :first_name, '%')";
+            $filter_value["first_name"] = $filters["first_name"];
+        }
+        if (isset($filters["last_name"])) {
+            $sql .= " AND last_name LIKE CONCAT( :last_name, '%')";
+            $filter_value["last_name"] = $filters["last_name"];
+        }
+        if (isset($filters["player_name"])) {
+            $sql .= " AND player_name LIKE CONCAT( :player_name, '%')";
+            $filter_value["player_name"] = $filters["player_name"];
+        }
+        if (isset($filters["position"])) {
+            $sql .= " AND position LIKE CONCAT( :position, '%')";
+            $filter_value["position"] = $filters["position"];
+        }
+       
+        $result["res"] = $this->paginate($sql,$filter_value);
+        return $result;
+    }
+    
 }

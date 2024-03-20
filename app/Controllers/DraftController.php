@@ -26,4 +26,36 @@ class DraftController extends BaseController
 
         return $this->makeResponse($response, $drafts);
     }
+    public function handleGetDraftPersonId(Request $request, Response $response, array $uri_args): Response
+    {
+        $filters = $request->getQueryParams();
+
+         //TODO: validate the paginaton params
+         $this->draft_model->setPaginationOptions(
+             $filters["page"] ?? 4,
+             $filters["page_size"] ?? 10,
+         );
+         $person_id = $uri_args["person_id"];
+         $team = $this->draft_model->getDraftPersonId($person_id,$filters);
+ 
+         return $this->makeResponse($response, $team);
+		 
+		 
+    }
+    public function handleGetDraftTeamId(Request $request, Response $response, array $uri_args): Response
+    {
+        $filters = $request->getQueryParams();
+
+         //TODO: validate the paginaton params
+         $this->draft_model->setPaginationOptions(
+             $filters["page"] ?? 4,
+             $filters["page_size"] ?? 10,
+         );
+         $team_id = $uri_args["team_id"];
+         $team = $this->draft_model->getDraftTeamId($team_id,$filters);
+ 
+         return $this->makeResponse($response, $team);
+		 
+		 
+    }
 }

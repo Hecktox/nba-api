@@ -19,11 +19,14 @@ global $app;
 
 //* ROUTE: GET /
 $app->get('/', [AboutController::class, 'handleAboutWebService']);
-//* ROUTE: GET /Draf
+//* ROUTE: GET /Draft
 $app->get('/draft', [DraftController::class, 'handleGetDraft']); 
+//* ROUTE: GET /Draft/{person_id}
+$app->get('/draft/{person_id}', [DraftController::class, 'handleGetDraftPersonId']); 
+//* ROUTE: GET /Draft/{team_id}
+$app->get('/draft/{team_id}', [DraftController::class, 'handleGetDraftTeamId']); 
 //* ROUTE: GET /Team
 $app->get('/team', [TeamController::class, 'handleGetAllTeams']);
-
 //* ROUTE: GET /hello
 $app->get('/hello', function (Request $request, Response $response, $args) {
 
