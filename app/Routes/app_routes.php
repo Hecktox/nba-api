@@ -25,12 +25,8 @@ $app->get('/draft', [DraftController::class, 'handleGetDraft']);
 $app->get('/draft/{person_id}', [DraftController::class, 'handleGetDraftPersonId']); 
 //* ROUTE: GET /Draft/{team_id}
 $app->get('/draft/{team_id}', [DraftController::class, 'handleGetDraftTeamId']); 
+
 //* ROUTE: GET /Team
 $app->get('/team', [TeamController::class, 'handleGetAllTeams']);
-//* ROUTE: GET /hello
-$app->get('/hello', function (Request $request, Response $response, $args) {
+$app->get('/team/{team_id}', [TeamController::class, 'handleGetTeamId']);
 
-    $now = DateTimeHelper::getDateAndTime(DateTimeHelper::D_M_Y);
-    $response->getBody()->write("Reporting! Hello there! The current time is: " . $now);
-    return $response;
-});
