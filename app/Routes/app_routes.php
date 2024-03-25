@@ -7,6 +7,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 use Vanier\Api\Controllers\AboutController;
 use Vanier\Api\Controllers\DraftController;
+use Vanier\Api\Controllers\GamesController;
 use Vanier\Api\Helpers\DateTimeHelper;
 use Vanier\Api\Controllers\TeamController;
 
@@ -20,13 +21,19 @@ global $app;
 //* ROUTE: GET /
 $app->get('/', [AboutController::class, 'handleAboutWebService']);
 //* ROUTE: GET /Draft
-$app->get('/draft', [DraftController::class, 'handleGetDraft']); 
+$app->get('/draft', [DraftController::class, 'handleGetDraft']);
 //* ROUTE: GET /Draft/{person_id}
-$app->get('/draft/{person_id}', [DraftController::class, 'handleGetDraftPersonId']); 
+$app->get('/draft/{person_id}', [DraftController::class, 'handleGetDraftPersonId']);
 //* ROUTE: GET /Draft/{team_id}
-$app->get('/draft/{team_id}', [DraftController::class, 'handleGetDraftTeamId']); 
+$app->get('/draft/{team_id}', [DraftController::class, 'handleGetDraftTeamId']);
 
 //* ROUTE: GET /Team
 $app->get('/team', [TeamController::class, 'handleGetAllTeams']);
 $app->get('/team/{team_id}', [TeamController::class, 'handleGetTeamId']);
+
+//* ROUTE: GET /games
+$app->get('/games', [GamesController::class, 'handleGetGames']);
+
+//* ROUTE: GET /games/{game_id}
+$app->get('/games/{game_id}', [GamesController::class, 'handleGetGameById']);
 
