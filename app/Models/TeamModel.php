@@ -11,46 +11,46 @@ class TeamModel extends BaseModel
     public function getAllTeams(array $filters): array
     {
         $filter_values = [];
-        $sql = "SELECT * FROM teams WHERE 1";
+        $sql = "SELECT t.*, th.year_founded, th.year_active_till 
+                FROM teams t 
+                JOIN team_history th ON t.team_id = th.team_id 
+                WHERE 1";
     
         if (isset($filters["full_name"])) {
-            $sql .= " AND full_name LIKE CONCAT(:full_name, '%') ";
+            $sql .= " AND t.full_name LIKE CONCAT(:full_name, '%') ";
             $filter_values["full_name"] = $filters["full_name"];
         }
         if (isset($filters["nickname"])) {
-            $sql .= " AND nickname LIKE CONCAT(:nickname, '%') ";
+            $sql .= " AND t.nickname LIKE CONCAT(:nickname, '%') ";
             $filter_values["nickname"] = $filters["nickname"];
         }
         if (isset($filters["abbreviation"])) {
-            $sql .= " AND abbreviation LIKE CONCAT(:abbreviation, '%') ";
+            $sql .= " AND t.abbreviation LIKE CONCAT(:abbreviation, '%') ";
             $filter_values["abbreviation"] = $filters["abbreviation"];
         }
         if (isset($filters["city"])) {
-            $sql .= " AND city LIKE CONCAT(:city, '%') ";
+            $sql .= " AND t.city LIKE CONCAT(:city, '%') ";
             $filter_values["city"] = $filters["city"];
         }
         if (isset($filters["state"])) {
-            $sql .= " AND state LIKE CONCAT(:state, '%') ";
+            $sql .= " AND t.state LIKE CONCAT(:state, '%') ";
             $filter_values["state"] = $filters["state"];
         }
         if (isset($filters["year_founded"])) {
-            $sql .= " AND year_founded LIKE CONCAT(:year_founded, '%') ";
+            $sql .= " AND th.year_founded LIKE CONCAT(:year_founded, '%') ";
             $filter_values["year_founded"] = $filters["year_founded"];
         }
         if (isset($filters["year_active_till"])) {
-            $sql .= " AND year_active_till LIKE CONCAT(:year_active_till, '%') ";
+            $sql .= " AND th.year_active_till LIKE CONCAT(:year_active_till, '%') ";
             $filter_values["year_active_till"] = $filters["year_active_till"];
         }
         if (isset($filters["owner"])) {
-            $sql .= " AND owner LIKE CONCAT(:owner, '%') ";
+            $sql .= " AND t.owner LIKE CONCAT(:owner, '%') ";
             $filter_values["owner"] = $filters["owner"];
         }
     
         return (array) $this->paginate($sql, $filter_values);
     }
-
-    // change later on so that year founded, 
-    // year active till will no longer be in team but instead in team history
 
     public function getTeamInfo($team_id)
     {
