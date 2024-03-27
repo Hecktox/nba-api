@@ -49,6 +49,9 @@ class TeamModel extends BaseModel
         return (array) $this->paginate($sql, $filter_values);
     }
 
+    // change later on so that year founded, 
+    // year active till will no longer be in team but instead in team history
+
     public function getTeamInfo($team_id)
     {
         $sql = "SELECT * FROM teams WHERE team_id = :team_id";

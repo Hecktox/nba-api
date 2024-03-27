@@ -5,7 +5,7 @@ namespace Vanier\Api\Controllers;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Vanier\Api\Models\TeamModel;
-use Vanier\Api\Exceptions\HttpInvalidInputExecption;
+use Vanier\Api\Exceptions\HttpInvalidInputException;
 
 class TeamController extends BaseController
 {
@@ -30,14 +30,14 @@ class TeamController extends BaseController
     public function handleGetTeamId(Request $request, Response $response, array $uri_args): Response
     {
         $team_id = $uri_args["team_id"];
-        $team_info = $this->teams_model->getTeamInfo($team_id);
+        $team_info = $this->team_model->getTeamInfo($team_id);
 
-        if (empty ($team_info)) {
-            throw new HttpInvalidInputException(
-                $request,
-                "The supplied team id is not valid"
-            );
-        }
+        // if (empty ($team_info)) {
+        //     throw new HttpInvalidInputException(
+        //         $request,
+        //         "The supplied team id is not valid"
+        //     );
+        // }
 
         return $this->makeResponse($response, $team_info);
     }
