@@ -24,24 +24,24 @@ class ContentNegotiationMiddleware implements MiddlewareInterface
     {
         // echo "Hello! From test middleware!";
 
-        // $requestRepresentation = $request->getHeaderLine("Accept");
+        $requestRepresentation = $request->getHeaderLine("Accept");
 
-        // if(str_contains($requestRepresentation, 'application/json')) {
+        if(str_contains($requestRepresentation, 'application/json')) {
 
-        // } else {
-        //     //throw new HttpNotAcceptableException($request);
-        //     $response = new \Slim\Psr7\Response();  
+        } else {
+            //throw new HttpNotAcceptableException($request);
+            $response = new \Slim\Psr7\Response();  
 
-        //     $data = [
-        //     'message'=>'Not Accepted',
-        //     'description'=>'Resource representation not supported.'];
+            $data = [
+            'message'=>'Not Accepted',
+            'description'=>'Resource representation not supported.'];
 
-        //     $payload = json_encode($data);
+            $payload = json_encode($data);
 
-        //     $response->getBody()->write($payload);
-        //     return $response
-        //         ->withStatus(406);
-        // }
+            $response->getBody()->write($payload);
+            return $response
+                ->withStatus(406);
+        }
 
 
         //! DO NOT remove or change the following statements. 
