@@ -12,7 +12,7 @@ class TeamModel extends BaseModel
     {
         $filter_values = [];
         $sql = "SELECT t.*, th.year_founded, th.year_active_till 
-                FROM teams t 
+                FROM team t 
                 JOIN team_history th ON t.team_id = th.team_id 
                 WHERE 1";
     
@@ -54,7 +54,7 @@ class TeamModel extends BaseModel
 
     public function getTeamInfo($team_id)
     {
-        $sql = "SELECT * FROM teams WHERE team_id = :team_id";
+        $sql = "SELECT * FROM team WHERE team_id = :team_id";
         return (array) $this->fetchSingle($sql, ["team_id" => $team_id]);
     }
 

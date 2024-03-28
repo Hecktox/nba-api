@@ -32,12 +32,12 @@ class TeamController extends BaseController
         $team_id = $uri_args["team_id"];
         $team_info = $this->team_model->getTeamInfo($team_id);
 
-        // if (empty ($team_info)) {
-        //     throw new HttpInvalidInputException(
-        //         $request,
-        //         "The supplied team id is not valid"
-        //     );
-        // }
+        if (empty ($team_info)) {
+            throw new HttpInvalidInputException(
+                $request,
+                "The supplied team id is not valid"
+            );
+        }
 
         return $this->makeResponse($response, $team_info);
     }
