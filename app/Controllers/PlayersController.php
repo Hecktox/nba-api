@@ -46,15 +46,49 @@ class PlayersController extends BaseController
         return $this->makeResponse($response, $players);
     }
 
-public function handleGetPlayer(Request $request, Response $response, array $uri_args): Response {
-    //1. Extract the player id from the uri_args array
-    $player_id = $uri_args["player_id"];
+    public function handleGetPlayer(Request $request, Response $response, array $uri_args): Response {
+        //1. Extract the player id from the uri_args array
+        $player_id = $uri_args["player_id"];
 
-    //2. Use the id to extract the desired player's info from the db
-    $player = $this->player_model->getSinglePlayer($player_id);
+        //2. Use the id to extract the desired player's info from the db
+        $player = $this->player_model->getSinglePlayer($player_id);
 
-    //3. Return a response to the user
-    return $this->makeResponse($response, $player);
-}
+        //3. Return a response to the user
+        return $this->makeResponse($response, $player);
+    }
+
+    public function handleGetPlayerDrafts(Request $request, Response $response, array $uri_args): Response {
+        
+        //1. Retrieve the query params entered by the user
+        $filters = $request->getQueryParams();
+
+        //2. Create the pagination logic for the resource
+        if(isset($filters["page"]) && isset($filters["page_size"])){
+            if(InputsHelper::isInt($filters["page"]) && InputsHelper::isIntAndInRange($filters["page_size"], 1, 20)){
+                $this->player_model->setPaginationOptions(
+                    $filters["page"],
+                    $filters["page_size"]
+                );
+            } else {
+                throw new HttPInvalidPaginationParameterException($request);
+        }    }
+         else {
+                $this->player_model->setPaginationOptions(
+                    $filters["page"] = 1,
+                    $filters["page_size"] = 5
+                );
+            }
+
+        //3. Extract the player id from the uri_args array
+        $player_id = $uri_args["player_id"];
+
+        //4. Use the id to extract the drafts for the specified player from the db
+        $drafts = $this->player_model->getPlayerDrafts($player_id);
+
+        //5. Return a response to the user
+        return $this->makeResponse($response, $drafts);
+
+
+    }
 
 }
