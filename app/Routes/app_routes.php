@@ -8,6 +8,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Vanier\Api\Controllers\AboutController;
 use Vanier\Api\Controllers\DraftController;
 use Vanier\Api\Controllers\GamesController;
+use Vanier\Api\Controllers\PlayersController;
 use Vanier\Api\Helpers\DateTimeHelper;
 use Vanier\Api\Controllers\TeamController;
 
@@ -25,7 +26,9 @@ $app->get('/draft', [DraftController::class, 'handleGetDraft']);
 //* ROUTE: GET /Draft/{person_id}
 $app->get('/draft/{person_id}', [DraftController::class, 'handleGetDraftPersonId']);
 //* ROUTE: GET /Draft/{team_id}
-$app->get('/draft/{team_id}', [DraftController::class, 'handleGetDraftTeamId']);
+
+//! Throws Error (Change path name)
+//$app->get('/draft/{team_id}', [DraftController::class, 'handleGetDraftTeamId']);
 
 //* ROUTE: GET /Team
 $app->get('/team', [TeamController::class, 'handleGetAllTeams']);
@@ -36,4 +39,11 @@ $app->get('/games', [GamesController::class, 'handleGetGames']);
 
 //* ROUTE: GET /games/{game_id}
 $app->get('/games/{game_id}', [GamesController::class, 'handleGetGameById']);
+
+//*ROUTE: GET /players
+$app->get('/players', [PlayersController::class, 'handleGetPlayers']);
+
+//*ROUTE: GET /players/{player_id}
+$app->get('/players/{player_id}', [PlayersController::class, 'handleGetPlayer']);
+
 
