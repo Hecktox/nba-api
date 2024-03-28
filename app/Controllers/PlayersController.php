@@ -5,6 +5,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Vanier\Api\Helpers\InputsHelper;
 use Vanier\Api\Models\PlayersModel;
+use Vanier\Api\Exceptions\HttpNoContentException;
 use Vanier\Api\Exceptions\HttpInvalidPaginationParameterException;
 
 class PlayersController extends BaseController
@@ -53,6 +54,11 @@ class PlayersController extends BaseController
         //2. Use the id to extract the desired player's info from the db
         $player = $this->player_model->getSinglePlayer($player_id);
 
+        if ($player === false) {
+            //var_dump($player_info);exit;
+            throw new HttpNoContentException($request);
+        }
+
         //3. Return a response to the user
         return $this->makeResponse($response, $player);
     }
@@ -78,6 +84,8 @@ class PlayersController extends BaseController
                     $filters["page_size"] = 5
                 );
             }
+
+        
 
         //3. Extract the player id from the uri_args array
         $player_id = $uri_args["player_id"];
