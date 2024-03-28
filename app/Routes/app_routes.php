@@ -42,4 +42,5 @@ $app->get('/players', [PlayersController::class, 'handleGetPlayers']);
 //*ROUTE: GET /players/{player_id}
 $app->get('/players/{player_id}', [PlayersController::class, 'handleGetPlayer']);
 
-
+//*ROUTE: GET /players/{players_id}/drafts
+$app->get('/players/{player_id}/drafts', [PlayersController::class, 'handleGetPlayerDrafts']);
