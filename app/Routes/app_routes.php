@@ -37,6 +37,8 @@ $app->get('/team/{team_id}/history', [TeamController::class, 'handleGetTeamHisto
 $app->get('/games', [GamesController::class, 'handleGetGames']);
 //* ROUTE: GET /games/{game_id}
 $app->get('/games/{game_id}', [GamesController::class, 'handleGetGameById']);
+//* ROUTE: GET /games/{game_id}/teams
+$app->get('/games/{game_id}/teams', [GamesController::class, 'handleGetGameTeams']);
 
 //*ROUTE: GET /players
 $app->get('/players', [PlayersController::class, 'handleGetPlayers']);

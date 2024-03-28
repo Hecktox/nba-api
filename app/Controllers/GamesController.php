@@ -20,11 +20,9 @@ class GamesController extends BaseController
     {
         $filters = $request->getQueryParams();
 
-        // Set default values for pagination if not provided
         $page = $filters["page"] ?? 1;
         $page_size = $filters["page_size"] ?? 10;
 
-        // Validate pagination params
         if (!is_numeric($page) || $page < 1) {
             throw new HttpInvalidInputException($request, "Invalid page number. Must be a positive integer.");
         }
@@ -33,10 +31,8 @@ class GamesController extends BaseController
             throw new HttpInvalidInputException($request, "Invalid page size. Must be an integer between 1 and 50.");
         }
 
-        // Set pagination options
         $this->games_model->setPaginationOptions($page, $page_size);
 
-        // Retrieve games from the database
         $games = $this->games_model->getAllGames($filters);
 
         return $this->makeResponse($response, $games);
@@ -56,11 +52,24 @@ class GamesController extends BaseController
 
         $game = $this->games_model->getGameById($game_id);
 
-        if (empty ($game)) {
+        if (empty($game)) {
             throw new HttpInvalidInputException($request, "The supplied game id was not valid!");
         }
 
         return $this->makeResponse($response, $game);
     }
 
+    public function handleGetGameTeams(Request $request, Response $response, array $uri_args): Response
+    {
+        $game_id = $uri_args["game_id"];
+        $this->assertGameId($request, $game_id);
+
+        $game_teams = $this->games_model->getGameTeams($game_id);
+
+        if (empty($game_teams["game"])) {
+            throw new HttpInvalidInputException($request, "No game found with the provided id!");
+        }
+
+        return $this->makeResponse($response, $game_teams);
+    }
 }
