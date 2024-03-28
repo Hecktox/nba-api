@@ -19,24 +19,20 @@ global $app;
 //! The callbacks must be implemented in a controller class.
 //! The Vanier\Api must be used as namespace prefix. 
 
-//* ROUTE: GET /
-$app->get('/', [AboutController::class, 'handleAboutWebService']);
-//* ROUTE: GET /Draft
-$app->get('/draft', [DraftController::class, 'handleGetDraft']);
-//* ROUTE: GET /Draft/{person_id}
-$app->get('/draft/{person_id}', [DraftController::class, 'handleGetDraftPersonId']);
-//* ROUTE: GET /Draft/{team_id}
-
-//! Throws Error (Change path name)
-//$app->get('/draft/{team_id}', [DraftController::class, 'handleGetDraftTeamId']);
+// //* ROUTE: GET /Draft
+// $app->get('/draft', [DraftController::class, 'handleGetDraft']);
+// //* ROUTE: GET /Draft/{person_id}
+// $app->get('/draft/{person_id}', [DraftController::class, 'handleGetDraftPersonId']);
+// //* ROUTE: GET /Draft/{team_id}
+// $app->get('/draft/{team_id}', [DraftController::class, 'handleGetDraftTeamId']);
 
 //* ROUTE: GET /Team
 $app->get('/team', [TeamController::class, 'handleGetAllTeams']);
+//* ROUTE: GET /Team/{team_id}
 $app->get('/team/{team_id}', [TeamController::class, 'handleGetTeamId']);
 
 //* ROUTE: GET /games
 $app->get('/games', [GamesController::class, 'handleGetGames']);
-
 //* ROUTE: GET /games/{game_id}
 $app->get('/games/{game_id}', [GamesController::class, 'handleGetGameById']);
 
