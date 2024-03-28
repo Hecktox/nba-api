@@ -8,14 +8,14 @@ class TeamModel extends BaseModel
     {
         parent::__construct();
     }
-    public function getAllTeams(array $filters): array
+    public function getAllTeams(array $filters): mixed
     {
         $filter_values = [];
         $sql = "SELECT t.*, th.year_founded, th.year_active_till 
                 FROM team t 
                 JOIN team_history th ON t.team_id = th.team_id 
                 WHERE 1";
-    
+
         if (isset($filters["full_name"])) {
             $sql .= " AND t.full_name LIKE CONCAT(:full_name, '%') ";
             $filter_values["full_name"] = $filters["full_name"];
@@ -48,7 +48,12 @@ class TeamModel extends BaseModel
             $sql .= " AND t.owner LIKE CONCAT(:owner, '%') ";
             $filter_values["owner"] = $filters["owner"];
         }
-    
+        
+        // Sorting
+        if (isset($filters["order"]) && in_array($filters["order"], ["asc", "desc"])) {
+            $sql .= " ORDER BY t.full_name " . strtoupper($filters["order"]);
+        }
+
         return (array) $this->paginate($sql, $filter_values);
     }
 
@@ -57,6 +62,4 @@ class TeamModel extends BaseModel
         $sql = "SELECT * FROM team WHERE team_id = :team_id";
         return (array) $this->fetchSingle($sql, ["team_id" => $team_id]);
     }
-
-    
 }
