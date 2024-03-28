@@ -30,6 +30,8 @@ global $app;
 $app->get('/team', [TeamController::class, 'handleGetAllTeams']);
 //* ROUTE: GET /Team/{team_id}
 $app->get('/team/{team_id}', [TeamController::class, 'handleGetTeamId']);
+//* ROUTE: GET /Team/{team_id}/History
+$app->get('/team/{team_id}/history', [TeamController::class, 'handleGetTeamHistory']);
 
 //* ROUTE: GET /games
 $app->get('/games', [GamesController::class, 'handleGetGames']);

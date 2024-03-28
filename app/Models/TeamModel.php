@@ -62,4 +62,22 @@ class TeamModel extends BaseModel
         $sql = "SELECT * FROM team WHERE team_id = :team_id";
         return (array) $this->fetchSingle($sql, ["team_id" => $team_id]);
     }
+    public function getTeamHistory($team_id, array $filters = []): array
+    {
+        $result = [];
+        $result["team"] = $this->getTeamInfo($team_id);
+    
+        $sql = "SELECT * FROM team_history WHERE team_id = :team_id";
+        $filter_values = ["team_id" => $team_id];
+    
+        if(isset($filters["match_result"])) {
+            $sql .= " AND match_result LIKE CONCAT(:match_result, '%')";
+            $filter_values["match_result"] = $filters["match_result"];
+        }
+    
+        $appearances = $this->fetchAll($sql, $filter_values);
+    
+        $result["appearances"] = $appearances;
+        return $result;
+    }
 }

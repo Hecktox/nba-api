@@ -42,4 +42,15 @@ class TeamController extends BaseController
         return $this->makeResponse($response, $team_info);
     }
     
+    public function handleGetTeamHistory(Request $request, Response $response, array $uri_args): Response
+    {
+        $team_id = $uri_args["team_id"];
+        $team_info = $this->team_model->getTeamHistory($team_id);
+    
+        $payload = json_encode($team_info);
+        $response->getBody()->write($payload);
+    
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+    
 }
