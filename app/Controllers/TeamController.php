@@ -15,14 +15,27 @@ class TeamController extends BaseController
     {
         $this->team_model = new TeamModel;
     }
+    private function assertTeamId($request, $team_id)
+    {
+        if (!is_numeric($team_id) || strlen($team_id) !== 10) {
+            throw new HttpInvalidInputException($request, "Invalid game id format. Must be a 10-digit number.");
+        }
+    }
     public function handleGetAllTeams(Request $request, Response $response, array $uri_args): Response
     {
         $filters = $request->getQueryParams();
 
-        $this->team_model->setPaginationOptions(
-            $filters["page"] ?? 4,
-            $filters["page_size"] ?? 10,
-        );
+        $page = $filters["page"] ?? 1;
+        $page_size = $filters["page_size"] ?? 10;
+
+        if (!is_numeric($page) || $page < 1) {
+            throw new HttpInvalidInputException($request, "Invalid page number. Must be a positive integer.");
+        }
+
+        if (!is_numeric($page_size) || $page_size < 1 || $page_size > 50) {
+            throw new HttpInvalidInputException($request, "Invalid page size. Must be an integer between 1 and 50.");
+        }
+
         $teams = $this->team_model->getAllTeams($filters);
 
         return $this->makeResponse($response, $teams);
@@ -30,9 +43,11 @@ class TeamController extends BaseController
     public function handleGetTeamId(Request $request, Response $response, array $uri_args): Response
     {
         $team_id = $uri_args["team_id"];
+        $this->assertTeamId($request, $team_id);
+    
         $team_info = $this->team_model->getTeamInfo($team_id);
         
-        if (empty($team_info)) {
+        if ($team_info === false || empty($team_info)) {
             throw new HttpInvalidInputException(
                 $request,
                 "The supplied team ID is not valid"

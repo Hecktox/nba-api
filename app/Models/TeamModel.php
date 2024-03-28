@@ -75,9 +75,9 @@ class TeamModel extends BaseModel
             $filter_values["match_result"] = $filters["match_result"];
         }
     
-        $appearances = $this->fetchAll($sql, $filter_values);
+        $history = $this->fetchAll($sql, $filter_values);
     
-        $result["appearances"] = $appearances;
+        $result["history"] = $history;
         return $result;
     }
 }
