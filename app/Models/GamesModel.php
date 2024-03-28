@@ -9,10 +9,10 @@ class GamesModel extends BaseModel
         parent::__construct();
     }
 
-    public function getAllTeams(array $filters): array
+    public function getAllGames(array $filters): array
     {
         $filter_values = [];
-        $sql = "SELECT * FROM teams WHERE 1 ";
+        $sql = "SELECT * FROM game WHERE 1 ";
 
         if (isset ($filters["season_id"])) {
             $sql .= " AND season_id = :season_id ";
