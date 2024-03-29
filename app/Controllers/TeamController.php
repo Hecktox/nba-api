@@ -44,20 +44,21 @@ class TeamController extends BaseController
     public function handleGetTeamId(Request $request, Response $response, array $uri_args): Response
     {
         $team_id = $uri_args["team_id"];
-        $this->assertTeamId($request, $team_id);
-
+    
+        // Fetch team information
         $team_info = $this->team_model->getTeamInfo($team_id);
-
-        if ($team_info === false || empty($team_info)) {
+    
+        // Check if team information is empty
+        if (empty($team_info)) {
             throw new HttpInvalidInputException(
                 $request,
                 "The supplied team ID is not valid"
             );
         }
-
+    
         return $this->makeResponse($response, $team_info);
     }
-
+    
     public function handleGetTeamHistory(Request $request, Response $response, array $uri_args): Response
     {
         $team_id = $uri_args["team_id"];

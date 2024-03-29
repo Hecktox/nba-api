@@ -48,7 +48,7 @@ class TeamModel extends BaseModel
             $sql .= " AND t.owner LIKE CONCAT(:owner, '%') ";
             $filter_values["owner"] = $filters["owner"];
         }
-        
+
         // Sorting
         if (isset($filters["order"]) && in_array($filters["order"], ["asc", "desc"])) {
             $sql .= " ORDER BY t.full_name " . strtoupper($filters["order"]);
@@ -62,21 +62,33 @@ class TeamModel extends BaseModel
         $sql = "SELECT * FROM team WHERE team_id = :team_id";
         return (array) $this->fetchSingle($sql, ["team_id" => $team_id]);
     }
+
+    //created function like this because exception handling for invalid id was not working, only validating id size was working 
+
+    // public function getTeamInfo($team_id)
+    // {
+    //     if (!is_numeric($team_id) || strlen($team_id) !== 10) {
+    //         return null;
+    //     }
+
+    //     $sql = "SELECT * FROM team WHERE team_id = :team_id";
+    //     return (array) $this->fetchSingle($sql, ["team_id" => $team_id]);
+    // }
     public function getTeamHistory($team_id, array $filters = []): array
     {
         $result = [];
         $result["team"] = $this->getTeamInfo($team_id);
-    
+
         $sql = "SELECT * FROM team_history WHERE team_id = :team_id";
         $filter_values = ["team_id" => $team_id];
-    
-        if(isset($filters["match_result"])) {
+
+        if (isset($filters["match_result"])) {
             $sql .= " AND match_result LIKE CONCAT(:match_result, '%')";
             $filter_values["match_result"] = $filters["match_result"];
         }
-    
+
         $history = $this->fetchAll($sql, $filter_values);
-    
+
         $result["history"] = $history;
         return $result;
     }
