@@ -15,8 +15,6 @@ class PlayersModel extends BaseModel
         //2. Create the sql statement to pull all players from the db
         $sql = "SELECT * from common_player_info WHERE 1";
 
-
-
         //3. Create the filter statements
 
         if (isset($filters["first_name"])){
@@ -52,16 +50,16 @@ class PlayersModel extends BaseModel
         return (array) $this->fetchSingle($sql, ["person_id" => $person_id]);
     }
 
-    public function getPlayerDrafts(string $person_id) : mixed {
+    public function getPlayerDrafts(string $player_id) : mixed {
         //1. Create an array for the result of the query and for the filter values
         $result = array();
 
         //2. Get the specified player's info
-        $result["player"] = $this->getSinglePlayer($person_id);
+        $result["player"] = $this->getSinglePlayer($player_id);
 
         //3. Get the list of drafts for the specified player
-        $sql = "SELECT * FROM draft_history WHERE person_id = :person_id";
-        $drafts = $this->paginate($sql, ["person_id" => $person_id]);
+        $sql = "SELECT * FROM draft_combine_stats WHERE player_id = :player_id";
+        $drafts = $this->paginate($sql, ["player_id" => $player_id]);
 
         $result["drafts"] = $drafts;
 
