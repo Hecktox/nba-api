@@ -109,13 +109,15 @@ class GamesModel extends BaseModel
 
     public function getGameTeams($game_id): array
     {
-        //TODO: fix
-        $sql = "SELECT t1.*, t2.* 
+        //! almost fixed
+
+        $sql = "SELECT t_home.*, t_away.*
             FROM game g
-            JOIN team_details t1 ON g.team_id_home = t1.team_id
-            JOIN team_details t2 ON g.`COL 30` = t2.team_id
+            JOIN team t_home ON g.team_id_home = t_home.id
+            JOIN team t_away ON g.`COL 30` = t_away.id
             WHERE g.game_id = :game_id";
 
-        return $this->fetchSingle($sql, ["game_id" => $game_id]);
+        $result = $this->fetchAll($sql, ["game_id" => $game_id]);
+        return is_array($result) ? $result : [];
     }
 }
