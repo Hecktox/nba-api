@@ -18,10 +18,11 @@ class TeamController extends BaseController
     }
     private function assertTeamId($request, $team_id)
     {
-        if (!is_numeric($team_id) || strlen($team_id) !== 10) {
-            throw new HttpInvalidInputException($request, "Invalid game id format. Must be a 10-digit number.");
+        if (strlen($team_id) !== 10) {
+            throw new HttpInvalidInputException($request, "Invalid team ID format. Must be a 10-character string.");
         }
     }
+
     public function handleGetAllTeams(Request $request, Response $response, array $uri_args): Response
     {
         $filters = $request->getQueryParams();
@@ -44,10 +45,10 @@ class TeamController extends BaseController
     public function handleGetTeamId(Request $request, Response $response, array $uri_args): Response
     {
         $team_id = $uri_args["team_id"];
-    
+
         // Fetch team information
         $team_info = $this->team_model->getTeamInfo($team_id);
-    
+
         // Check if team information is empty
         if (empty($team_info)) {
             throw new HttpInvalidInputException(
@@ -55,10 +56,10 @@ class TeamController extends BaseController
                 "The supplied team ID is not valid"
             );
         }
-    
+
         return $this->makeResponse($response, $team_info);
     }
-    
+
     public function handleGetTeamHistory(Request $request, Response $response, array $uri_args): Response
     {
         $team_id = $uri_args["team_id"];
