@@ -59,8 +59,10 @@ class PlayersController extends BaseController
             throw new HttpNoContentException($request);
         }
 
+        $result = $this->makeResponse($response, $player);
+
         //3. Return a response to the user
-        return $this->makeResponse($response, $player);
+        return $result;
     }
 
     public function handleGetPlayerDrafts(Request $request, Response $response, array $uri_args): Response {
