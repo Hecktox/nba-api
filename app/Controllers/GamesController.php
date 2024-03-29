@@ -40,8 +40,8 @@ class GamesController extends BaseController
 
     private function assertGameId($request, $game_id)
     {
-        if (!is_numeric($game_id) || strlen($game_id) !== 10) {
-            throw new HttpInvalidInputException($request, "Invalid game id format. Must be a 10-digit number.");
+        if (!is_numeric($game_id) || strlen($game_id) !== 8) {
+            throw new HttpInvalidInputException($request, "Invalid game id format. Must be a 8-digit number.");
         }
     }
 
