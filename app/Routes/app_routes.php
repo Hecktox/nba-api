@@ -21,10 +21,21 @@ global $app;
 
 //* ROUTE: GET /Draft
 $app->get('/draft', [DraftController::class, 'handleGetDraft']);
+
 //* ROUTE: GET /Draft/{player_id}
 $app->get('/draft/{player_id}', [DraftController::class, 'handleGetDraftPlayerId']);
+
 //* ROUTE: GET /Draft/{player_id}/season
 $app->get('/draft/{player_id}/season', [DraftController::class, 'handleGetPlayerIdSeason']);
+
+$app->post('/draft', [DraftController::class, 'handleCreateDraft']);
+
+//* ROUTE: PUT /games
+$app->put('/draft', [DraftController::class, 'handleUpdateDraft']);
+
+//* ROUTE: DELETE /games
+$app->delete('/draft', [DraftController::class, 'handleDeleteDraft']);
+
 
 //* ROUTE: GET /Team
 $app->get('/team', [TeamController::class, 'handleGetAllTeams']);

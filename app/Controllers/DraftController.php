@@ -65,4 +65,53 @@ class DraftController extends BaseController
         return $this->makeResponse($response, $draft_info);
 		 
     }
+    public function handleCreateDraft(Request $request, Response $response, array $uri_args): Response
+    {
+        $draft = $request->getParsedBody();
+
+        foreach ($draft as $game) {
+            $this->draft_model->createDraft($game);
+        }
+
+        $response_data = array(
+            "code" => "success",
+            "message" => "The list of games has been created successfully"
+        );
+
+        return $this->makeResponse($response, $response_data, 201);
+    }
+
+    public function handleUpdateDraft(Request $request, Response $response, array $uri_args): Response
+    {
+        $draft = $request->getParsedBody();
+
+        foreach ($draft as $draft) {
+            $player_id = $draft["player_id"];
+            unset($draft["player_id"]);
+            $this->draft_model->updateDraft($draft, $player_id);
+        }
+
+        $response_data = array(
+            "code" => "success",
+            "message" => "The specified games have been updated successfully"
+        );
+
+        return $this->makeResponse($response, $response_data, 201);
+    }
+
+    public function handleDeleteDraft(Request $request, Response $response, array $uri_args): Response
+    {
+        $draft = $request->getParsedBody();
+
+        foreach ($draft as $player_id) {
+            $this->draft_model->deleteDraft($player_id);
+        }
+
+        $response_data = array(
+            "code" => "success",
+            "message" => "The specified games have been deleted successfully"
+        );
+
+        return $this->makeResponse($response, $response_data, 201);
+    }
 }
