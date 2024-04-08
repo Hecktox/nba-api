@@ -39,59 +39,29 @@ class GamesModel extends BaseModel
             $filter_values["game_date"] = $filters["game_date"];
         }
 
-        if (isset($filters["matchup_home"])) {
-            $sql .= " AND matchup_home LIKE CONCAT(:matchup_home, '%') ";
-            $filter_values["matchup_home"] = $filters["matchup_home"];
+        if (isset($filters["matchup_away"])) {
+            $sql .= " AND matchup_away LIKE CONCAT(:matchup_away, '%') ";
+            $filter_values["matchup_away"] = $filters["matchup_away"];
         }
 
-        if (isset($filters["wl_home"])) {
-            $sql .= " AND wl_home = :wl_home ";
-            $filter_values["wl_home"] = $filters["wl_home"];
+        if (isset($filters["wl_away"])) {
+            $sql .= " AND wl_away = :wl_away ";
+            $filter_values["wl_away"] = $filters["wl_away"];
         }
 
-        if (isset($filters["min"])) {
-            $sql .= " AND min = :min ";
-            $filter_values["min"] = $filters["min"];
+        if (isset($filters["pts_away"])) {
+            $sql .= " AND pts_away = :pts_away ";
+            $filter_values["pts_away"] = $filters["pts_away"];
         }
 
-        if (isset($filters["fgm_home"])) {
-            $sql .= " AND fgm_home = :fgm_home ";
-            $filter_values["fgm_home"] = $filters["fgm_home"];
+        if (isset($filters["plus_minus_away"])) {
+            $sql .= " AND plus_minus_away = :plus_minus_away ";
+            $filter_values["plus_minus_away"] = $filters["plus_minus_away"];
         }
 
-        if (isset($filters["fga_home"])) {
-            $sql .= " AND fga_home = :fga_home ";
-            $filter_values["fga_home"] = $filters["fga_home"];
-        }
-
-        if (isset($filters["fg_pct_home"])) {
-            $sql .= " AND fg_pct_home = :fg_pct_home ";
-            $filter_values["fg_pct_home"] = $filters["fg_pct_home"];
-        }
-
-        if (isset($filters["fg3m_home"])) {
-            $sql .= " AND fg3m_home = :fg3m_home ";
-            $filter_values["fg3m_home"] = $filters["fg3m_home"];
-        }
-
-        if (isset($filters["fg3a_home"])) {
-            $sql .= " AND fg3a_home = :fg3a_home ";
-            $filter_values["fg3a_home"] = $filters["fg3a_home"];
-        }
-
-        if (isset($filters["fg3_pct_home"])) {
-            $sql .= " AND fg3_pct_home = :fg3_pct_home ";
-            $filter_values["fg3_pct_home"] = $filters["fg3_pct_home"];
-        }
-
-        if (isset($filters["ftm_home"])) {
-            $sql .= " AND ftm_home = :ftm_home ";
-            $filter_values["ftm_home"] = $filters["ftm_home"];
-        }
-
-        if (isset($filters["fta_home"])) {
-            $sql .= " AND fta_home = :fta_home ";
-            $filter_values["fta_home"] = $filters["fta_home"];
+        if (isset($filters["season_type"])) {
+            $sql .= " AND season_type = :season_type ";
+            $filter_values["season_type"] = $filters["season_type"];
         }
 
         if (isset($filters["order"]) && in_array($filters["order"], ["asc", "desc"])) {
@@ -109,15 +79,25 @@ class GamesModel extends BaseModel
 
     public function getGameTeams($game_id): array
     {
-        //! almost fixed
+        $result = array();
 
-        $sql = "SELECT t_home.*, t_away.*
-            FROM game g
-            JOIN team t_home ON g.team_id_home = t_home.id
-            JOIN team t_away ON g.`COL 30` = t_away.id
-            WHERE g.game_id = :game_id";
+        $sql = "SELECT * FROM game WHERE game_id = :game_id";
+        $game = $this->fetchSingle($sql, ["game_id" => $game_id]);
 
-        $result = $this->fetchAll($sql, ["game_id" => $game_id]);
-        return is_array($result) ? $result : [];
+        if (!$game) {
+            return $result;
+        }
+
+        $result["game"] = $game;
+
+        $sql_home = "SELECT * FROM team WHERE team_id = :team_id";
+        $team_home = $this->fetchSingle($sql_home, ["team_id" => $game["team_id_home"]]);
+        $result["team_home"] = $team_home;
+
+        $sql_away = "SELECT * FROM team WHERE team_id = :team_id";
+        $team_away = $this->fetchSingle($sql_away, ["team_id" => $game["team_id_away"]]);
+        $result["team_away"] = $team_away;
+
+        return $result;
     }
 }
