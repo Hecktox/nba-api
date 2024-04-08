@@ -12,7 +12,7 @@ class DraftModel extends BaseModel
     {
         //slq stament
         $filter_value = [];
-        $sql = "SELECT * FROM draft_history WHERE 1";
+        $sql = "SELECT * FROM draft_combine_stats WHERE 1";
         
         //filtering
         if (isset($filters["first_name"])) {
@@ -63,59 +63,21 @@ class DraftModel extends BaseModel
             $sql .= " AND bench_press LIKE CONCAT( :bench_press, '%')";
             $filter_value["bench_presss"] = $filters["bench_press"];
         }
+        if (isset($filters["order"]) && in_array($filters["order"], ["asc", "desc"])) {
+            $sql .= " ORDER BY first_name " . strtoupper($filters["order"]);
+        }
         return (array) $this->paginate($sql, $filter_value);
     }
-    public function getDraftPersonId($person_id,array $filters): array
+    public function getDraftPlayerIdSeason($player_id,array $filters =[]): array
     {
         $result = array();
-        $sql = "SELECT * FROM draft_history WHERE person_id = :person_id";
-        $filter_value = ["person_id" => $person_id];
-        //filtering
-        if (isset($filters["first_name"])) {
-            $sql .= " AND first_name LIKE CONCAT( :first_name, '%')";
-            $filter_value["first_name"] = $filters["first_name"];
-        }
-        if (isset($filters["last_name"])) {
-            $sql .= " AND last_name LIKE CONCAT( :last_name, '%')";
-            $filter_value["last_name"] = $filters["last_name"];
-        }
-        if (isset($filters["player_name"])) {
-            $sql .= " AND player_name LIKE CONCAT( :player_name, '%')";
-            $filter_value["player_name"] = $filters["player_name"];
-        }
-        if (isset($filters["position"])) {
-            $sql .= " AND position LIKE CONCAT( :position, '%')";
-            $filter_value["position"] = $filters["position"];
-        }
-       
-        $result["res"] = $this->paginate($sql,$filter_value);
-        return $result;
+        $sql = "SELECT * FROM draft_combine_stats WHERE player_id = :player_id And season = season";
+        return $this->fetchSingle($sql, ["player_id" => $player_id]);
     }
-    public function getDraftTeamId($team_id,array $filters): array
+    public function getDraftPlayerId($player_id ,array $filters =[]): array
     {
-        $result = array();
-        $sql = "SELECT * FROM draft_history WHERE team_id = :team_id";
-        $filter_value = ["team_id" => $team_id];
-        //filtering
-        if (isset($filters["first_name"])) {
-            $sql .= " AND first_name LIKE CONCAT( :first_name, '%')";
-            $filter_value["first_name"] = $filters["first_name"];
-        }
-        if (isset($filters["last_name"])) {
-            $sql .= " AND last_name LIKE CONCAT( :last_name, '%')";
-            $filter_value["last_name"] = $filters["last_name"];
-        }
-        if (isset($filters["player_name"])) {
-            $sql .= " AND player_name LIKE CONCAT( :player_name, '%')";
-            $filter_value["player_name"] = $filters["player_name"];
-        }
-        if (isset($filters["position"])) {
-            $sql .= " AND position LIKE CONCAT( :position, '%')";
-            $filter_value["position"] = $filters["position"];
-        }
-       
-        $result["res"] = $this->paginate($sql,$filter_value);
-        return $result;
+        $sql = "SELECT * FROM draft_combine_stats WHERE player_id = :player_id";
+        return $this->fetchSingle($sql, ["player_id" => $player_id]);
     }
     
 }
