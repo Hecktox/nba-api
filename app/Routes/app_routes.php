@@ -19,12 +19,12 @@ global $app;
 //! The callbacks must be implemented in a controller class.
 //! The Vanier\Api must be used as namespace prefix. 
 
-// //* ROUTE: GET /Draft
-// $app->get('/draft', [DraftController::class, 'handleGetDraft']);
-// //* ROUTE: GET /Draft/{person_id}
-// $app->get('/draft/{person_id}', [DraftController::class, 'handleGetDraftPersonId']);
-// //* ROUTE: GET /Draft/{team_id}
-// $app->get('/draft/{team_id}', [DraftController::class, 'handleGetDraftTeamId']);
+//* ROUTE: GET /Draft
+$app->get('/draft', [DraftController::class, 'handleGetDraft']);
+//* ROUTE: GET /Draft/{player_id}
+$app->get('/draft/{player_id}', [DraftController::class, 'handleGetDraftPlayerId']);
+//* ROUTE: GET /Draft/{player_id}/season
+$app->get('/draft/{player_id}/season', [DraftController::class, 'handleGetPlayerIdSeason']);
 
 //* ROUTE: GET /Team
 $app->get('/team', [TeamController::class, 'handleGetAllTeams']);
