@@ -28,17 +28,34 @@ global $app;
 
 //* ROUTE: GET /Team
 $app->get('/team', [TeamController::class, 'handleGetAllTeams']);
+
 //* ROUTE: GET /Team/{team_id}
 $app->get('/team/{team_id}', [TeamController::class, 'handleGetTeamId']);
+
 //* ROUTE: GET /Team/{team_id}/History
 $app->get('/team/{team_id}/history', [TeamController::class, 'handleGetTeamHistory']);
 
+
+
 //* ROUTE: GET /games
 $app->get('/games', [GamesController::class, 'handleGetGames']);
+
 //* ROUTE: GET /games/{game_id}
 $app->get('/games/{game_id}', [GamesController::class, 'handleGetGameById']);
+
 //* ROUTE: GET /games/{game_id}/teams
 $app->get('/games/{game_id}/teams', [GamesController::class, 'handleGetGameTeams']);
+
+//* ROUTE: POST /games
+$app->post('/games', [GamesController::class, 'handleCreateGames']);
+
+//* ROUTE: PUT /games
+$app->put('/games', [GamesController::class, 'handleUpdateGames']);
+
+//* ROUTE: DELETE /games
+$app->delete('/games', [GamesController::class, 'handleDeleteGames']);
+
+
 
 //*ROUTE: GET /players
 $app->get('/players', [PlayersController::class, 'handleGetPlayers']);

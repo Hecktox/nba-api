@@ -73,4 +73,55 @@ class GamesController extends BaseController
 
         return $this->makeResponse($response, $game_teams);
     }
+
+
+    public function handleCreateGames(Request $request, Response $response, array $uri_args): Response
+    {
+        $games = $request->getParsedBody();
+
+        foreach ($games as $game) {
+            $this->games_model->createGame($game);
+        }
+
+        $response_data = array(
+            "code" => "success",
+            "message" => "The list of games has been created successfully"
+        );
+
+        return $this->makeResponse($response, $response_data, 201);
+    }
+
+    public function handleUpdateGames(Request $request, Response $response, array $uri_args): Response
+    {
+        $games = $request->getParsedBody();
+
+        foreach ($games as $game) {
+            $game_id = $game["game_id"];
+            unset($game["game_id"]);
+            $this->games_model->updateGame($game, $game_id);
+        }
+
+        $response_data = array(
+            "code" => "success",
+            "message" => "The specified games have been updated successfully"
+        );
+
+        return $this->makeResponse($response, $response_data, 201);
+    }
+
+    public function handleDeleteGames(Request $request, Response $response, array $uri_args): Response
+    {
+        $games = $request->getParsedBody();
+
+        foreach ($games as $game_id) {
+            $this->games_model->deleteGame($game_id);
+        }
+
+        $response_data = array(
+            "code" => "success",
+            "message" => "The specified games have been deleted successfully"
+        );
+
+        return $this->makeResponse($response, $response_data, 201);
+    }
 }

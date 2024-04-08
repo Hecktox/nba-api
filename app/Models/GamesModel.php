@@ -100,4 +100,19 @@ class GamesModel extends BaseModel
 
         return $result;
     }
+
+    public function createGame(array $game_data): mixed
+    {
+        return $this->insert("game", $game_data);
+    }
+
+    public function updateGame(array $game_data, int $game_id): mixed
+    {
+        return $this->update("game", $game_data, ["game_id" => $game_id]);
+    }
+
+    public function deleteGame(int $game_id): mixed
+    {
+        return $this->delete("game", ["game_id" => $game_id]);
+    }
 }
