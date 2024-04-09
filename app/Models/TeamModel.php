@@ -64,7 +64,6 @@ class TeamModel extends BaseModel
     }
 
     //created function like this because exception handling for invalid id was not working, only validating id size was working 
-
     // public function getTeamInfo($team_id)
     // {
     //     if (!is_numeric($team_id) || strlen($team_id) !== 10) {
@@ -91,5 +90,20 @@ class TeamModel extends BaseModel
 
         $result["history"] = $history;
         return $result;
+    }
+
+    public function createTeam(array $team): mixed
+    {
+        return $this->insert("team", $team);
+    }
+
+    public function updateTeam(array $team_data, int $team_id): mixed
+    {
+        return $this->update("team", $team_data, ["team_id" => $team_id]);
+    }
+
+    public function deleteTeam(int $team_id): mixed
+    {
+        return $this->delete("team", ["team_id" => $team_id]);
     }
 }

@@ -21,28 +21,24 @@ global $app;
 
 //* ROUTE: GET /Draft
 $app->get('/draft', [DraftController::class, 'handleGetDraft']);
-
 //* ROUTE: GET /Draft/{player_id}
 $app->get('/draft/{player_id}', [DraftController::class, 'handleGetDraftPlayerId']);
-
 //* ROUTE: GET /Draft/{player_id}/season
 $app->get('/draft/{player_id}/season', [DraftController::class, 'handleGetPlayerIdSeason']);
-
 $app->post('/draft', [DraftController::class, 'handleCreateDraft']);
-
 //* ROUTE: PUT /games
 $app->put('/draft', [DraftController::class, 'handleUpdateDraft']);
-
 //* ROUTE: DELETE /games
 $app->delete('/draft', [DraftController::class, 'handleDeleteDraft']);
 
 
-//* ROUTE: GET /Team
+//* ROUTE: CURM /Team
 $app->get('/team', [TeamController::class, 'handleGetAllTeams']);
-
+$app->post('/team', [TeamController::class, 'handleCreateTeam']); 
+$app->put('/team', [TeamController::class, 'handleUpdateTeam']); 
+$app->delete('/team', [TeamController::class, 'handleDeleteTeam']); 
 //* ROUTE: GET /Team/{team_id}
 $app->get('/team/{team_id}', [TeamController::class, 'handleGetTeamId']);
-
 //* ROUTE: GET /Team/{team_id}/History
 $app->get('/team/{team_id}/history', [TeamController::class, 'handleGetTeamHistory']);
 
@@ -50,19 +46,14 @@ $app->get('/team/{team_id}/history', [TeamController::class, 'handleGetTeamHisto
 
 //* ROUTE: GET /games
 $app->get('/games', [GamesController::class, 'handleGetGames']);
-
 //* ROUTE: GET /games/{game_id}
 $app->get('/games/{game_id}', [GamesController::class, 'handleGetGameById']);
-
 //* ROUTE: GET /games/{game_id}/teams
 $app->get('/games/{game_id}/teams', [GamesController::class, 'handleGetGameTeams']);
-
 //* ROUTE: POST /games
 $app->post('/games', [GamesController::class, 'handleCreateGames']);
-
 //* ROUTE: PUT /games
 $app->put('/games', [GamesController::class, 'handleUpdateGames']);
-
 //* ROUTE: DELETE /games
 $app->delete('/games', [GamesController::class, 'handleDeleteGames']);
 
@@ -70,9 +61,7 @@ $app->delete('/games', [GamesController::class, 'handleDeleteGames']);
 
 //*ROUTE: GET /players
 $app->get('/players', [PlayersController::class, 'handleGetPlayers']);
-
 //*ROUTE: GET /players/{player_id}
 $app->get('/players/{player_id}', [PlayersController::class, 'handleGetPlayer']);
-
 //*ROUTE: GET /players/{players_id}/drafts
 $app->get('/players/{player_id}/drafts', [PlayersController::class, 'handleGetPlayerDrafts']);
