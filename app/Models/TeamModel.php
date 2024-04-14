@@ -92,9 +92,9 @@ class TeamModel extends BaseModel
         return $result;
     }
 
-    public function createTeam(array $team): mixed
+    public function createTeam(array $team_data): mixed
     {
-        return $this->insert("team", $team);
+        return $this->insert("team", $team_data);
     }
 
     public function updateTeam(array $team_data, int $team_id): mixed

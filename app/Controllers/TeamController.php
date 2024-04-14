@@ -22,55 +22,6 @@ class TeamController extends BaseController
             throw new HttpInvalidInputException($request, "Invalid team ID format. Must be a 10-character string.");
         }
     }
-    public function handleCreateTeam(Request $request, Response $response, array $uri_args): Response
-    {
-        $team = $request->getParsedBody();
-
-        if (!is_null($team)) {
-            $team_model = new TeamModel();
-            $team_model->createTeam($team);
-        }
-
-        $response_data = array(
-            "code" => "success",
-            "message" => "The team has been created successfully",
-        );
-        return $this->makeResponse($response, $response_data, 201);
-    }
-    public function handleUpdateTeam(Request $request, Response $response, array $uri_args): Response
-    {
-        $team = $request->getParsedBody();
-
-        if (!is_null($team)) {
-            $team_model = new TeamModel();
-            foreach ($team as $key => $member) {
-                $team_id = $member["team_id"];
-                unset($member["team_id"]);
-                $team_model->updateTeam($member, $team_id);
-            }
-        }
-
-        $response_data = array(
-            "code" => "success",
-            "message" => "The list of teams updated correctly",
-        );
-        return $this->makeResponse($response, $response_data, 201);
-    }
-
-    public function handleDeleteTeam(Request $request, Response $response, array $uri_args): Response
-    {
-        $team_ids = $request->getParsedBody();
-        $team_model = new TeamModel();
-        foreach ($team_ids as $team_id) {
-            $team_model->deleteTeam($team_id);
-        }
-
-        $response_data = array(
-            "code" => "success",
-            "message" => "The list of teams deleted correctly",
-        );
-        return $this->makeResponse($response, $response_data, 202);
-    }
 
     public function handleGetAllTeams(Request $request, Response $response, array $uri_args): Response
     {
@@ -119,7 +70,55 @@ class TeamController extends BaseController
 
         return $response->withHeader('Content-Type', 'application/json');
     }
+    public function handleCreateTeam(Request $request, Response $response, array $uri_args): Response
+    {
+        $teams = $request->getParsedBody();
 
+        foreach ($teams as $team) {
+            $this->team_model->createTeam($team);
+        }
 
+        $response_data = array(
+            "code" => "success",
+            "message" => "The list of teams has been created successfully"
+        );
+
+        return $this->makeResponse($response, $response_data, 201);
+    }
+
+    public function handleUpdateTeam(Request $request, Response $response, array $uri_args): Response
+    {
+        $team = $request->getParsedBody();
+
+        if (!is_null($team)) {
+            $team_model = new TeamModel();
+            foreach ($team as $key => $member) {
+                $team_id = $member["team_id"];
+                unset($member["team_id"]);
+                $team_model->updateTeam($member, $team_id);
+            }
+        }
+
+        $response_data = array(
+            "code" => "success",
+            "message" => "The list of teams updated correctly",
+        );
+        return $this->makeResponse($response, $response_data, 201);
+    }
+
+    public function handleDeleteTeam(Request $request, Response $response, array $uri_args): Response
+    {
+        $team_ids = $request->getParsedBody();
+        $team_model = new TeamModel();
+        foreach ($team_ids as $team_id) {
+            $team_model->deleteTeam($team_id);
+        }
+
+        $response_data = array(
+            "code" => "success",
+            "message" => "The list of teams deleted correctly",
+        );
+        return $this->makeResponse($response, $response_data, 202);
+    }
 
 }
