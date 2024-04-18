@@ -65,4 +65,16 @@ class PlayersModel extends BaseModel
 
         return $result;
     }
+
+    public function createPlayer(array $player_data): mixed {
+        return $this->insert("common_player_info", $player_data);
+    }
+
+    public function updatePlayer(array $player_data, int $player_id): mixed{
+        return $this->update("common_player_info", $player_data, ["player_id" => $player_id]);
+    }
+
+    public function deletePlayer(int $player_id): mixed {
+        return $this->delete("common_player_info", ["player_id" => $player_id]);
+    }
 }

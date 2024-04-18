@@ -61,6 +61,16 @@ $app->delete('/games', [GamesController::class, 'handleDeleteGames']);
 
 //*ROUTE: GET /players
 $app->get('/players', [PlayersController::class, 'handleGetPlayers']);
+
+//*ROUTE: POST /players
+$app->post('/players', [PlayersController::class, 'handleCreatePlayers']);
+
+//*ROUTE: PUT /players
+$app->put('/players', [PlayersController::class, 'handleUpdatePlayers']);
+
+//*ROUTE: DELETE /players
+$app->delete('/players', [PlayersController::class, 'handleDeletePlayers']);
+
 //*ROUTE: GET /players/{player_id}
 $app->get('/players/{player_id}', [PlayersController::class, 'handleGetPlayer']);
 //*ROUTE: GET /players/{players_id}/drafts

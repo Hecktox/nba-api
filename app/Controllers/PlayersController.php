@@ -7,6 +7,7 @@ use Vanier\Api\Helpers\InputsHelper;
 use Vanier\Api\Models\PlayersModel;
 use Vanier\Api\Exceptions\HttpNoContentException;
 use Vanier\Api\Exceptions\HttpInvalidPaginationParameterException;
+use Vanier\Api\Validations\Validator;
 
 class PlayersController extends BaseController
 {
@@ -54,7 +55,9 @@ class PlayersController extends BaseController
         //2. Use the id to extract the desired player's info from the db
         $player = $this->player_model->getSinglePlayer($player_id);
 
-        if ($player === false) {
+        //var_dump($player);exit;
+
+        if ($player[0] === false) {
             //var_dump($player_info);exit;
             throw new HttpNoContentException($request);
         }
@@ -100,5 +103,56 @@ class PlayersController extends BaseController
 
 
     }
+
+    public function handleCreatePlayers(Request $request, Response $response, array $uri_args): Response {
+        $players = $request->getParsedBody();
+
+        $v = new Validator();
+
+        foreach($players as $player){
+            $this->player_model->createPlayer($player);
+        }
+
+
+
+        $response_data = array(
+            "code" => "success",
+            "message" => "The list of players has been created successfully"
+        );
+
+        return $this->makeResponse($response, $response_data, 201);
+    }
+
+    public function handleUpdatePlayers(Request $request, Response $response, array $uri_args): Response{
+        $players = $request->getParsedBody();
+
+        foreach ($players as $player){
+            $player_id = $player["player_id"];
+            unset($player["player_id"]);
+            $this->player_model->updatePlayer($player, $player_id);
+        }
+
+        $response_data = array(
+            "code" => "success",
+            "message" => "he specified players have been updated successfully"
+        );
+
+        return $this->makeResponse($response, $response_data, 201);
+    }
+
+    public function handleDeletePlayers(Request $request, Response $response, array $uri_args): Response {
+        $players = $request->getParsedBody();
+
+        foreach ($players as $player_id){
+            $this->player_model->deletePlayer($player_id);
+        }
+
+        $response_data = array(
+            "code" => "success",
+            "message" => "he specified players have been deleted successfully"
+        );
+        return $this->makeResponse($response, $response_data, 201);
+    }
+
 
 }
