@@ -87,7 +87,7 @@ class TeamController extends BaseController
         $teams = $request->getParsedBody();
 
         $v = new Validator($teams);
-        $rules = [
+        $rules = (array) [
             'team_id' => [
                 'required',
                 'integer',
@@ -95,39 +95,34 @@ class TeamController extends BaseController
             ],
             'full_name' => [
                 'required',
-                'string',
                 ['max', 255]
             ],
             'abbreviation' => [
                 'required',
-                'string',
                 ['max', 10]
             ],
             'nickname' => [
-                'required',
-                'string'
+                'required'
             ],
             'city' => [
-                'required',
-                'string'
+                'required'
             ],
             'state' => [
-                'required',
-                'string'
+                'required'
             ],
             'year_founded' => [
                 'required',
-                'string',
-                ['regex', '/^\d{4}$/'] // Year format (e.g., 2024)
+                'integer',
+                ['min', 1000],
+                ['max', date('Y')] // Assuming current year is the maximum
             ],
             'owner' => [
-                'required',
-                'string'
+                'required'
             ],
             'year_active_till' => [
                 'required',
-                'string',
-                ['regex', '/^\d{4}$/'] // Year format (e.g., 2024)
+                ['regex', '/^\d{4}$/'], // Year format (e.g., 2024)
+                ['min', date('Y')] // Assuming the year should be equal to or greater than the current year
             ]
         ];
 
@@ -138,21 +133,24 @@ class TeamController extends BaseController
                 $this->team_model->createTeam($team);
             }
 
-            $response_data = [
+            $response_data = array(
                 "code" => "success",
                 "message" => "The list of teams has been created successfully"
-            ];
+            );
 
             return $this->makeResponse($response, $response_data, 201);
         } else {
-            $response_data = [
-                "code" => "failure",
-                "message" => "Invalid team data"
-            ];
-
-            return $this->makeResponse($response, $response_data, 400);
+            print_r($v->errors());
         }
+
+        $response_data = array(
+            "code" => "failure",
+            "message" => "The list of teams has not been created."
+        );
+
+        return $this->makeResponse($response, $response_data, 500);
     }
+
 
     // public function handleCreateTeam(Request $request, Response $response, array $uri_args): Response
     // {
@@ -193,11 +191,10 @@ class TeamController extends BaseController
 
     public function handleUpdateTeam(Request $request, Response $response, array $uri_args): Response
     {
-        $team = $request->getParsedBody();
+        $teams = $request->getParsedBody();
 
-        // Validate team data
-        $v = new Validator($team);
-        $rules = [
+        $v = new Validator($teams);
+        $rules = (array)[
             'team_id' => [
                 'required',
                 'integer',
@@ -205,87 +202,95 @@ class TeamController extends BaseController
             ],
             'full_name' => [
                 'required',
-                'string',
                 ['max', 255]
             ],
             'abbreviation' => [
                 'required',
-                'string',
                 ['max', 10]
             ],
             'nickname' => [
-                'required',
-                'string'
+                'required'
             ],
             'city' => [
-                'required',
-                'string'
+                'required'
             ],
             'state' => [
-                'required',
-                'string'
+                'required'
             ],
             'year_founded' => [
                 'required',
-                'string',
-                ['regex', '/^\d{4}$/'] // Year format (e.g., 2024)
+                'integer',
+                ['min', 1000],
+                ['max', date('Y')] // Assuming current year is the maximum
             ],
             'owner' => [
-                'required',
-                'string'
+                'required'
             ],
             'year_active_till' => [
                 'required',
-                'string',
-                ['regex', '/^\d{4}$/'] // Year format (e.g., 2024)
+                ['regex', '/^\d{4}$/'], // Year format (e.g., 2024)
+                ['min', date('Y')] // Assuming the year should be equal to or greater than the current year
             ]
         ];
 
         $v->mapFieldsRules($rules);
 
-        // How to throw an appropriate exception
-        if (!$v->validate()) {
-            throw new HttpInvalidInputException($request, 'Invalid team data.');
-        }
-
-        if (!is_null($team)) {
-            $team_model = new TeamModel();
-            foreach ($team as $member) {
-                $team_id = $member["team_id"];
-                unset($member["team_id"]);
-                $team_model->updateTeam($member, $team_id);
+        if ($v->validate()) {
+            foreach ($teams as $team) {
+                $team_id = $team["team_id"];
+                unset($game["team_id"]);
+                $this->team_model->updateTeam($team, $team_id);
             }
+
+            $response_data = array(
+                "code" => "success",
+                "message" => "The specified teams have been updated successfully"
+            );
+
+            return $this->makeResponse($response, $response_data, 201);
+        } else {
+            print_r($v->errors());
         }
 
-        $response_data = [
-            "code" => "success",
-            "message" => "The list of teams updated correctly",
-        ];
-        return $this->makeResponse($response, $response_data, 201);
+        $response_data = array(
+            "code" => "failure",
+            "message" => "The list of teams has not been updated."
+        );
+
+        return $this->makeResponse($response, $response_data, 500);
     }
 
 
     public function handleDeleteTeam(Request $request, Response $response, array $uri_args): Response
     {
-        $team_ids = $request->getParsedBody();
+        $teams = $request->getParsedBody();
 
-        // Validate team IDs (assuming it's an array of integers)
-        $v = new Validator($team_ids);
-        $v->rule('each', 'integer');
-        if (!$v->validate()) {
-            throw new HttpInvalidInputException($request, "Invalid team ID(s) provided.");
-        }
+        $v = new Validator($teams);
+        $v->rule(function ($field, $value, $params, $fields) {
+            // Custom validation logic
+            return true;
+        }, "")->message("{field} failed...");
 
-        $team_model = new TeamModel();
-        foreach ($team_ids as $team_id) {
-            $team_model->deleteTeam($team_id);
+        if ($v->validate()) {
+            foreach ($teams as $team_id) {
+                $this->team_model->deleteTeam($team_id);
+            }
+
+            $response_data = array(
+                "code" => "success",
+                "message" => "The specified teams have been deleted successfully"
+            );
+            return $this->makeResponse($response, $response_data, 201);
+        } else {
+            print_r($v->errors());
         }
 
         $response_data = array(
-            "code" => "success",
-            "message" => "The list of teams deleted correctly",
+            "code" => "failure",
+            "message" => "The list of teams has not been deleted."
         );
-        return $this->makeResponse($response, $response_data, 202);
+
+        return $this->makeResponse($response, $response_data, 500);
     }
 
     // public function handleDeleteTeam(Request $request, Response $response, array $uri_args): Response
