@@ -50,6 +50,24 @@ class PlayersModel extends BaseModel
         return (array) $this->fetchSingle($sql, ["person_id" => $person_id]);
     }
 
+    public function verifyTeamId(string $team_id): mixed {
+        $sql = "SELECT * FROM team WHERE team_id = $team_id";
+
+        if(empty($sql)){
+            return false;
+        } 
+        return true;
+    }
+
+    public function verifyPlayerId(string $player_id): mixed {
+        $sql = "SELECT * FROM common_player_info WHERE player_id = $player_id";
+
+        if(empty($sql)){
+            return false;
+        }
+        return true;
+    }
+
     public function getPlayerDrafts(string $player_id) : mixed {
         //1. Create an array for the result of the query and for the filter values
         $result = array();

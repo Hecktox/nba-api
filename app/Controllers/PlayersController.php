@@ -102,8 +102,6 @@ class PlayersController extends BaseController
 
         //5. Return a response to the user
         return $this->makeResponse($response, $drafts);
-
-
     }
 
     public function handleCreatePlayers(Request $request, Response $response, array $uri_args): Response {
@@ -111,38 +109,37 @@ class PlayersController extends BaseController
 
         $v = new Validator($players);
         $rules = array(
-            'fist_name' => array(
-                'required',
-                array('regex', '^[A-Z][a-z]+$')
-            ),
-            'last_name' => array(
-                'required',
-                array('regex', '^[A-Z][a-z]+$')
-            ),
-            'country' => [
-                'required',
-                array('regex', '^[A-Z][a-z]+$')
-            ],
-            'teamName' => [
-                'required',
-                array('regex', '^[A-Z][a-z]+$')
-            ],
+            // 'first_name' => array(
+            //     'required',
+            //     array('regex', '^[A-Z][a-z]+$')
+            // ),
+            // 'last_name' => array(
+            //     'required',
+            //     array('regex', '^[A-Z][a-z]+$')
+            // ),
+            // 'country' => [
+            //     'required',
+            //     array('regex', '^[A-Z][a-z]+$')
+            // ],
+            // 'teamName' => [
+            //     'required',
+            //     array('regex', '^[A-Z][a-z]+$')
+            // ],
             'team_id' => [
-                'required',
-                array('regex', '^\d+$')
+                'integer'
             ],
-            'draft_number' => [
-                'required',
-                array('regex', '^\d+$')
-            ],
-            'from_year' => [
-                'required',
-                array('regex', '^(18[6-9]\d|19\d\d|20[0-1]\d|202[0-4])$')
-            ],
-            'to_year' => [
-                'required',
-                array('regex', '^(18[6-9]\d|19\d\d|20[0-1]\d|202[0-4])$')
-            ],
+            // 'draft_number' => [
+            //     'required',
+            //     array('regex', '^\d+$')
+            // ],
+            // 'from_year' => [
+            //     'required',
+            //     array('regex', '^(18[6-9]\d|19\d\d|20[0-1]\d|202[0-4])$')
+            // ],
+            // 'to_year' => [
+            //     'required',
+            //     array('regex', '^(18[6-9]\d|19\d\d|20[0-1]\d|202[0-4])$')
+            // ],
         );
 
         $v->mapFieldsRules($rules);
@@ -152,8 +149,17 @@ class PlayersController extends BaseController
             foreach($players as $player){
                 $this->player_model->createPlayer($player);
             }
+
+            $response_data = array(
+                "code" => "success",
+                "message" => "The list of players has been created successfully"
+            );
+    
+            return $this->makeResponse($response, $response_data, 201);
+
+
         } else {
-            throw new HttpInvalidPaginationParameterException($request);
+            print_r($v->errors());
         }
 
         $response_data = array(
@@ -161,7 +167,13 @@ class PlayersController extends BaseController
             "message" => "The list of players has been created successfully"
         );
 
-        return $this->makeResponse($response, $response_data, 201);
+
+        $response_data = array(
+            "code" => "failure",
+            "message" => "The list of players has not been created."
+        );
+
+        return $this->makeResponse($response, $response_data, 500);
     }
 
     public function handleUpdatePlayers(Request $request, Response $response, array $uri_args): Response{

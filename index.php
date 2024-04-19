@@ -23,7 +23,7 @@ $app = AppFactory::create();
 //TODO: Add the middleware here.
 $app->addBodyParsingMiddleware();
 $app->addRoutingMiddleware();
-//$app->add(new ContentNegotiationMiddleware());
+$app->add(new ContentNegotiationMiddleware());
 
 //!NOTE: the error handling middleware MUST be added last.
 $errorMiddleware = $app->addErrorMiddleware(true, true, true);
