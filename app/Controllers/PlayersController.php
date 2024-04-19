@@ -106,40 +106,72 @@ class PlayersController extends BaseController
 
     public function handleCreatePlayers(Request $request, Response $response, array $uri_args): Response {
         $players = $request->getParsedBody();
+        
+        $player_fk = $players[0];
+
+        $provided_team_id = $player_fk['team_id'];
+
+        $provided_player_id = $player_fk['person_id'];
+
+        Validator::addRule(
+            'invalid_foreign_key',
+            function($inserted_team_id) use ($provided_team_id){
+                $result = $this->player_model->verifyTeamId($provided_team_id);
+
+                if(empty($result)){
+                    return false;
+                }
+
+                return true;
+            },
+            'Foreign key provided team_id does not exists'
+        );
+
+        Validator::addRule(
+            'present_player_id',
+            function($inserted_player_id) use ($provided_player_id){
+                $result = $this->player_model->verifyPlayerIdPresent($provided_player_id);
+
+                if(empty($result)){
+                    return false;
+                }
+
+                return true;
+            },
+            'Provided player_id does exists. Unable to add player(s)'
+        );
 
         $v = new Validator($players);
         $rules = array(
-            // 'first_name' => array(
-            //     'required',
-            //     array('regex', '^[A-Z][a-z]+$')
-            // ),
-            // 'last_name' => array(
-            //     'required',
-            //     array('regex', '^[A-Z][a-z]+$')
-            // ),
-            // 'country' => [
-            //     'required',
-            //     array('regex', '^[A-Z][a-z]+$')
-            // ],
-            // 'teamName' => [
-            //     'required',
-            //     array('regex', '^[A-Z][a-z]+$')
-            // ],
-            'team_id' => [
-                'integer'
+            'player_id' => array(
+                'present_player_id'
+            ),
+            'first_name' => array(
+                array('regex', '^[A-Z][a-z]+$')
+            ),
+            'last_name' => array(
+                array('regex', '^[A-Z][a-z]+$'),
+            ),
+            'country' => [
+                array('regex', '^[A-Z][a-z]+$'),
+
             ],
-            // 'draft_number' => [
-            //     'required',
-            //     array('regex', '^\d+$')
-            // ],
-            // 'from_year' => [
-            //     'required',
-            //     array('regex', '^(18[6-9]\d|19\d\d|20[0-1]\d|202[0-4])$')
-            // ],
-            // 'to_year' => [
-            //     'required',
-            //     array('regex', '^(18[6-9]\d|19\d\d|20[0-1]\d|202[0-4])$')
-            // ],
+            'teamName' => [
+                array('regex', '^[A-Z][a-z]+$')
+            ],
+            'team_id' => [
+                'integer',
+                'invalid_foreign_key'
+            ],
+            'draft_number' => [
+                array('regex', '^\d+$')
+            ],
+            'from_year' => [
+                array('regex', '^(18[6-9]\d|19\d\d|20[0-1]\d|202[0-4])$')
+            ],
+            'to_year' => [
+                array('regex', '^(18[6-9]\d|19\d\d|20[0-1]\d|202[0-4])$')
+            ],
         );
 
         $v->mapFieldsRules($rules);
@@ -160,13 +192,10 @@ class PlayersController extends BaseController
 
         } else {
             print_r($v->errors());
+            
+
+
         }
-
-        $response_data = array(
-            "code" => "success",
-            "message" => "The list of players has been created successfully"
-        );
-
 
         $response_data = array(
             "code" => "failure",
@@ -212,10 +241,18 @@ class PlayersController extends BaseController
         //How to throw appropriate exception
         if($v->validate()){
             foreach ($players as $player){
-                $player_id = $player["player_id"];
-                unset($player["player_id"]);
+                $player_id = $player["person_id"];
+                unset($player["person_id"]);
                 $this->player_model->updatePlayer($player, $player_id);
             }
+
+            $response_data = array(
+                "code" => "success",
+                "message" => "he specified players have been updated successfully"
+            );
+    
+            return $this->makeResponse($response, $response_data, 201);
+
         } else {
             print_r($v->errors());
         }
@@ -223,32 +260,68 @@ class PlayersController extends BaseController
 
 
         $response_data = array(
-            "code" => "success",
-            "message" => "he specified players have been updated successfully"
+            "code" => "failure",
+            "message" => "the specified players have not been updated"
         );
 
-        return $this->makeResponse($response, $response_data, 201);
+        return $this->makeResponse($response, $response_data, 500);
     }
 
     public function handleDeletePlayers(Request $request, Response $response, array $uri_args): Response {
         $players = $request->getParsedBody();
 
+        $provided_player_id = $players['person_id'];
+
+        Validator::addRule(
+            'invalid_player_id',
+            function($inserted_player_id) use ($provided_player_id){
+                $result = $this->player_model->verifyPlayerIdAbsent($provided_player_id);
+
+                if(empty($result)){
+                    return false;
+                }
+
+                return true;
+            },
+            'Provided player_id does not exist'
+        );
+
+
+
+
          //Check if id exists in the table
          $v = new Validator($players);
-         $v->rule(function($field, $value, $params, $fields) {
+         
+         $rules = array(
+            'player_id' => array(
+                'invalid_player_id'
+            ),
+        );
 
-             return true;
-         }, "")->message("{field} failed...");
+        $v->mapFieldsRules($rules);
 
-        foreach ($players as $player_id){
-            $this->player_model->deletePlayer($player_id);
+        //How to throw appropriate exception
+        if($v->validate()){
+            foreach ($players as $player_id){
+                $this->player_model->deletePlayer($player_id);
+            }
+    
+            $response_data = array(
+                "code" => "success",
+                "message" => "the specified players have been deleted successfully"
+            );
+            return $this->makeResponse($response, $response_data, 201);
+
+        } else {
+            print_r($v->errors());
         }
 
+
         $response_data = array(
-            "code" => "success",
-            "message" => "he specified players have been deleted successfully"
+            "code" => "failure",
+            "message" => "the specified players have not been deleted"
         );
-        return $this->makeResponse($response, $response_data, 201);
+        return $this->makeResponse($response, $response_data, 500);
     }
 
 
