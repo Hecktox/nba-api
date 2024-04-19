@@ -3,11 +3,13 @@
 namespace Vanier\Api\Controllers;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Vanier\Api\Exceptions\HttpInvalidInputException;
 use Vanier\Api\Helpers\InputsHelper;
 use Vanier\Api\Models\PlayersModel;
 use Vanier\Api\Exceptions\HttpNoContentException;
 use Vanier\Api\Exceptions\HttpInvalidPaginationParameterException;
 use Vanier\Api\Validations\Validator;
+require_once("validation/validation/Validator.php");
 
 class PlayersController extends BaseController
 {
@@ -57,10 +59,10 @@ class PlayersController extends BaseController
 
         //var_dump($player);exit;
 
-        if ($player[0] === false) {
-            //var_dump($player_info);exit;
-            throw new HttpNoContentException($request);
-        }
+        // if ($player[0] === false) {
+        //     //var_dump($player_info);exit;
+        //     throw new HttpNoContentException($request);
+        // }
 
         $result = $this->makeResponse($response, $player);
 
@@ -108,28 +110,51 @@ class PlayersController extends BaseController
         $players = $request->getParsedBody();
 
         $v = new Validator($players);
-        $v->rule('required', ['first_name', 'last_name',
-         'country', 'position', 'team_id', 'team_name', 'from_year', 'to_year', 'draft_number']);
+        $rules = array(
+            'fist_name' => array(
+                'required',
+                array('regex', '^[A-Z][a-z]+$')
+            ),
+            'last_name' => array(
+                'required',
+                array('regex', '^[A-Z][a-z]+$')
+            ),
+            'country' => [
+                'required',
+                array('regex', '^[A-Z][a-z]+$')
+            ],
+            'teamName' => [
+                'required',
+                array('regex', '^[A-Z][a-z]+$')
+            ],
+            'team_id' => [
+                'required',
+                array('regex', '^\d+$')
+            ],
+            'draft_number' => [
+                'required',
+                array('regex', '^\d+$')
+            ],
+            'from_year' => [
+                'required',
+                array('regex', '^(18[6-9]\d|19\d\d|20[0-1]\d|202[0-4])$')
+            ],
+            'to_year' => [
+                'required',
+                array('regex', '^(18[6-9]\d|19\d\d|20[0-1]\d|202[0-4])$')
+            ],
+        );
 
-        
+        $v->mapFieldsRules($rules);
 
-
-        
+        //How to throw appropriate exception
         if($v->validate()){
-            echo "Yay! All good!";
-
-
+            foreach($players as $player){
+                $this->player_model->createPlayer($player);
+            }
         } else {
-            print_r($v->errors());
-
-
+            throw new HttpInvalidPaginationParameterException($request);
         }
-
-        foreach($players as $player){
-            $this->player_model->createPlayer($player);
-        }
-
-
 
         $response_data = array(
             "code" => "success",
@@ -142,11 +167,48 @@ class PlayersController extends BaseController
     public function handleUpdatePlayers(Request $request, Response $response, array $uri_args): Response{
         $players = $request->getParsedBody();
 
-        foreach ($players as $player){
-            $player_id = $player["player_id"];
-            unset($player["player_id"]);
-            $this->player_model->updatePlayer($player, $player_id);
+        $v = new Validator($players);
+        $rules = array(
+            'fist_name' => array(
+                array('regex', '^[A-Z][a-z]+$')
+            ),
+            'last_name' => array(
+                array('regex', '^[A-Z][a-z]+$')
+            ),
+            'country' => [
+                array('regex', '^[A-Z][a-z]+$')
+            ],
+            'teamName' => [
+                array('regex', '^[A-Z][a-z]+$')
+            ],
+            'team_id' => [
+                array('regex', '^\d+$')
+            ],
+            'draft_number' => [
+                array('regex', '^\d+$')
+            ],
+            'from_year' => [
+                array('regex', '^(18[6-9]\d|19\d\d|20[0-1]\d|202[0-4])$')
+            ],
+            'to_year' => [
+                array('regex', '^(18[6-9]\d|19\d\d|20[0-1]\d|202[0-4])$')
+            ],
+        );
+
+        $v->mapFieldsRules($rules);
+
+        //How to throw appropriate exception
+        if($v->validate()){
+            foreach ($players as $player){
+                $player_id = $player["player_id"];
+                unset($player["player_id"]);
+                $this->player_model->updatePlayer($player, $player_id);
+            }
+        } else {
+            print_r($v->errors());
         }
+
+
 
         $response_data = array(
             "code" => "success",
@@ -165,10 +227,6 @@ class PlayersController extends BaseController
 
              return true;
          }, "")->message("{field} failed...");
-
-
-
-
 
         foreach ($players as $player_id){
             $this->player_model->deletePlayer($player_id);
