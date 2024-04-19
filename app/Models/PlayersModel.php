@@ -59,13 +59,22 @@ class PlayersModel extends BaseModel
         return true;
     }
 
-    public function verifyPlayerId(string $player_id): mixed {
-        $sql = "SELECT * FROM common_player_info WHERE player_id = $player_id";
+    public function verifyPlayerIdAbsent(string $player_id): mixed {
+        $sql = "SELECT * FROM common_player_info WHERE person_id = $player_id";
 
         if(empty($sql)){
             return false;
         }
         return true;
+    }
+
+    public function verifyPlayerIdPresent(string $player_id): mixed {
+        $sql = "SELECT * FROM common_player_info WHERE person_id = $player_id";
+
+        if(empty($sql)){
+            return true;
+        }
+        return false;
     }
 
     public function getPlayerDrafts(string $player_id) : mixed {
@@ -89,10 +98,10 @@ class PlayersModel extends BaseModel
     }
 
     public function updatePlayer(array $player_data, int $player_id): mixed{
-        return $this->update("common_player_info", $player_data, ["player_id" => $player_id]);
+        return $this->update("common_player_info", $player_data, ["person_id" => $player_id]);
     }
 
     public function deletePlayer(int $player_id): mixed {
-        return $this->delete("common_player_info", ["player_id" => $player_id]);
+        return $this->delete("common_player_info", ["person_id" => $player_id]);
     }
 }
