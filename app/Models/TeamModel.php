@@ -106,4 +106,14 @@ class TeamModel extends BaseModel
     {
         return $this->delete("team", ["team_id" => $team_id]);
     }
+
+    public function verifyTeamId(string $team_id): mixed
+    {
+        $sql = "SELECT * FROM team WHERE team_id = $team_id";
+
+        if (empty($sql)) {
+            return false;
+        }
+        return true;
+    }
 }
