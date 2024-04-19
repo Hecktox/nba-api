@@ -84,67 +84,51 @@ class GamesController extends BaseController
         $v = new Validator($games);
         $rules = array(
             'season_id' => [
-                'integer',
-                'required'
+                'integer'
             ],
             'team_id_home' => [
-                'integer',
-                'required'
+                'integer'
             ],
             'team_abbreviation_home' => [
-                'required',
                 array('regex', '^[A-Z][a-z]+$')
             ],
             'team_name_home' => [
-                'required',
                 array('regex', '^[A-Z][a-z]+$')
             ],
             'game_id' => [
-                'integer',
-                'required'
+                'integer'
             ],
             'game_date' => [
-                'required',
                 'date'
             ],
             'pts_home' => [
-                'required',
                 'numeric'
             ],
             'plus_minus_home' => [
-                'required',
                 'numeric'
             ],
             'team_id_away' => [
-                'integer',
-                'required'
+                'integer'
             ],
             'team_abbreviation_away' => [
-                'required',
                 array('regex', '^[A-Z][a-z]+$')
             ],
             'team_name_away' => [
-                'required',
                 array('regex', '^[A-Z][a-z]+$')
             ],
             'matchup_away' => [
-                'required',
                 array('regex', '^[A-Z][a-z]+$')
             ],
             'wl_away' => [
-                'required',
                 array('regex', '^[A-Z][a-z]+$')
             ],
             'pts_away' => [
-                'required',
                 'numeric'
             ],
             'plus_minus_away' => [
-                'required',
                 'numeric'
             ],
             'season_type' => [
-                'required',
                 array('regex', '^[A-Z][a-z]+$')
             ],
         );
@@ -181,67 +165,51 @@ class GamesController extends BaseController
         $v = new Validator($games);
         $rules = array(
             'season_id' => [
-                'integer',
-                'required'
+                'integer'
             ],
             'team_id_home' => [
-                'integer',
-                'required'
+                'integer'
             ],
             'team_abbreviation_home' => [
-                'required',
                 array('regex', '^[A-Z][a-z]+$')
             ],
             'team_name_home' => [
-                'required',
                 array('regex', '^[A-Z][a-z]+$')
             ],
             'game_id' => [
-                'integer',
-                'required'
+                'integer'
             ],
             'game_date' => [
-                'required',
                 'date'
             ],
             'pts_home' => [
-                'required',
                 'numeric'
             ],
             'plus_minus_home' => [
-                'required',
                 'numeric'
             ],
             'team_id_away' => [
-                'integer',
-                'required'
+                'integer'
             ],
             'team_abbreviation_away' => [
-                'required',
                 array('regex', '^[A-Z][a-z]+$')
             ],
             'team_name_away' => [
-                'required',
                 array('regex', '^[A-Z][a-z]+$')
             ],
             'matchup_away' => [
-                'required',
                 array('regex', '^[A-Z][a-z]+$')
             ],
             'wl_away' => [
-                'required',
                 array('regex', '^[A-Z][a-z]+$')
             ],
             'pts_away' => [
-                'required',
                 'numeric'
             ],
             'plus_minus_away' => [
-                'required',
                 'numeric'
             ],
             'season_type' => [
-                'required',
                 array('regex', '^[A-Z][a-z]+$')
             ],
         );
