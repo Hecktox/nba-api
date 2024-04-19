@@ -6,7 +6,9 @@ use Vanier\Api\Models\GamesModel;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Vanier\Api\Exceptions\HttpInvalidPaginationParameterException;
+use Vanier\Api\Validations\Validator;
 
+require_once 'validation/validation/Validator.php';
 
 class GamesController extends BaseController
 {
@@ -79,49 +81,227 @@ class GamesController extends BaseController
     {
         $games = $request->getParsedBody();
 
-        foreach ($games as $game) {
-            $this->games_model->createGame($game);
+        $v = new Validator($games);
+        $rules = array(
+            'season_id' => [
+                'integer',
+                'required'
+            ],
+            'team_id_home' => [
+                'integer',
+                'required'
+            ],
+            'team_abbreviation_home' => [
+                'required',
+                array('regex', '^[A-Z][a-z]+$')
+            ],
+            'team_name_home' => [
+                'required',
+                array('regex', '^[A-Z][a-z]+$')
+            ],
+            'game_id' => [
+                'integer',
+                'required'
+            ],
+            'game_date' => [
+                'required',
+                'date'
+            ],
+            'pts_home' => [
+                'required',
+                'numeric'
+            ],
+            'plus_minus_home' => [
+                'required',
+                'numeric'
+            ],
+            'team_id_away' => [
+                'integer',
+                'required'
+            ],
+            'team_abbreviation_away' => [
+                'required',
+                array('regex', '^[A-Z][a-z]+$')
+            ],
+            'team_name_away' => [
+                'required',
+                array('regex', '^[A-Z][a-z]+$')
+            ],
+            'matchup_away' => [
+                'required',
+                array('regex', '^[A-Z][a-z]+$')
+            ],
+            'wl_away' => [
+                'required',
+                array('regex', '^[A-Z][a-z]+$')
+            ],
+            'pts_away' => [
+                'required',
+                'numeric'
+            ],
+            'plus_minus_away' => [
+                'required',
+                'numeric'
+            ],
+            'season_type' => [
+                'required',
+                array('regex', '^[A-Z][a-z]+$')
+            ],
+        );
+
+        $v->mapFieldsRules($rules);
+
+        if ($v->validate()) {
+            foreach ($games as $game) {
+                $this->games_model->createGame($game);
+            }
+
+            $response_data = array(
+                "code" => "success",
+                "message" => "The list of games has been created successfully"
+            );
+
+            return $this->makeResponse($response, $response_data, 201);
+        } else {
+            print_r($v->errors());
         }
 
         $response_data = array(
-            "code" => "success",
-            "message" => "The list of games has been created successfully"
+            "code" => "failure",
+            "message" => "The list of games has not been created."
         );
 
-        return $this->makeResponse($response, $response_data, 201);
+        return $this->makeResponse($response, $response_data, 500);
     }
 
     public function handleUpdateGames(Request $request, Response $response, array $uri_args): Response
     {
         $games = $request->getParsedBody();
 
-        foreach ($games as $game) {
-            $game_id = $game["game_id"];
-            unset($game["game_id"]);
-            $this->games_model->updateGame($game, $game_id);
+        $v = new Validator($games);
+        $rules = array(
+            'season_id' => [
+                'integer',
+                'required'
+            ],
+            'team_id_home' => [
+                'integer',
+                'required'
+            ],
+            'team_abbreviation_home' => [
+                'required',
+                array('regex', '^[A-Z][a-z]+$')
+            ],
+            'team_name_home' => [
+                'required',
+                array('regex', '^[A-Z][a-z]+$')
+            ],
+            'game_id' => [
+                'integer',
+                'required'
+            ],
+            'game_date' => [
+                'required',
+                'date'
+            ],
+            'pts_home' => [
+                'required',
+                'numeric'
+            ],
+            'plus_minus_home' => [
+                'required',
+                'numeric'
+            ],
+            'team_id_away' => [
+                'integer',
+                'required'
+            ],
+            'team_abbreviation_away' => [
+                'required',
+                array('regex', '^[A-Z][a-z]+$')
+            ],
+            'team_name_away' => [
+                'required',
+                array('regex', '^[A-Z][a-z]+$')
+            ],
+            'matchup_away' => [
+                'required',
+                array('regex', '^[A-Z][a-z]+$')
+            ],
+            'wl_away' => [
+                'required',
+                array('regex', '^[A-Z][a-z]+$')
+            ],
+            'pts_away' => [
+                'required',
+                'numeric'
+            ],
+            'plus_minus_away' => [
+                'required',
+                'numeric'
+            ],
+            'season_type' => [
+                'required',
+                array('regex', '^[A-Z][a-z]+$')
+            ],
+        );
+
+        $v->mapFieldsRules($rules);
+
+        if ($v->validate()) {
+            foreach ($games as $game) {
+                $game_id = $game["game_id"];
+                unset($game["game_id"]);
+                $this->games_model->updateGame($game, $game_id);
+            }
+
+            $response_data = array(
+                "code" => "success",
+                "message" => "The specified games have been updated successfully"
+            );
+
+            return $this->makeResponse($response, $response_data, 201);
+        } else {
+            print_r($v->errors());
         }
 
         $response_data = array(
-            "code" => "success",
-            "message" => "The specified games have been updated successfully"
+            "code" => "failure",
+            "message" => "The list of games has not been updated."
         );
 
-        return $this->makeResponse($response, $response_data, 201);
+        return $this->makeResponse($response, $response_data, 500);
     }
 
     public function handleDeleteGames(Request $request, Response $response, array $uri_args): Response
     {
         $games = $request->getParsedBody();
 
-        foreach ($games as $game_id) {
-            $this->games_model->deleteGame($game_id);
+        $v = new Validator($games);
+        $v->rule(function ($field, $value, $params, $fields) {
+            // Custom validation logic
+            return true;
+        }, "")->message("{field} failed...");
+
+        if ($v->validate()) {
+            foreach ($games as $game_id) {
+                $this->games_model->deleteGame($game_id);
+            }
+
+            $response_data = array(
+                "code" => "success",
+                "message" => "The specified games have been deleted successfully"
+            );
+            return $this->makeResponse($response, $response_data, 201);
+        } else {
+            print_r($v->errors());
         }
 
         $response_data = array(
-            "code" => "success",
-            "message" => "The specified games have been deleted successfully"
+            "code" => "failure",
+            "message" => "The list of games has not been deleted."
         );
 
-        return $this->makeResponse($response, $response_data, 201);
+        return $this->makeResponse($response, $response_data, 500);
     }
 }
