@@ -107,7 +107,23 @@ class PlayersController extends BaseController
     public function handleCreatePlayers(Request $request, Response $response, array $uri_args): Response {
         $players = $request->getParsedBody();
 
-        $v = new Validator();
+        $v = new Validator($players);
+        $v->rule('required', ['first_name', 'last_name',
+         'country', 'position', 'team_id', 'team_name', 'from_year', 'to_year', 'draft_number']);
+
+        
+
+
+        
+        if($v->validate()){
+            echo "Yay! All good!";
+
+
+        } else {
+            print_r($v->errors());
+
+
+        }
 
         foreach($players as $player){
             $this->player_model->createPlayer($player);
@@ -142,6 +158,17 @@ class PlayersController extends BaseController
 
     public function handleDeletePlayers(Request $request, Response $response, array $uri_args): Response {
         $players = $request->getParsedBody();
+
+         //Check if id exists in the table
+         $v = new Validator($players);
+         $v->rule(function($field, $value, $params, $fields) {
+
+             return true;
+         }, "")->message("{field} failed...");
+
+
+
+
 
         foreach ($players as $player_id){
             $this->player_model->deletePlayer($player_id);
