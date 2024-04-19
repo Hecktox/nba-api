@@ -7,6 +7,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Vanier\Api\Exceptions\HttpInvalidPaginationParameterException;
 use Vanier\Api\Validations\Validator;
+use Vanier\Api\Exceptions\HttpInvalidInputException;
 
 require_once 'validation/validation/Validator.php';
 
@@ -147,7 +148,15 @@ class GamesController extends BaseController
 
             return $this->makeResponse($response, $response_data, 201);
         } else {
-            print_r($v->errors());
+            $errors = $v->errors();
+            if (isset($errors['season_id']) && in_array('integer', $errors['season_id'])) {
+                throw new HttpInvalidInputException();
+            }
+            if (isset($errors['team_id_home']) && in_array('integer', $errors['team_id_home'])) {
+                throw new HttpInvalidInputException();
+            }
+
+            print_r($errors);
         }
 
         $response_data = array(
@@ -230,7 +239,15 @@ class GamesController extends BaseController
 
             return $this->makeResponse($response, $response_data, 201);
         } else {
-            print_r($v->errors());
+            $errors = $v->errors();
+            if (isset($errors['season_id']) && in_array('integer', $errors['season_id'])) {
+                throw new HttpInvalidInputException();
+            }
+            if (isset($errors['team_id_home']) && in_array('integer', $errors['team_id_home'])) {
+                throw new HttpInvalidInputException();
+            }
+
+            print_r($errors);
         }
 
         $response_data = array(
@@ -247,7 +264,6 @@ class GamesController extends BaseController
 
         $v = new Validator($games);
         $v->rule(function ($field, $value, $params, $fields) {
-            // Custom validation logic
             return true;
         }, "")->message("{field} failed...");
 
@@ -262,7 +278,15 @@ class GamesController extends BaseController
             );
             return $this->makeResponse($response, $response_data, 201);
         } else {
-            print_r($v->errors());
+            $errors = $v->errors();
+            if (isset($errors['season_id']) && in_array('integer', $errors['season_id'])) {
+                throw new HttpInvalidInputException();
+            }
+            if (isset($errors['team_id_home']) && in_array('integer', $errors['team_id_home'])) {
+                throw new HttpInvalidInputException();
+            }
+
+            print_r($errors);
         }
 
         $response_data = array(
