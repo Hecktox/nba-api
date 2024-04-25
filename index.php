@@ -5,7 +5,12 @@ declare(strict_types=1);
 use Slim\Factory\AppFactory;
 use Vanier\Api\Middleware\ContentNegotiationMiddleware;
 
-define('APP_BASE_DIR',  __DIR__);
+define('APP_BASE_DIR', __DIR__);
+
+// App's logs directory
+define('APP_LOGS_DIR', APP_BASE_DIR . '//logs/');
+define('APP_ACCESS_LOG_FILE', 'access.log');
+define('APP_ERROR_LOG_FILE', 'error.log');
 
 //! This file must be excluded in your .gitignore file. 
 define('APP_ENV_FILE', 'config.env');

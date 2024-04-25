@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -75,3 +77,32 @@ $app->delete('/players', [PlayersController::class, 'handleDeletePlayers']);
 $app->get('/players/{player_id}', [PlayersController::class, 'handleGetPlayer']);
 //*ROUTE: GET /players/{players_id}/drafts
 $app->get('/players/{player_id}/drafts', [PlayersController::class, 'handleGetPlayerDrafts']);
+
+//! For logging (example!). We need to implement this in helper and index.
+//* ROUTE: GET /hello
+$app->get('/hello', function (Request $request, Response $response, $args) {
+
+    // 1) Initiate and configure a logger.
+    $logger = new Logger('access');
+    $logger->pushHandler(
+        new StreamHandler(
+            APP_LOGS_DIR . APP_ACCESS_LOG_FILE,
+            Logger::DEBUG
+        )
+    );
+
+    // 2) We now can log some access info:
+    $client_ip = $_SERVER["REMOTE_ADDR"];
+    $method = $request->getMethod();
+    $uri = $request->getUri()->getPath();
+    $log_record = $client_ip . ' ' . $method . ' ' . $uri . ' ' . "Hello!";
+
+    // 3) Prepare any extra info.
+    $extras = $request->getQueryParams();
+
+    $logger->info($log_record, $extras);
+
+    $now = DateTimeHelper::getDateAndTime(DateTimeHelper::D_M_Y);
+    $response->getBody()->write("Reporting! Hello there! The current time is: " . $now);
+    return $response;
+});

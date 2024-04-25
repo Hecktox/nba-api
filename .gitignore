@@ -2,6 +2,8 @@
 vendor/
 env/
 
+logs/
+
 ##### VisualStudioCode
 ##.vscode/
 
