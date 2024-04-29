@@ -81,3 +81,45 @@ Listed below are recommended VS Code extensions for Web development. However, mo
 1. [Evondev Dracula](https://marketplace.visualstudio.com/items?itemName=evondev.dracula-high-contrast)
 2. [Tokyo Night](https://marketplace.visualstudio.com/items?itemName=enkia.tokyo-night)
 3. [Dracula Official](https://marketplace.visualstudio.com/items?itemName=dracula-theme.theme-dracula)
+
+
+# Task List for Each Build
+
+## Requirements and Tasks for First Build
+- Review Project Proposal
+- Building SQL Dataset and Database
+  - Add content and implement any necessary changes to the database
+- Implement All Read Requests
+  - Create all GET requests
+  - Tasks like filtering, paging, and sorting functions will be subtasks for GET
+  - Input validation for pagination parameters will be another subtask for GET
+- Implement Paging
+- Implementing Filtering
+- Error Handling
+  - Implement the status codes that may adhere to the project
+
+## Requirements and Tasks for Second Build
+- Implement CREATE, UPDATE, and DELETE Requests
+  - Each team member must implement 1 POST, 1 PUT, and 1 DELETE on a collection resource
+- Implement Input Data Validation
+- Implement Content Negotiation
+- Error Handling (Requirements and Task for First Build)
+
+## Requirements and Tasks for Third Build
+- Implement Composite Resources
+  - Implement API and any external resources
+- Implement Root Resource
+- Implement Logging
+  - Implement Logging with an authentication token
+- Implement Identity Management
+  - Create controlled access for Admin and User
+- Implement Computation
+- Implement Versioning
+  - Log each version that the project goes through
+
+## Additional Tasks
+- Review ERD
+- Split all tasks into subtasks
+- Organize GitHub using branches and other techniques to avoid conflicts
+
+Review task details and additional information found in Team Implementation. Any task that cannot be done will either be because we have not done the labs for them yet. Every task and thing must be implemented in GitHub Projects!
