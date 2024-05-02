@@ -8,6 +8,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 use Vanier\Api\Controllers\AboutController;
+use Vanier\Api\Controllers\AccountsController;
 use Vanier\Api\Controllers\DraftController;
 use Vanier\Api\Controllers\GamesController;
 use Vanier\Api\Controllers\PlayersController;
@@ -77,6 +78,11 @@ $app->delete('/players', [PlayersController::class, 'handleDeletePlayers']);
 $app->get('/players/{player_id}', [PlayersController::class, 'handleGetPlayer']);
 //*ROUTE: GET /players/{players_id}/drafts
 $app->get('/players/{player_id}/drafts', [PlayersController::class, 'handleGetPlayerDrafts']);
+
+//*ROUTE: POST /account
+$app->post('/account', [AccountsController::class, 'handleCreateAccount']);
+//*ROUTE: POST /token
+$app->post('/token', [AccountsController::class, 'handleGenerateToken']);
 
 //! For logging (example!). We need to implement this in helper and index.
 //* ROUTE: GET /hello

@@ -3,6 +3,7 @@ vendor/
 env/
 
 logs/
+#config.env
 
 ##### VisualStudioCode
 ##.vscode/

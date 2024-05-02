@@ -34,8 +34,8 @@ class AccountsModel extends BaseModel
      */
     public function isPasswordValid($email, $input_password)
     {
-        $sql = "SELECT * FROM $this->table_name WHERE email= :email";
-        $account = $this->fetchSingle($sql, [":email" => $email]);
+        $sql = "SELECT * FROM $this->table_name WHERE email = ?";
+        $account = $this->fetchSingle($sql, [$email]);
         if ($account && is_array($account)) {
             if (password_verify($input_password, $account['password'])) {
                 return $account;
@@ -51,7 +51,7 @@ class AccountsModel extends BaseModel
      *  will be created.
      * @return int the newly generated user id.
      */
-    public function createAccount(array $account_info) : int
+    public function createAccount(array $account_info): int
     {
         //-- 1) Add the value of the required created at (date and time) field.        
         $account_info["created_at"] = DateTimeHelper::getDateAndTime(DateTimeHelper::Y_M_D_H_M_S);
@@ -67,7 +67,7 @@ class AccountsModel extends BaseModel
      * @param string $password_to_hash the user password that needs to be hashed
      * @return string the hashed password.
      */
-    private function getHashedPassword(string $password_to_hash) : string
+    private function getHashedPassword(string $password_to_hash): string
     {
         //@see: https://www.php.net/manual/en/function.password-hash.php
         $options = ['cost' => 15];
