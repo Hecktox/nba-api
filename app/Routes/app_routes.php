@@ -79,6 +79,9 @@ $app->get('/players/{player_id}', [PlayersController::class, 'handleGetPlayer'])
 //*ROUTE: GET /players/{players_id}/drafts
 $app->get('/players/{player_id}/drafts', [PlayersController::class, 'handleGetPlayerDrafts']);
 
+//*ROUTE: GET /sport
+$app->get('/sports', [SportDbController::class, 'searchLeagues'])
+    
 //*ROUTE: POST /account
 $app->post('/account', [AccountsController::class, 'handleCreateAccount']);
 //*ROUTE: POST /token
