@@ -2,12 +2,12 @@
 
 namespace Vanier\Api\Controllers;
 
+use Vanier\Api\Models\TeamModel;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Vanier\Api\Models\TeamModel;
-use Vanier\Api\Exceptions\HttpInvalidInputException;
 use Vanier\Api\Exceptions\HttpInvalidPaginationParameterException;
 use Vanier\Api\Validations\Validator;
+use Vanier\Api\Exceptions\HttpInvalidInputException;
 
 require_once("validation/validation/Validator.php");
 
