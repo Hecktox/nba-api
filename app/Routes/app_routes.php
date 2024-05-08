@@ -12,6 +12,7 @@ use Vanier\Api\Controllers\AccountsController;
 use Vanier\Api\Controllers\DraftController;
 use Vanier\Api\Controllers\GamesController;
 use Vanier\Api\Controllers\PlayersController;
+use Vanier\Api\Controllers\SportDbController;
 use Vanier\Api\Helpers\DateTimeHelper;
 use Vanier\Api\Controllers\TeamController;
 
@@ -80,10 +81,11 @@ $app->get('/players/{player_id}', [PlayersController::class, 'handleGetPlayer'])
 $app->get('/players/{player_id}/drafts', [PlayersController::class, 'handleGetPlayerDrafts']);
 
 //*ROUTE: GET /sport
-$app->get('/sports', [SportDbController::class, 'searchLeagues'])
+$app->get('/sports', [SportDbController::class, 'searchLeagues']);
     
 //*ROUTE: POST /account
 $app->post('/account', [AccountsController::class, 'handleCreateAccount']);
+
 //*ROUTE: POST /token
 $app->post('/token', [AccountsController::class, 'handleGenerateToken']);
 
