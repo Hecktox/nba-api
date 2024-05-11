@@ -38,11 +38,13 @@ $app->put('/draft', [DraftController::class, 'handleUpdateDraft']);
 $app->delete('/draft', [DraftController::class, 'handleDeleteDraft']);
 
 
+
+
 //* ROUTE: CRUD /Team
 $app->get('/team', [TeamController::class, 'handleGetAllTeams']);
-$app->post('/team', [TeamController::class, 'handleCreateTeam']); 
-$app->put('/team', [TeamController::class, 'handleUpdateTeam']); 
-$app->delete('/team', [TeamController::class, 'handleDeleteTeam']); 
+$app->post('/team', [TeamController::class, 'handleCreateTeam']);
+$app->put('/team', [TeamController::class, 'handleUpdateTeam']);
+$app->delete('/team', [TeamController::class, 'handleDeleteTeam']);
 //* ROUTE: GET /Team/{team_id}
 $app->get('/team/{team_id}', [TeamController::class, 'handleGetTeamId']);
 //* ROUTE: GET /Team/{team_id}/History
@@ -78,21 +80,30 @@ $app->get('/players/{player_id}', [PlayersController::class, 'handleGetPlayer'])
 //*ROUTE: GET /players/{players_id}/drafts
 $app->get('/players/{player_id}/drafts', [PlayersController::class, 'handleGetPlayerDrafts']);
 
+
+
 //*ROUTE: POST /BMI
 $app->post('/BMI', [BMIController::class, 'handleComputeBMI']);
 
+
+
 //*ROUTE: GET /sport
 $app->get('/sports', [SportDbController::class, 'searchLeagues']);
-//*ROUTE: GET /sport
+//*ROUTE: GET /shows
 $app->get('/shows', [TvMazeController::class, 'searchNbaShows']);
+
+
 
 //*ROUTE: POST /account
 $app->post('/account', [AccountsController::class, 'handleCreateAccount']);
 //*ROUTE: POST /token
 $app->post('/token', [AccountsController::class, 'handleGenerateToken']);
 
+
+
+$app->get('/', [AboutController::class, 'handleAboutWebService']);
 //! For logging (example!). We need to implement this in helper and index.
-//* ROUTE: GET /hello
+//* ROUTE: GET Hello
 $app->get('/hello', function (Request $request, Response $response, $args) {
 
     // 1) Initiate and configure a logger.

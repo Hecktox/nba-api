@@ -6,35 +6,6 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Vanier\Api\Models\SportsDbModel;
 
-// class SportDbController extends BaseController
-// {
-//     private $sportsDbModel;
-
-//     public function __construct()
-//     {
-//         $this->sportsDbModel = new SportsDbModel();
-//     }
-
-//     public function handleLeagues(Request $request, Response $response, array $uri_args): Response
-//     {
-//         try {
-//             $queryParams = $request->getQueryParams();
-//             $country = $queryParams['c'] ?? '';
-//             $order = $queryParams['order'] ?? 'asc';
-
-//             if ($order !== 'asc' && $order !== 'desc') {
-//                 throw new \InvalidArgumentException('Invalid order parameter. Must be "asc" or "desc".');
-//             }
-
-//             $apiData = $this->sportsDbModel->searchLeagues('Basketball', $country, $order);
-//             return $this->makeResponse($response, $apiData, 200);
-//         } catch (\Exception $e) {
-//             return $this->makeResponse($response, ['error' => $e->getMessage()], 500);
-//         }
-//     }
-// }
-
-
 use GuzzleHttp\Client;
 
 class SportDbController extends BaseController
