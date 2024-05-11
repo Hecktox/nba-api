@@ -9,6 +9,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 use Vanier\Api\Controllers\AboutController;
 use Vanier\Api\Controllers\AccountsController;
+use Vanier\Api\Controllers\BMIController;
 use Vanier\Api\Controllers\DraftController;
 use Vanier\Api\Controllers\GamesController;
 use Vanier\Api\Controllers\PlayersController;
@@ -37,7 +38,7 @@ $app->put('/draft', [DraftController::class, 'handleUpdateDraft']);
 $app->delete('/draft', [DraftController::class, 'handleDeleteDraft']);
 
 
-//* ROUTE: CURM /Team
+//* ROUTE: CRUD /Team
 $app->get('/team', [TeamController::class, 'handleGetAllTeams']);
 $app->post('/team', [TeamController::class, 'handleCreateTeam']); 
 $app->put('/team', [TeamController::class, 'handleUpdateTeam']); 
@@ -66,29 +67,27 @@ $app->delete('/games', [GamesController::class, 'handleDeleteGames']);
 
 //*ROUTE: GET /players
 $app->get('/players', [PlayersController::class, 'handleGetPlayers']);
-
 //*ROUTE: POST /players
 $app->post('/players', [PlayersController::class, 'handleCreatePlayers']);
-
 //*ROUTE: PUT /players
 $app->put('/players', [PlayersController::class, 'handleUpdatePlayers']);
-
 //*ROUTE: DELETE /players
 $app->delete('/players', [PlayersController::class, 'handleDeletePlayers']);
-
 //*ROUTE: GET /players/{player_id}
 $app->get('/players/{player_id}', [PlayersController::class, 'handleGetPlayer']);
 //*ROUTE: GET /players/{players_id}/drafts
 $app->get('/players/{player_id}/drafts', [PlayersController::class, 'handleGetPlayerDrafts']);
 
+//*ROUTE: POST /BMI
+$app->post('/BMI', [BMIController::class, 'handleComputeBMI']);
+
 //*ROUTE: GET /sport
 $app->get('/sports', [SportDbController::class, 'searchLeagues']);
-
 //*ROUTE: GET /sport
 $app->get('/shows', [TvMazeController::class, 'searchNbaShows']);
+
 //*ROUTE: POST /account
 $app->post('/account', [AccountsController::class, 'handleCreateAccount']);
-
 //*ROUTE: POST /token
 $app->post('/token', [AccountsController::class, 'handleGenerateToken']);
 
