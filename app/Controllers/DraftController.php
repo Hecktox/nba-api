@@ -1,26 +1,32 @@
 <?php
 
 namespace Vanier\Api\Controllers;
+
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Vanier\Api\Models\DraftModel;
 use Vanier\Api\Exceptions\HttpInvalidInputException;
 use Vanier\Api\Exceptions\HttpInvalidPaginationParameterException;
 use Vanier\Api\Validations\Validator;
+
 require_once("validation/validation/Validator.php");
+
 class DraftController extends BaseController
 {
     private $draft_model = null;
+
     public function __construct()
     {
-        $this->draft_model= new DraftModel;
+        $this->draft_model = new DraftModel;
     }
+
     private function assertDraftId($request, $draft_id)
     {
         if (strlen($draft_id) !== 10) {
             throw new HttpInvalidPaginationParameterException($request, "Invalid team ID format. Must be a 10-character string.");
         }
     }
+
     public function handleGetDraft(Request $request, Response $response, array $uri_args): Response
     {
         $filters = $request->getQueryParams();
@@ -37,6 +43,7 @@ class DraftController extends BaseController
 
         return $this->makeResponse($response, $teams);
     }
+
     public function handleGetDraftPlayerId(Request $request, Response $response, array $uri_args): Response
     {
         $player_id = $uri_args["player_id"];
@@ -50,8 +57,8 @@ class DraftController extends BaseController
         }
 
         return $this->makeResponse($response, $draft_info);
-		 
     }
+
     public function handleGetPlayerIdSeason(Request $request, Response $response, array $uri_args): Response
     {
         $team_id = $uri_args["player_id"];
@@ -65,67 +72,63 @@ class DraftController extends BaseController
         }
 
         return $this->makeResponse($response, $draft_info);
-		 
     }
+
     public function handleCreateDraft(Request $request, Response $response, array $uri_args): Response
     {
-        $draft = $request->getParsedBody();
-        $v = new Validator($draft);
+        $drafts = $request->getParsedBody();
+        $v = new Validator($drafts);
         $rules = array(
             'season' => [
-                array('regex', '\b\d{1,4}\b')
+                array('regex', '/^\b\d{1,4}\b+$/')
             ],
             'player_id' => [
                 'integer'
             ],
             'first_name' => [
-                array('regex', '^[A-Z][a-z]+$')
+                array('regex', '/^[A-Z][a-z]+$/')
             ],
             'last_name' => [
-                array('regex', '^[A-Z][a-z]+$')
+                array('regex', '/^[A-Z][a-z]+$/')
             ],
             'player_name' => [
-                array('regex', '^[A-Z][a-z]+$')
+                array('regex', '/^[A-Z][a-z]+$/')
             ],
             'position' => [
-                array('regex', '^\b(PG|SG|SF|PF|C)\b$')
+                array('regex', '/^\b(PG|SG|SF|PF|C)\b$/')
             ],
             'weight' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/gm')
+                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
             ],
             'wingspan' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/gm')
+                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
             ],
             'standing_reach' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/gm')
+                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
             ],
             'hand_length' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/gm')
+                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
             ],
             'hand_width' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/gm')
+                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
             ],
             'standing_vertical_leap' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/gm')
+                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
             ],
             'max_vertical_leap' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/gm')
+                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
             ],
             'bench_press' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/gm')
+                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
             ],
         );
 
         $v->mapFieldsRules($rules);
 
         if ($v->validate()) {
-            foreach ($draft as $draft) {
+            foreach ($drafts as $draft) {
                 $this->draft_model->createDraft($draft);
             }
-
-        }
-        foreach ($draft as $game) {
-            $this->draft_model->createDraft($game);
         }
 
         $response_data = array(
@@ -142,46 +145,46 @@ class DraftController extends BaseController
         $v = new Validator($drafts);
         $rules = array(
             'season' => [
-                array('regex', '\b\d{1,4}\b')
+                array('regex', '/^\b\d{1,4}\b$/')
             ],
             'player_id' => [
                 'integer'
             ],
             'first_name' => [
-                array('regex', '^[A-Z][a-z]+$')
+                array('regex', '/^[A-Z][a-z]+$/')
             ],
             'last_name' => [
-                array('regex', '^[A-Z][a-z]+$')
+                array('regex', '/^[A-Z][a-z]+$/')
             ],
             'player_name' => [
-                array('regex', '^[A-Z][a-z]+$')
+                array('regex', '/^[A-Z][a-z]+$/')
             ],
             'position' => [
-                array('regex', '^\b(PG|SG|SF|PF|C)\b$')
+                array('regex', '/^\b(PG|SG|SF|PF|C)\b$/')
             ],
             'weight' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/gm')
+                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
             ],
             'wingspan' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/gm')
+                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
             ],
             'standing_reach' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/gm')
+                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
             ],
             'hand_length' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/gm')
+                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
             ],
             'hand_width' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/gm')
+                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
             ],
             'standing_vertical_leap' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/gm')
+                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
             ],
             'max_vertical_leap' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/gm')
+                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
             ],
             'bench_press' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/gm')
+                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
             ],
         );
 
@@ -189,17 +192,8 @@ class DraftController extends BaseController
 
         if ($v->validate()) {
             foreach ($drafts as $draft) {
-                $this->draft_model->createDraft($draft);
+                $this->draft_model->updateDraft($draft, $draft['player_id']);
             }
-
-        }
-        foreach ($draft as $game) {
-            $this->draft_model->createDraft($game);
-        }
-        foreach ($draft as $draft) {
-            $player_id = $draft["player_id"];
-            unset($draft["player_id"]);
-            $this->draft_model->updateDraft($draft, $player_id);
         }
 
         $response_data = array(
@@ -212,66 +206,59 @@ class DraftController extends BaseController
 
     public function handleDeleteDraft(Request $request, Response $response, array $uri_args): Response
     {
-        $draft = $request->getParsedBody();
-        $v = new Validator($draft);
+        $drafts = $request->getParsedBody();
+        $v = new Validator($drafts);
         $rules = array(
             'season' => [
-                array('regex', '\b\d{1,4}\b')
+                array('regex', '/^\b\d{1,4}\b+$/')
             ],
             'player_id' => [
                 'integer'
             ],
             'first_name' => [
-                array('regex', '^[A-Z][a-z]+$')
+                array('regex', '/^[A-Z][a-z]+$/')
             ],
             'last_name' => [
-                array('regex', '^[A-Z][a-z]+$')
+                array('regex', '/^[A-Z][a-z]+$/')
             ],
             'player_name' => [
-                array('regex', '^[A-Z][a-z]+$')
+                array('regex', '/^[A-Z][a-z]+$/')
             ],
             'position' => [
-                array('regex', '^\b(PG|SG|SF|PF|C)\b$')
+                array('regex', '/^\b(PG|SG|SF|PF|C)\b$/')
             ],
             'weight' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/gm')
+                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
             ],
             'wingspan' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/gm')
+                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
             ],
             'standing_reach' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/gm')
+                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
             ],
             'hand_length' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/gm')
+                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
             ],
             'hand_width' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/gm')
+                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
             ],
             'standing_vertical_leap' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/gm')
+                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
             ],
             'max_vertical_leap' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/gm')
+                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
             ],
             'bench_press' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/gm')
+                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
             ],
         );
 
         $v->mapFieldsRules($rules);
 
         if ($v->validate()) {
-            foreach ($draft as $draft) {
-                $this->draft_model->createDraft($draft);
+            foreach ($drafts as $player_id) {
+                $this->draft_model->deleteDraft($player_id);
             }
-
-        }
-        foreach ($draft as $game) {
-            $this->draft_model->createDraft($game);
-        }
-        foreach ($draft as $player_id) {
-            $this->draft_model->deleteDraft($player_id);
         }
 
         $response_data = array(

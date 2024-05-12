@@ -79,6 +79,22 @@ Welcome! This is a Web service that provides comprehensive access to NBA-related
 | Draft by Player ID | /draft/{player_id}                       | GET                    | N/A    |
 | Draft Seasons      | /draft/{player_id}/season                | GET                    | N/A    |
 
+| POST           | PUT            | DELETE         |
+|----------------|----------------|----------------|
+| "player_id":  |   "player_id":    | player_id
+| "season":     | "season":     |      |
+| "first_name":   | "first_name":   |                |
+| "last_name":| "last_name":|                |
+| "position":    | "position":    |                |
+| "weight":        | "weight":        |                |
+| "wingspan":       | "wingspan":       |                |
+| "standing_reach":| "standing_reach":|                |
+| "hand_length":       | "hand_length":       |                |
+| "hand_width":| "hand_width":|          |
+| "standing_vertical_leap":    | "standing_vertical_leap":    |                |
+| "max_vertical_leap":        | "max_vertical_leap":        |                |
+| "bench_press":       | "bench_press":       |                |
+
 ## Games
 
 | Resource   | URI                                                              | Method                 | Filter |
