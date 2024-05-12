@@ -26,6 +26,19 @@ Welcome! This is a Web service that provides comprehensive access to NBA-related
 | Team by ID   | /team/{team_id}                        | GET                    | N/A    |
 | Team History | /team/{team_id}/history                | GET                    | match_result    |
 
+| POST           | PUT            | DELETE         |
+|----------------|----------------|----------------|
+| "team_id":    | "team_id":    | team_id            |
+| "full_name":   | "full_name":   |                |
+| "abbreviation":| "abbreviation":|                |
+| "nickname":    | "nickname":    |                |
+| "city":        | "city":        |                |
+| "state":       | "state":       |                |
+| "year_founded":| "year_founded":|                |
+| "owner":       | "owner":       |                |
+| "year_active_till":| "year_active_till":|          |
+
+
 ### Players
 
 | Resource      | URI                                                                  | Method                 | Filter |
