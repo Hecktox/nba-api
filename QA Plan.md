@@ -56,4 +56,5 @@ Welcome! This is a Web service that provides comprehensive access to NBA-related
 | Resource | URI                                                              | Method | Filter |
 | -------- | ---------------------------------------------------------------- | ------ | ------ |
 | Sports    | /sports                       | GET    | c=[Country]    |
-| Shows    | [http://localhost/nba-api/shows](http://localhost/nba-api/shows) | GET    | N/A    |
+| Shows    | /shows | GET    | N/A    |
+| BMI Computation    | /BMI | POST    | N/A    |
