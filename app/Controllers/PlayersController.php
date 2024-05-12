@@ -19,6 +19,7 @@ class PlayersController extends BaseController
         $this->player_model = new PlayersModel();
     }
 
+
     public function handleGetPlayers(Request $request, Response $response, array $uri_args): Response{
         //1. Retrieve the query params entered by the user
         $filters = $request->getQueryParams();
@@ -40,13 +41,13 @@ class PlayersController extends BaseController
                 );
             }
         
-        
+        //!3. Create the sorting logic for the resource
 
 
-        //3. Pull the list of players from the db
+        //4. Pull the list of players from the db
         $players = $this->player_model->getAllPlayers($filters);
 
-        //4. Return a response to the user with the info
+        //5. Return a response to the user with the info
         return $this->makeResponse($response, $players);
     }
 
@@ -57,8 +58,7 @@ class PlayersController extends BaseController
         //2. Use the id to extract the desired player's info from the db
         $player = $this->player_model->getSinglePlayer($player_id);
 
-        //var_dump($player);exit;
-
+        //!3. Throw error if player does not exist
         // if ($player[0] === false) {
         //     //var_dump($player_info);exit;
         //     throw new HttpNoContentException($request);
@@ -66,7 +66,7 @@ class PlayersController extends BaseController
 
         $result = $this->makeResponse($response, $player);
 
-        //3. Return a response to the user
+        //4. Return a response to the user
         return $result;
     }
 
@@ -92,85 +92,85 @@ class PlayersController extends BaseController
                 );
             }
 
-        
-
-        //3. Extract the player id from the uri_args array
+        //5. Extract the player id from the uri_args array
         $player_id = $uri_args["player_id"];
 
-        //4. Use the id to extract the drafts for the specified player from the db
+        //6. Use the id to extract the drafts for the specified player from the db
         $drafts = $this->player_model->getPlayerDrafts($player_id);
 
-        //5. Return a response to the user
+        //7. Return a response to the user
         return $this->makeResponse($response, $drafts);
     }
 
     public function handleCreatePlayers(Request $request, Response $response, array $uri_args): Response {
+
+        //1. Get the information from the body
         $players = $request->getParsedBody();
         
-        $player_fk = $players[0];
+        //2. Validation logic for foreign_key
+        // $player_fk = $players[0];
 
-        $provided_team_id = $player_fk['team_id'];
+        // $provided_team_id = $player_fk['team_id'];
 
-        $provided_player_id = $player_fk['person_id'];
+        // $provided_player_id = $player_fk['person_id'];
 
-        Validator::addRule(
-            'invalid_foreign_key',
-            function($inserted_team_id) use ($provided_team_id){
-                $result = $this->player_model->verifyTeamId($provided_team_id);
+        // Validator::addRule(
+        //     'invalid_foreign_key',
+        //     function($inserted_team_id) use ($provided_team_id){
+        //         $result = $this->player_model->verifyTeamId($provided_team_id);
 
-                if(empty($result)){
-                    return false;
-                }
+        //         if(empty($result)){
+        //             return false;
+        //         }
 
-                return true;
-            },
-            'Foreign key provided team_id does not exists'
-        );
+        //         return true;
+        //     },
+        //     'Foreign key provided team_id does not exists'
+        // );
 
-        Validator::addRule(
-            'present_player_id',
-            function($inserted_player_id) use ($provided_player_id){
-                $result = $this->player_model->verifyPlayerIdPresent($provided_player_id);
+        // Validator::addRule(
+        //     'isPresent_player_id',
+        //     function($inserted_player_id) use ($provided_player_id){
+        //         $result = $this->player_model->verifyPlayerIdPresent($provided_player_id);
 
-                if(empty($result)){
-                    return false;
-                }
+        //         if(empty($result)){
+        //             return false;
+        //         }
 
-                return true;
-            },
-            'Provided player_id does exists. Unable to add player(s)'
-        );
+        //         return true;
+        //     },
+        //     'Provided player_id does exists. Unable to add player(s)'
+        // );
 
         $v = new Validator($players);
         $rules = array(
-            'player_id' => array(
-                'present_player_id'
-            ),
+            // 'player_id' => array(
+            //     'isPresent_player_id'
+            // ),
             'first_name' => array(
-                array('regex', '^[A-Z][a-z]+$')
+                array('regex', '/^[A-Z][a-z]+$/')
             ),
             'last_name' => array(
-                array('regex', '^[A-Z][a-z]+$'),
+                array('regex', '/^[A-Z][a-z]+$/')
             ),
             'country' => [
-                array('regex', '^[A-Z][a-z]+$'),
-
+                array('regex', '/^[A-Z][a-z]+$/'),
             ],
             'teamName' => [
-                array('regex', '^[A-Z][a-z]+$')
+                array('regex', '/^[A-Z][a-z]+$/')
             ],
             'team_id' => [
                 'integer',
-                'invalid_foreign_key'
+                //'invalid_foreign_key'
             ],
             'draft_number' => [
-                array('regex', '^\d+$')
+                array('regex', '/^\d+$/')
             ],
             'from_year' => [
-                array('regex', '^(18[6-9]\d|19\d\d|20[0-1]\d|202[0-4])$')
+                array('regex', '/^(18[6-9]\d|19\d\d|20[0-1]\d|202[0-4])$/')
             ],
             'to_year' => [
-                array('regex', '^(18[6-9]\d|19\d\d|20[0-1]\d|202[0-4])$')
+                array('regex', '/^(18[6-9]\d|19\d\d|20[0-1]\d|202[0-4])$/')
             ],
         );
 
@@ -285,9 +285,6 @@ class PlayersController extends BaseController
             },
             'Provided player_id does not exist'
         );
-
-
-
 
          //Check if id exists in the table
          $v = new Validator($players);

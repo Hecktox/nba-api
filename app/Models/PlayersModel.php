@@ -37,6 +37,10 @@ class PlayersModel extends BaseModel
             $filter_values["team_name"] = $filters["team_name"];
         }
 
+        if (isset($filters["order"]) && in_array($filters["order"], ["asc", "desc"])) {
+            $sql .= " ORDER BY last_name " . strtoupper($filters["order"]);
+        }
+
         //4. Return an array of the obtained values using the 'paginate' method
         return (array)$this->paginate($sql, $filter_values);
     }
