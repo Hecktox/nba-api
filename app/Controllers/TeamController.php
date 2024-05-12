@@ -84,10 +84,11 @@ class TeamController extends BaseController
     }
     public function handleCreateTeam(Request $request, Response $response, array $uri_args): Response
     {
-        $teams = $request->getParsedBody();
+        $team_data = $request->getParsedBody();
 
-        $v = new Validator($teams);
-        $rules = (array) [
+        // Validate team data
+        $v = new Validator($team_data);
+        $rules = [
             'team_id' => [
                 'required',
                 'integer',
@@ -114,42 +115,43 @@ class TeamController extends BaseController
                 'required',
                 'integer',
                 ['min', 1000],
-                ['max', date('Y')] // Assuming current year is the maximum
+                ['max', date('Y')]
             ],
             'owner' => [
                 'required'
             ],
             'year_active_till' => [
                 'required',
-                ['regex', '/^\d{4}$/'], // Year format (e.g., 2024)
-                ['min', date('Y')] // Assuming the year should be equal to or greater than the current year
+                ['regex', '/^\d{4}$/'],
+                ['min', date('Y')]
             ]
         ];
 
         $v->mapFieldsRules($rules);
 
-        if ($v->validate()) {
-            foreach ($teams as $team) {
-                $this->team_model->createTeam($team);
-            }
-
-            $response_data = array(
-                "code" => "success",
-                "message" => "The list of teams has been created successfully"
-            );
-
-            return $this->makeResponse($response, $response_data, 201);
-        } else {
-            print_r($v->errors());
+        if (!$v->validate()) {
+            $error_response = [
+                "code" => "failure",
+                "message" => "Validation failed",
+                "errors" => $v->errors()
+            ];
+            return $this->makeResponse($response, $error_response, 400);
         }
 
-        $response_data = array(
-            "code" => "failure",
-            "message" => "The list of teams has not been created."
-        );
+        // Create teams
+        foreach ($team_data as $team) {
+            $this->team_model->createTeam($team);
+        }
 
-        return $this->makeResponse($response, $response_data, 500);
+        // Response for successful creation
+        $response_data = [
+            "code" => "success",
+            "message" => "The list of teams has been created successfully"
+        ];
+
+        return $this->makeResponse($response, $response_data, 201);
     }
+
 
 
     // public function handleCreateTeam(Request $request, Response $response, array $uri_args): Response
