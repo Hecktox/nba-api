@@ -7,6 +7,7 @@ use Vanier\Api\Models\DraftModel;
 use Vanier\Api\Exceptions\HttpInvalidInputException;
 use Vanier\Api\Exceptions\HttpInvalidPaginationParameterException;
 use Vanier\Api\Validations\Validator;
+require_once("validation/validation/Validator.php");
 class DraftController extends BaseController
 {
     private $draft_model = null;
@@ -137,8 +138,8 @@ class DraftController extends BaseController
 
     public function handleUpdateDraft(Request $request, Response $response, array $uri_args): Response
     {
-        $draft = $request->getParsedBody();
-        $v = new Validator($draft);
+        $drafts = $request->getParsedBody();
+        $v = new Validator($drafts);
         $rules = array(
             'season' => [
                 array('regex', '\b\d{1,4}\b')
@@ -187,7 +188,7 @@ class DraftController extends BaseController
         $v->mapFieldsRules($rules);
 
         if ($v->validate()) {
-            foreach ($draft as $draft) {
+            foreach ($drafts as $draft) {
                 $this->draft_model->createDraft($draft);
             }
 
