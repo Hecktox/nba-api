@@ -90,12 +90,12 @@ class GamesController extends BaseController
             'team_id_home' => [
                 'integer'
             ],
-            'team_abbreviation_home' => [
-                array('regex', '^[A-Z][a-z]+$')
-            ],
-            'team_name_home' => [
-                array('regex', '^[A-Z][a-z]+$')
-            ],
+            'team_abbreviation_home' => array(
+                array('regex', '/^[A-Z]+$/')
+            ),
+            'team_name_home' => array(
+                array('regex', '/^[A-Z][a-zA-Z\s]+$/')
+            ),
             'game_id' => [
                 'integer'
             ],
@@ -112,16 +112,16 @@ class GamesController extends BaseController
                 'integer'
             ],
             'team_abbreviation_away' => [
-                array('regex', '^[A-Z][a-z]+$')
+                array('regex', '/^[A-Z]+$/')
             ],
             'team_name_away' => [
-                array('regex', '^[A-Z][a-z]+$')
+                array('regex', '/^[A-Z][a-zA-Z\s]+$/')
             ],
             'matchup_away' => [
-                array('regex', '^[A-Z][a-z]+$')
+                array('regex', '/^[A-Z\s]+ @ [A-Z\s]+$/')
             ],
             'wl_away' => [
-                array('regex', '^[A-Z][a-z]+$')
+                array('regex', '/^[A-Z]+$/')
             ],
             'pts_away' => [
                 'numeric'
@@ -130,7 +130,7 @@ class GamesController extends BaseController
                 'numeric'
             ],
             'season_type' => [
-                array('regex', '^[A-Z][a-z]+$')
+                array('regex', '/^[A-Z][a-zA-Z\s]+$/')
             ],
         );
 
