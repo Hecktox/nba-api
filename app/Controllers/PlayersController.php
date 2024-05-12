@@ -107,26 +107,33 @@ class PlayersController extends BaseController
         //1. Get the information from the body
         $players = $request->getParsedBody();
         
+
         //2. Validation logic for foreign_key
+        $GLOBALS['team_fk'] = $players["team_id"];
+        // var_dump($GLOBALS['team_fk']);
+        // exit;
         // $player_fk = $players[0];
 
         // $provided_team_id = $player_fk['team_id'];
 
         // $provided_player_id = $player_fk['person_id'];
+        
 
-        // Validator::addRule(
-        //     'invalid_foreign_key',
-        //     function($inserted_team_id) use ($provided_team_id){
-        //         $result = $this->player_model->verifyTeamId($provided_team_id);
+         Validator::addRule(
+             'invalid_foreign_key',
+             function(){
+                $team_id = $GLOBALS['team_fk'];
+                $result = $this->player_model->verifyTeamId($team_id);
+                
 
-        //         if(empty($result)){
-        //             return false;
-        //         }
+                if($result == False){
+                    return false;
+                }
 
-        //         return true;
-        //     },
-        //     'Foreign key provided team_id does not exists'
-        // );
+                return true;
+            },
+            'Foreign key provided team_id does not exists'
+        );
 
         // Validator::addRule(
         //     'isPresent_player_id',
@@ -161,7 +168,7 @@ class PlayersController extends BaseController
             ],
             'team_id' => [
                 'integer',
-                //'invalid_foreign_key'
+                'invalid_foreign_key'
             ],
             'draft_number' => [
                 array('regex', '/^\d+$/')

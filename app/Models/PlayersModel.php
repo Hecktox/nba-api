@@ -54,17 +54,25 @@ class PlayersModel extends BaseModel
         return (array) $this->fetchSingle($sql, ["person_id" => $person_id]);
     }
 
-    public function verifyTeamId(string $team_id): mixed {
-        $sql = "SELECT * FROM team WHERE team_id = $team_id";
+    public function verifyTeamId($team_id): mixed {
+        $sql = "SELECT * FROM team WHERE team_id = :$team_id";
 
-        if(empty($sql)){
+        // var_dump($sql);
+        // exit;
+        //!Statement executes with an error
+        $returnValue = (array) $this->fetchSingle($sql, ["team_id" => $team_id]);
+        
+        var_dump($returnValue);
+        exit;
+
+        if($returnValue == False){
             return false;
         } 
         return true;
     }
 
     public function verifyPlayerIdAbsent(string $player_id): mixed {
-        $sql = "SELECT * FROM common_player_info WHERE person_id = $player_id";
+        $sql = "SELECT * FROM common_player_info WHERE person_id = :$player_id";
 
         if(empty($sql)){
             return false;
