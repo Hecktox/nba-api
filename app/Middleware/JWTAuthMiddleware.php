@@ -11,7 +11,6 @@ use Slim\Exception\HttpForbiddenException;
 use Slim\Exception\HttpUnauthorizedException;
 use UnexpectedValueException;
 use Firebase\JWT\JWT;
-
 use Vanier\Api\Helpers\JWTManager;
 
 class JWTAuthMiddleware implements MiddlewareInterface
@@ -30,7 +29,7 @@ class JWTAuthMiddleware implements MiddlewareInterface
         // Public routes (routes that do not require JWT authorization)
         $publicRoutes = ['/account', '/token'];
 
-        if (in_array($request->getUri()->getPath(), $publicRoutes)) {
+        if (in_array($request->getUri()->getPath(), $publicRoutes) || $request->getMethod() === 'POST') {
             return $handler->handle($request);
         }
 
@@ -51,7 +50,7 @@ class JWTAuthMiddleware implements MiddlewareInterface
             /*
              * 4) Try to decode the JWT token.
              */
-            $decodedToken = JWT::decode($token, JWTManager::loadSecretKey(), [JWTManager::SIGNATURE_ALGO]);
+            $decodedToken = JWTManager::decodeJWT($token, JWTManager::SIGNATURE_ALGO);
         } catch (\Exception $e) {
             throw new HttpForbiddenException($request, 'Invalid authorization token');
         }
