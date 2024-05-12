@@ -59,7 +59,7 @@ class PlayersController extends BaseController
         $player = $this->player_model->getSinglePlayer($player_id);
 
         //!3. Throw error if player does not exist
-        // if ($player[0] === false) {
+        // if ($player === false) {
         //     //var_dump($player_info);exit;
         //     throw new HttpNoContentException($request);
         // }
@@ -110,6 +110,7 @@ class PlayersController extends BaseController
 
         //2. Validation logic for foreign_key
         $GLOBALS['team_fk'] = $players["team_id"];
+
         // var_dump($GLOBALS['team_fk']);
         // exit;
         // $player_fk = $players[0];
@@ -135,25 +136,11 @@ class PlayersController extends BaseController
             'Foreign key provided team_id does not exists'
         );
 
-        // Validator::addRule(
-        //     'isPresent_player_id',
-        //     function($inserted_player_id) use ($provided_player_id){
-        //         $result = $this->player_model->verifyPlayerIdPresent($provided_player_id);
-
-        //         if(empty($result)){
-        //             return false;
-        //         }
-
-        //         return true;
-        //     },
-        //     'Provided player_id does exists. Unable to add player(s)'
-        // );
-
         $v = new Validator($players);
         $rules = array(
-            // 'player_id' => array(
-            //     'isPresent_player_id'
-            // ),
+            'player_id' => array(
+                'required'
+            ),
             'first_name' => array(
                 array('regex', '/^[A-Z][a-z]+$/')
             ),
@@ -168,7 +155,7 @@ class PlayersController extends BaseController
             ],
             'team_id' => [
                 'integer',
-                'invalid_foreign_key'
+                //'invalid_foreign_key'
             ],
             'draft_number' => [
                 array('regex', '/^\d+$/')

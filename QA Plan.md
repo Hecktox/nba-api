@@ -28,7 +28,7 @@ Welcome! This is a Web service that provides comprehensive access to NBA-related
 
 | POST           | PUT            | DELETE         |
 |----------------|----------------|----------------|
-| "team_id":    | "team_id":    | team_id            |
+| "team_id":     | "team_id":     | team_id        |
 | "full_name":   | "full_name":   |                |
 | "abbreviation":| "abbreviation":|                |
 | "nickname":    | "nickname":    |                |
@@ -46,6 +46,29 @@ Welcome! This is a Web service that provides comprehensive access to NBA-related
 | Players       | /players | GET, POST, PUT, DELETE | first_name, country, birthdate, team_name, order, page, page_size, order    |
 | Player by ID  | /players/{player_id}                            | GET                    | N/A    |
 | Player Drafts | /players/{player_id}/drafts                     | GET                    | N/A    |
+
+| POST           | PUT            | DELETE         |
+|----------------|----------------|----------------|
+| "person_id":  |   "person_id":    | person_id
+| "first_name":     | "first_name":     |      |
+| "last_name":   | "last_name":   |                |
+| "birthdate":| "birthdate":|                |
+| "school":    | "school":    |                |
+| "country":        | "country":        |                |
+| "height":       | "height":       |                |
+| "weight":| "weight":|                |
+| "jersey":       | "jersey":       |                |
+| "position":| "position":|          |
+| "team_id":    | "team_id":    |                |
+| "team_name":        | "team_name":        |                |
+| "team_abbreviation":       | "team_abbreviation":       |                |
+| "team_code":| "team_code":|                |
+| "team_city":       | "team_city":       |                |
+| "from_year":| "from_year":|          |
+| "to_year":        | "to_year":        |                |
+| "draft_year":     | "draft_year":       |             |
+| "draft_number":| "draft_number":|                |
+
 
 ### Drafts
 
