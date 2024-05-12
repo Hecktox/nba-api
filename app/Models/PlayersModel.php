@@ -8,6 +8,14 @@ class PlayersModel extends BaseModel
         parent::__construct();
     }
 
+    
+    /**
+     * 
+     * Retrieves all the players inside of the database and processes 
+     * the appropriate filters specified by the user.
+     * 
+     * 
+     */
     public function getAllPlayers(array $filters) : array{
         //1. Create a local array to hold the values of the filters
         $filter_values = [];
@@ -45,6 +53,14 @@ class PlayersModel extends BaseModel
         return (array)$this->paginate($sql, $filter_values);
     }
 
+    
+    /**
+     * 
+     * Retrieves a single player from the database using the person_id specified by the
+     * user.
+     * 
+     * 
+     */
     public function getSinglePlayer(string $person_id) : mixed
     {
         //1. Create the sql statement to pull the specified player from the db.
@@ -53,6 +69,14 @@ class PlayersModel extends BaseModel
         //2. Return the result of the executed statement using the fetchSingle method
         return (array) $this->fetchSingle($sql, ["person_id" => $person_id]);
     }
+
+    
+    /**
+     * 
+     * Verifies if the specified team_id foreign key exists in the team table.
+     * 
+     * 
+     */
 
     public function verifyTeamId($team_id): mixed {
         $sql = "SELECT * FROM team WHERE team_id = :$team_id";
@@ -86,6 +110,14 @@ class PlayersModel extends BaseModel
 
         return $result;
     }
+
+    
+    /**
+     * 
+     * Add a player instance 
+     * 
+     * 
+     */
 
     public function createPlayer(array $player_data): mixed {
         return $this->insert("common_player_info", $player_data);

@@ -19,7 +19,10 @@ class PlayersController extends BaseController
         $this->player_model = new PlayersModel();
     }
 
-
+    /**
+     * 
+     * Handles the GET /players route of the app route.
+     */
     public function handleGetPlayers(Request $request, Response $response, array $uri_args): Response{
         //1. Retrieve the query params entered by the user
         $filters = $request->getQueryParams();
@@ -51,6 +54,10 @@ class PlayersController extends BaseController
         return $this->makeResponse($response, $players);
     }
 
+        /**
+     * 
+     * Handles the GET /player route of the app route.
+     */
     public function handleGetPlayer(Request $request, Response $response, array $uri_args): Response {
         //1. Extract the player id from the uri_args array
         $player_id = $uri_args["player_id"];
@@ -70,6 +77,12 @@ class PlayersController extends BaseController
         return $result;
     }
 
+    /**
+     * 
+     * Handles the GET /teams route of the app route.
+     * NOTE: Documentation is pretty similar for all other controller and model classes
+     * so only the 'team' route will be documented to minimize redundancy.
+     */
     public function handleGetPlayerDrafts(Request $request, Response $response, array $uri_args): Response {
         
         //1. Retrieve the query params entered by the user
@@ -102,6 +115,10 @@ class PlayersController extends BaseController
         return $this->makeResponse($response, $drafts);
     }
 
+    /**
+     * 
+     * Handles the POST /players route of the app route.
+     */
     public function handleCreatePlayers(Request $request, Response $response, array $uri_args): Response {
 
         //1. Get the information from the body
@@ -199,6 +216,10 @@ class PlayersController extends BaseController
         return $this->makeResponse($response, $response_data, 500);
     }
 
+    /**
+     * 
+     * Handles the PUT /players route of the app route.
+     */
     public function handleUpdatePlayers(Request $request, Response $response, array $uri_args): Response{
         $players = $request->getParsedBody();
 
@@ -261,6 +282,10 @@ class PlayersController extends BaseController
         return $this->makeResponse($response, $response_data, 500);
     }
 
+    /**
+     * 
+     * Handles the DELETE /players route of the app route.
+     */
     public function handleDeletePlayers(Request $request, Response $response, array $uri_args): Response {
         $players = $request->getParsedBody();
 
