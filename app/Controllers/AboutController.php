@@ -84,7 +84,12 @@ class AboutController extends BaseController
                     "shows" => [
                         "uri" => "http://localhost/nba-api/shows",
                         "methods" => ["GET"]
+                    ],
+                    "BMI Computation" => [
+                        "uri" => "http://localhost/nba-api/BMI",
+                        "methods" => ["POST"]
                     ]
+                    
                 ],
                 "composite_resource_1" => "www.thesportsdb.com/api/v1/json/3/search_all_leagues.php?c=England",
                 "composite_resource_2" => "https://api.tvmaze.com/search/shows?q=nba",
