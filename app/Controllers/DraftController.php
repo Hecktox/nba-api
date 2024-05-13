@@ -4,6 +4,7 @@ namespace Vanier\Api\Controllers;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Vanier\Api\Helpers\webServiceInvokerHelper;
 use Vanier\Api\Models\DraftModel;
 use Vanier\Api\Exceptions\HttpInvalidInputException;
 use Vanier\Api\Exceptions\HttpInvalidPaginationParameterException;
@@ -32,6 +33,10 @@ class DraftController extends BaseController
         $filters = $request->getQueryParams();
         $page = $filters["page"] ?? 1;
         $page_size = $filters["page_size"] ?? 10;
+
+        $queryParams = $request->getQueryParams();
+        $country = $queryParams['c'] ?? '';
+        
         if (!is_numeric($page) || $page < 1) {
             throw new HttpInvalidPaginationParameterException($request, "Invalid page number. Must be a positive integer.");
         }
@@ -41,7 +46,12 @@ class DraftController extends BaseController
         $this->draft_model->setPaginationOptions($page, $page_size);
         $teams = $this->draft_model->getAllDraftStats($filters);
 
-        return $this->makeResponse($response, $teams);
+        $ws_invoker = new webServiceInvokerHelper();
+        $uri = "https://www.thesportsdb.com/api/v1/json/3/search_all_leagues.php?s=Basketball&c=$country";
+        $leagues = $ws_invoker->invokeURI($uri);
+        $player["leagues"] = $leagues;
+
+        return $this->makeResponse($response, $leagues);
     }
 
     public function handleGetDraftPlayerId(Request $request, Response $response, array $uri_args): Response
