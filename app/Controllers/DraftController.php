@@ -99,6 +99,9 @@ class DraftController extends BaseController
             'position' => [
                 array('regex', '/^(PG|SG|SF|PF|C)$/')
             ],
+            'weight' => [
+                array('regex', '/^\d+(\.\d+)?$/')
+            ],
             'wingspan' => [
                 array('regex', '/^\d+(\.\d+)?$/')
             ],
@@ -114,7 +117,7 @@ class DraftController extends BaseController
             'standing_vertical_leap' => [
                 array('regex', '/^\d+(\.\d+)?$/')
             ],
-            'Max_vertical_leap' => [
+            'max_vertical_leap' => [
                 array('regex', '/^\d+(\.\d+)?$/')
             ],
             'bench_press' => [
@@ -127,17 +130,21 @@ class DraftController extends BaseController
         //How to throw appropriate exception
         if($v->validate()){
             foreach($drafts as $draft){
-                $this->draft_model->createDraft($draft); // Pass each $draft individually
+                print("hello");
+                $this->draft_model->createDraft($draft);
             }
-        
+
             $response_data = array(
                 "code" => "success",
                 "message" => "The list of players has been created successfully"
             );
-        
+    
             return $this->makeResponse($response, $response_data, 201);
+
+
         } else {
             print_r($v->errors());
+            
         }
 
         $response_data = array(
