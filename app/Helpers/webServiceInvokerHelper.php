@@ -12,7 +12,7 @@ class webServiceInvokerHelper
     {
         $this->client_options = $options;
     }
-    public function invokeURI(string $resource_uri): mixed
+    public function parseSports(string $resource_uri): mixed
     {
         $client = new Client($this->client_options);
         $response = $client->get($resource_uri);
@@ -21,7 +21,6 @@ class webServiceInvokerHelper
                 $response->getStatusCode(),
                 $response->getReasonPhrase(),
             );
-            return false;
         }
         $response_data = $response->getBody()->getContents();
         if (empty($response_data)) {
@@ -44,6 +43,45 @@ class webServiceInvokerHelper
             $parsed_leagues[$key]["strDescriptionEN"] = $league->strDescriptionEN;
         }
         return $parsed_leagues;
+    }
+    public function parseShows(string $resource_uri): mixed
+    {
+        $client = new Client($this->client_options);
+        $response = $client->get($resource_uri);
+        if ($response->getStatusCode() !== 200) {
+            return $this->returnError(
+                $response->getStatusCode(),
+                $response->getReasonPhrase(),
+            );
+        }
+
+        $response_data = $response->getBody()->getContents();
+        if (empty($response_data)) {
+            return $this->returnError(
+                "error",
+                "Empty response received!",
+            );
+        }
+
+        $shows = json_decode($response_data, true);
+        $parsed_shows = array();
+        foreach ($shows as $show) {
+            $parsed_show = array(
+                "id" => $show['show']['id'],
+                "name" => $show['show']['name'],
+                "type" => $show['show']['type'],
+                "language" => $show['show']['language'],
+                "genres" => $show['show']['genres'],
+                "status" => $show['show']['status'],
+                "runtime" => $show['show']['runtime'],
+                "averageRuntime" => $show['show']['averageRuntime'],
+                "premiered" => $show['show']['premiered'],
+                "summary" => $show['show']['summary']
+            );
+            $parsed_shows[] = $parsed_show;
+        }
+
+        return $parsed_shows;
     }
 
     private function returnError($code, $message): array

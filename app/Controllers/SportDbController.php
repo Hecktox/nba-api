@@ -7,8 +7,6 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Vanier\Api\Helpers\webServiceInvokerHelper;
 
 
-use GuzzleHttp\Client;
-
 class SportDbController extends BaseController
 {
 
@@ -19,7 +17,7 @@ class SportDbController extends BaseController
 
         $ws_invoker = new webServiceInvokerHelper();
         $uri = "https://www.thesportsdb.com/api/v1/json/3/search_all_leagues.php?s=Basketball&c=$country";
-        $leagues = $ws_invoker->invokeURI($uri);
+        $leagues = $ws_invoker->parseSports($uri);
         $player["leagues"] = $leagues;
 
         return $this->makeResponse($response, $leagues);
