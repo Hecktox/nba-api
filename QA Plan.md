@@ -103,6 +103,25 @@ Welcome! This is a Web service that provides comprehensive access to NBA-related
 | Game by ID | /games/{game_id}                         | GET                    | N/A    |
 | Game Teams | /games/{game_id}/teams                   | GET                    | N/A    |
 
+| POST           | PUT            | DELETE         |
+|----------------|----------------|----------------|
+| "season_id":  |   "season_id":    | game_id
+| "team_id_home":     | "team_id_home":     |      |
+| "team_abbreviation_home":   | "team_abbreviation_home":   |                |
+| "team_name_home":| "team_name_home":|                |
+| "game_id":    | "game_id":    |                |
+| "game_date":        | "game_date":        |                |
+| "pts_home":       | "pts_home":       |                |
+| "plus_minus_home":| "plus_minus_home":|                |
+| "team_id_away":       | "team_id_away":       |                |
+| "team_abbreviation_away":| "team_abbreviation_away":|          |
+| "team_name_away":    | "team_name_away":    |                |
+| "matchup_away":        | "matchup_away":        |                |
+| "wl_away":       | "wl_away":       |                |
+| "pts_away":       | "pts_away":       |                |
+| "plus_minus_away":       | "plus_minus_away":       |                |
+| "season_type":       | "season_type":       |                |
+
 ## Composite Resources
 
 | Resource | URI                                                              | Method | Filter |
