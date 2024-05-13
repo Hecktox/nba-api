@@ -84,160 +84,109 @@ class TeamController extends BaseController
     }
     public function handleCreateTeam(Request $request, Response $response, array $uri_args): Response
     {
-        $team_data = $request->getParsedBody();
+        $teams = $request->getParsedBody();
 
-        // Validate team data
-        $v = new Validator($team_data);
-        $rules = [
+        $v = new Validator($teams);
+        $rules = array(
             'team_id' => [
-                'required',
-                'integer',
-                ['min', 10]
+                'integer'
             ],
             'full_name' => [
-                'required',
-                ['max', 255]
+                array('regex', '/^[A-Z][a-zA-Z\s]+$/')
             ],
             'abbreviation' => [
-                'required',
-                ['max', 10]
+                array('regex', '/^[A-Z]+$/')
             ],
             'nickname' => [
-                'required'
+                array('regex', '/^[A-Z][a-zA-Z\s]+$/')
             ],
             'city' => [
-                'required'
+                array('regex', '/^[A-Z][a-zA-Z\s]+$/')
             ],
             'state' => [
-                'required'
+                array('regex', '/^[A-Z][a-zA-Z\s]+$/')
             ],
             'year_founded' => [
-                'required',
-                'integer',
-                ['min', 1000],
-                ['max', date('Y')]
+                'integer'
             ],
             'owner' => [
-                'required'
+                array('regex', '/^[A-Z][a-zA-Z\s]+$/')
             ],
             'year_active_till' => [
-                'required',
-                ['regex', '/^\d{4}$/'],
-                ['min', date('Y')]
+                ['regex', '/^\d{4}$/']
             ]
-        ];
+        );
 
         $v->mapFieldsRules($rules);
 
-        if (!$v->validate()) {
-            $error_response = [
-                "code" => "failure",
-                "message" => "Validation failed",
-                "errors" => $v->errors()
-            ];
-            return $this->makeResponse($response, $error_response, 400);
+        if ($v->validate()) {
+            foreach ($teams as $team) {
+                $this->team_model->createTeam($team);
+            }
+
+            $response_data = array(
+                "code" => "success",
+                "message" => "The list of teams has been created successfully"
+            );
+
+            return $this->makeResponse($response, $response_data, 201);
+        } else {
+            $errors = $v->errors();
+            if (isset($errors['team_id']) && in_array('integer', $errors['team_id'])) {
+                throw new HttpInvalidInputException($request);
+            }
+
+            print_r($errors);
         }
 
-        // Create teams
-        foreach ($team_data as $team) {
-            $this->team_model->createTeam($team);
-        }
+        $response_data = array(
+            "code" => "failure",
+            "message" => "The list of teams has not been created."
+        );
 
-        // Response for successful creation
-        $response_data = [
-            "code" => "success",
-            "message" => "The list of teams has been created successfully"
-        ];
-
-        return $this->makeResponse($response, $response_data, 201);
+        return $this->makeResponse($response, $response_data, 500);
     }
-
-
-
-    // public function handleCreateTeam(Request $request, Response $response, array $uri_args): Response
-    // {
-    //     $teams = $request->getParsedBody();
-
-    //     foreach ($teams as $team) {
-    //         $this->team_model->createTeam($team);
-    //     }
-
-    //     $response_data = array(
-    //         "code" => "success",
-    //         "message" => "The list of teams has been created successfully"
-    //     );
-
-    //     return $this->makeResponse($response, $response_data, 201);
-    // }
-
-
-    // public function handleUpdateTeam(Request $request, Response $response, array $uri_args): Response
-    // {
-    //     $team = $request->getParsedBody();
-
-    //     if (!is_null($team)) {
-    //         $team_model = new TeamModel();
-    //         foreach ($team as $key => $member) {
-    //             $team_id = $member["team_id"];
-    //             unset($member["team_id"]);
-    //             $team_model->updateTeam($member, $team_id);
-    //         }
-    //     }
-
-    //     $response_data = array(
-    //         "code" => "success",
-    //         "message" => "The list of teams updated correctly",
-    //     );
-    //     return $this->makeResponse($response, $response_data, 201);
-    // }
-
     public function handleUpdateTeam(Request $request, Response $response, array $uri_args): Response
     {
         $teams = $request->getParsedBody();
 
         $v = new Validator($teams);
-        $rules = (array)[
+        $rules = array(
             'team_id' => [
-                'required',
-                'integer',
-                ['min', 10]
+                'integer'
             ],
             'full_name' => [
-                'required'
+                array('regex', '/^[A-Z][a-zA-Z\s]+$/')
             ],
             'abbreviation' => [
-                'required'
+                array('regex', '/^[A-Z]+$/')
             ],
             'nickname' => [
-                'required'
+                array('regex', '/^[A-Z][a-zA-Z\s]+$/')
             ],
             'city' => [
-                'required'
+                array('regex', '/^[A-Z][a-zA-Z\s]+$/')
             ],
             'state' => [
-                'required'
+                array('regex', '/^[A-Z][a-zA-Z\s]+$/')
             ],
             'year_founded' => [
-                'required',
-                'integer',
-                ['min', 1000],
-                ['max', date('Y')] // Assuming current year is the maximum
+                'integer'
             ],
             'owner' => [
-                'required'
+                array('regex', '/^[A-Z][a-zA-Z\s]+$/')
             ],
             'year_active_till' => [
-                'required',
-                ['regex', '/^\d{4}$/'] // Year format (e.g., 2024)
+                ['regex', '/^\d{4}$/']
             ]
-        ];
+        );
 
         $v->mapFieldsRules($rules);
 
         if ($v->validate()) {
             foreach ($teams as $team) {
                 $team_id = $team["team_id"];
-                unset($game["team_id"]);
+                unset($team["team_id"]);
                 $this->team_model->updateTeam($team, $team_id);
             }
 
@@ -248,7 +197,12 @@ class TeamController extends BaseController
 
             return $this->makeResponse($response, $response_data, 201);
         } else {
-            print_r($v->errors());
+            $errors = $v->errors();
+            if (isset($errors['team_id']) && in_array('integer', $errors['team_id'])) {
+                throw new HttpInvalidInputException($request);
+            }
+
+            print_r($errors);
         }
 
         $response_data = array(
@@ -259,14 +213,12 @@ class TeamController extends BaseController
         return $this->makeResponse($response, $response_data, 500);
     }
 
-
     public function handleDeleteTeam(Request $request, Response $response, array $uri_args): Response
     {
         $teams = $request->getParsedBody();
 
         $v = new Validator($teams);
         $v->rule(function ($field, $value, $params, $fields) {
-            // Custom validation logic
             return true;
         }, "")->message("{field} failed...");
 
@@ -281,7 +233,12 @@ class TeamController extends BaseController
             );
             return $this->makeResponse($response, $response_data, 201);
         } else {
-            print_r($v->errors());
+            $errors = $v->errors();
+            if (isset($errors['team_id']) && in_array('integer', $errors['team_id'])) {
+                throw new HttpInvalidInputException($request);
+            }
+
+            print_r($errors);
         }
 
         $response_data = array(
@@ -291,19 +248,4 @@ class TeamController extends BaseController
 
         return $this->makeResponse($response, $response_data, 500);
     }
-
-    // public function handleDeleteTeam(Request $request, Response $response, array $uri_args): Response
-    // {
-    //     $team_ids = $request->getParsedBody();
-    //     $team_model = new TeamModel();
-    //     foreach ($team_ids as $team_id) {
-    //         $team_model->deleteTeam($team_id);
-    //     }
-
-    //     $response_data = array(
-    //         "code" => "success",
-    //         "message" => "The list of teams deleted correctly",
-    //     );
-    //     return $this->makeResponse($response, $response_data, 202);
-    // }
 }

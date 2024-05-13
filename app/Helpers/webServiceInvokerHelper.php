@@ -17,7 +17,7 @@ class webServiceInvokerHelper
         $client = new Client($this->client_options);
         $response = $client->get($resource_uri);
         if ($response->getStatusCode() !== 200) {
-            return $this->returnError(
+            return $this->returnError(  
                 $response->getStatusCode(),
                 $response->getReasonPhrase(),
             );
