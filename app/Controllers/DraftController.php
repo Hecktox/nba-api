@@ -81,193 +81,183 @@ class DraftController extends BaseController
         $drafts = $request->getParsedBody();
         $v = new Validator($drafts);
         $rules = array(
-            'season' => [
-                array('regex', '/^\b\d{1,4}\b+$/')
-            ],
-            'player_id' => [
-                'integer'
-            ],
-            'first_name' => [
+            'season' => array(
+                array('regex', '/^(18[6-9]\d|19\d\d|20[0-1]\d|202[0-4])$/')
+            ),
+            'player_id' => array(
+                'required'
+            ),
+            'first_name' => array(
                 array('regex', '/^[A-Z][a-z]+$/')
-            ],
-            'last_name' => [
+            ),
+            'last_name' => array(
                 array('regex', '/^[A-Z][a-z]+$/')
-            ],
+            ),
             'player_name' => [
-                array('regex', '/^[A-Z][a-z]+$/')
+                array('regex', '/^[A-Z][a-z]+(?: [A-Z][a-z]+)*$/'),
             ],
             'position' => [
-                array('regex', '/^\b(PG|SG|SF|PF|C)\b$/')
-            ],
-            'weight' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
+                array('regex', '/^(PG|SG|SF|PF|C)$/')
             ],
             'wingspan' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
+                array('regex', '/^\d+(\.\d+)?$/')
             ],
             'standing_reach' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
+                array('regex', '/^\d+(\.\d+)?$/')
             ],
-            'hand_length' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
+            'hand_lenght' => [
+                array('regex', '/^\d+(\.\d+)?$/')
             ],
-            'hand_width' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
+            'hand_widht' => [
+                array('regex', '/^\d+(\.\d+)?$/')
             ],
             'standing_vertical_leap' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
+                array('regex', '/^\d+(\.\d+)?$/')
             ],
-            'max_vertical_leap' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
+            'Max_vertical_leap' => [
+                array('regex', '/^\d+(\.\d+)?$/')
             ],
             'bench_press' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
+                array('regex', '/^\d+(\.\d+)?$/')
             ],
         );
 
         $v->mapFieldsRules($rules);
 
-        if ($v->validate()) {
-            foreach ($drafts as $draft) {
-                $this->draft_model->createDraft($draft);
+        //How to throw appropriate exception
+        if($v->validate()){
+            foreach($drafts as $draft){
+                $this->draft_model->createDraft($draft); // Pass each $draft individually
             }
+        
+            $response_data = array(
+                "code" => "success",
+                "message" => "The list of players has been created successfully"
+            );
+        
+            return $this->makeResponse($response, $response_data, 201);
+        } else {
+            print_r($v->errors());
         }
 
         $response_data = array(
-            "code" => "success",
-            "message" => "The list of games has been created successfully"
+            "code" => "failure",
+            "message" => "The list of players has not been created."
         );
 
-        return $this->makeResponse($response, $response_data, 201);
+        return $this->makeResponse($response, $response_data, 500);
     }
 
     public function handleUpdateDraft(Request $request, Response $response, array $uri_args): Response
     {
         $drafts = $request->getParsedBody();
+
         $v = new Validator($drafts);
         $rules = array(
-            'season' => [
-                array('regex', '/^\b\d{1,4}\b$/')
-            ],
-            'player_id' => [
-                'integer'
-            ],
-            'first_name' => [
+            'season' => array(
+                array('regex', '/^(18[6-9]\d|19\d\d|20[0-1]\d|202[0-4])$/')
+            ),
+            'first_name' => array(
                 array('regex', '/^[A-Z][a-z]+$/')
-            ],
-            'last_name' => [
+            ),
+            'last_name' => array(
                 array('regex', '/^[A-Z][a-z]+$/')
-            ],
+            ),
             'player_name' => [
-                array('regex', '/^[A-Z][a-z]+$/')
+                array('regex', '/^[A-Z][a-z]+$/'),
             ],
             'position' => [
-                array('regex', '/^\b(PG|SG|SF|PF|C)\b$/')
-            ],
-            'weight' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
+                array('regex', '/^(PG|SG|SF|PF|C)$/')
             ],
             'wingspan' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
+                array('regex', '/^\d+(\.\d+)?$/')
             ],
             'standing_reach' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
+                array('regex', '/^\d+(\.\d+)?$/')
             ],
-            'hand_length' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
+            'hand_lenght' => [
+                array('regex', '/^\d+(\.\d+)?$/')
             ],
-            'hand_width' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
+            'hand_widht' => [
+                array('regex', '/^\d+(\.\d+)?$/')
             ],
             'standing_vertical_leap' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
+                array('regex', '/^\d+(\.\d+)?$/')
             ],
-            'max_vertical_leap' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
+            'Max_vertical_leap' => [
+                array('regex', '/^\d+(\.\d+)?$/')
             ],
             'bench_press' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
+                array('regex', '/^\d+(\.\d+)?$/')
             ],
         );
 
         $v->mapFieldsRules($rules);
 
-        if ($v->validate()) {
-            foreach ($drafts as $draft) {
-                $this->draft_model->updateDraft($draft, $draft['player_id']);
+        //How to throw appropriate exception
+        if($v->validate()){
+            foreach ($drafts as $draft){
+                $player_id = $draft["player_id"];
+                unset($player["player_id"]);
+                $this->draft_model->updateDraft($draft, $player_id);
             }
+
+            $response_data = array(
+                "code" => "success",
+                "message" => "he specified players have been updated successfully"
+            );
+    
+            return $this->makeResponse($response, $response_data, 201);
+
+        } else {
+            print_r($v->errors());
         }
 
         $response_data = array(
-            "code" => "success",
-            "message" => "The specified games have been updated successfully"
+            "code" => "failure",
+            "message" => "the specified players have not been updated"
         );
 
-        return $this->makeResponse($response, $response_data, 201);
+        return $this->makeResponse($response, $response_data, 500);
     }
 
     public function handleDeleteDraft(Request $request, Response $response, array $uri_args): Response
     {
         $drafts = $request->getParsedBody();
-        $v = new Validator($drafts);
-        $rules = array(
-            'season' => [
-                array('regex', '/^\b\d{1,4}\b+$/')
-            ],
-            'player_id' => [
-                'integer'
-            ],
-            'first_name' => [
-                array('regex', '/^[A-Z][a-z]+$/')
-            ],
-            'last_name' => [
-                array('regex', '/^[A-Z][a-z]+$/')
-            ],
-            'player_name' => [
-                array('regex', '/^[A-Z][a-z]+$/')
-            ],
-            'position' => [
-                array('regex', '/^\b(PG|SG|SF|PF|C)\b$/')
-            ],
-            'weight' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
-            ],
-            'wingspan' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
-            ],
-            'standing_reach' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
-            ],
-            'hand_length' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
-            ],
-            'hand_width' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
-            ],
-            'standing_vertical_leap' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
-            ],
-            'max_vertical_leap' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
-            ],
-            'bench_press' => [
-                array('regex', '/^\d{1,3}(?:[.]\d+)?$/')
-            ],
+
+
+         //Check if id exists in the table
+         $v = new Validator($drafts);
+         
+         $rules = array(
+            'player_id' => array(
+                'required'
+            ),
         );
 
         $v->mapFieldsRules($rules);
 
-        if ($v->validate()) {
-            foreach ($drafts as $player_id) {
+        //How to throw appropriate exception
+        if($v->validate()){
+            foreach ($drafts as $player_id){
                 $this->draft_model->deleteDraft($player_id);
             }
+    
+            $response_data = array(
+                "code" => "success",
+                "message" => "the specified players have been deleted successfully"
+            );
+            return $this->makeResponse($response, $response_data, 201);
+
+        } else {
+            print_r($v->errors());
         }
 
-        $response_data = array(
-            "code" => "success",
-            "message" => "The specified games have been deleted successfully"
-        );
 
-        return $this->makeResponse($response, $response_data, 201);
+        $response_data = array(
+            "code" => "failure",
+            "message" => "the specified players have not been deleted"
+        );
+        return $this->makeResponse($response, $response_data, 500);
     }
 }

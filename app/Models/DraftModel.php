@@ -79,8 +79,7 @@ class DraftModel extends BaseModel
         $sql = "SELECT * FROM draft_combine_stats WHERE player_id = :player_id";
         return $this->fetchSingle($sql, ["player_id" => $player_id]);
     }
-    public function createDraft(array $draft_data): mixed
-    {
+    public function createDraft(array $draft_data): mixed {
         return $this->insert("draft_combine_stats", $draft_data);
     }
 
