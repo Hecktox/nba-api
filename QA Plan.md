@@ -110,3 +110,10 @@ Welcome! This is a Web service that provides comprehensive access to NBA-related
 | Sports    | /sports                       | GET    | c=[Country]    |
 | Shows    | /shows | GET    | N/A    |
 | BMI Computation    | /BMI | POST    | N/A    |
+
+| POST           |
+|----------------|
+| "height":      |
+| "weight":      |
+| "unit":        |  
+| "gender":      |
