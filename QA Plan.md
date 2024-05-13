@@ -130,6 +130,8 @@ Welcome! This is a Web service that provides comprehensive access to NBA-related
 | Shows    | /shows | GET    | N/A    |
 | BMI Computation    | /BMI | POST    | N/A    |
 
+## BMI
+
 | POST           |
 |----------------|
 | "height":      |
