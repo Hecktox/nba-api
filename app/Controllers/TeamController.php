@@ -203,12 +203,10 @@ class TeamController extends BaseController
                 ['min', 10]
             ],
             'full_name' => [
-                'required',
-                ['max', 255]
+                'required'
             ],
             'abbreviation' => [
-                'required',
-                ['max', 10]
+                'required'
             ],
             'nickname' => [
                 'required'
@@ -230,8 +228,7 @@ class TeamController extends BaseController
             ],
             'year_active_till' => [
                 'required',
-                ['regex', '/^\d{4}$/'], // Year format (e.g., 2024)
-                ['min', date('Y')] // Assuming the year should be equal to or greater than the current year
+                ['regex', '/^\d{4}$/'] // Year format (e.g., 2024)
             ]
         ];
 

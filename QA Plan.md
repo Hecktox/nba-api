@@ -1,4 +1,4 @@
-﻿# NBA API Exposed Resources
+﻿# QA Plan
 
 ## Description
 
