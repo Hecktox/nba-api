@@ -79,13 +79,22 @@ class DraftController extends BaseController
     public function handleCreateDraft(Request $request, Response $response, array $uri_args): Response
     {
         $drafts = $request->getParsedBody();
+
+        if (empty($drafts)) {
+            $response_data = array(
+                "code" => "error",
+                "message" => "Empty request body"
+            );
+            return $this->makeResponse($response, $response_data, 400); // 400 Bad Request status code
+        }
+
         $v = new Validator($drafts);
         $rules = array(
             'season' => array(
                 array('regex', '/^(18[6-9]\d|19\d\d|20[0-1]\d|202[0-4])$/')
             ),
             'player_id' => array(
-                'required'
+                'integer'
             ),
             'first_name' => array(
                 array('regex', '/^[A-Z][a-z]+$/')
@@ -125,44 +134,63 @@ class DraftController extends BaseController
             ],
         );
 
+       
         $v->mapFieldsRules($rules);
 
-        //How to throw appropriate exception
-        if($v->validate()){
-            foreach($drafts as $draft){
-                print("hello");
-                $this->draft_model->createDraft($draft);
+        if ($v->validate()) {
+            foreach ($drafts as $draft) {
+                if ($this->draft_model->verifyDraftId($draft['player_id'])) {
+                    $response_data = array(
+                        "code" => "failure",
+                        "message" => "A draft with the specified ID already exists"
+                    );
+                    return $this->makeResponse($response, $response_data, 409); // 409 Conflict status code
+                } else {
+                    $this->draft_model->createDraft($draft);
+                }
             }
 
             $response_data = array(
                 "code" => "success",
-                "message" => "The list of players has been created successfully"
+                "message" => "The list of drafts has been created successfully"
             );
-    
+
             return $this->makeResponse($response, $response_data, 201);
-
-
         } else {
-            print_r($v->errors());
-            
-        }
+            $errors = $v->errors();
+            if (isset($errors['player_id']) && in_array('integer', $errors['player_id'])) {
+                throw new HttpInvalidInputException($request);
+            }
 
-        $response_data = array(
-            "code" => "failure",
-            "message" => "The list of players has not been created."
-        );
-
-        return $this->makeResponse($response, $response_data, 500);
+            $response_data = array(
+                "code" => "validation_error",
+                "message" => "Validation failed.",
+                "errors" => $errors
+            );
+            return $this->makeResponse($response, $response_data, 422);
     }
+}
 
     public function handleUpdateDraft(Request $request, Response $response, array $uri_args): Response
     {
         $drafts = $request->getParsedBody();
 
+        // Check if the request body is empty
+        if (empty($drafts)) {
+            $response_data = array(
+                "code" => "error",
+                "message" => "Empty request body"
+            );
+            return $this->makeResponse($response, $response_data, 400); // 400 Bad Request status code
+        }
+
         $v = new Validator($drafts);
         $rules = array(
             'season' => array(
                 array('regex', '/^(18[6-9]\d|19\d\d|20[0-1]\d|202[0-4])$/')
+            ),
+            'player_id' => array(
+                'integer'
             ),
             'first_name' => array(
                 array('regex', '/^[A-Z][a-z]+$/')
@@ -171,10 +199,13 @@ class DraftController extends BaseController
                 array('regex', '/^[A-Z][a-z]+$/')
             ),
             'player_name' => [
-                array('regex', '/^[A-Z][a-z]+$/'),
+                array('regex', '/^[A-Z][a-z]+(?: [A-Z][a-z]+)*$/'),
             ],
             'position' => [
                 array('regex', '/^(PG|SG|SF|PF|C)$/')
+            ],
+            'weight' => [
+                array('regex', '/^\d+(\.\d+)?$/')
             ],
             'wingspan' => [
                 array('regex', '/^\d+(\.\d+)?$/')
@@ -191,38 +222,50 @@ class DraftController extends BaseController
             'standing_vertical_leap' => [
                 array('regex', '/^\d+(\.\d+)?$/')
             ],
-            'Max_vertical_leap' => [
+            'max_vertical_leap' => [
                 array('regex', '/^\d+(\.\d+)?$/')
             ],
             'bench_press' => [
                 array('regex', '/^\d+(\.\d+)?$/')
             ],
         );
-
         $v->mapFieldsRules($rules);
 
-        //How to throw appropriate exception
-        if($v->validate()){
-            foreach ($drafts as $draft){
+        if ($v->validate()) {
+            foreach ($drafts as $draft) {
                 $player_id = $draft["player_id"];
-                unset($player["player_id"]);
-                $this->draft_model->updateDraft($draft, $player_id);
+                // Check if the team exists before attempting to update
+                if ($this->draft_model->verifyDraftId($player_id)) {
+                    unset($team["player_id"]);
+                    $this->draft_model->updateDraft($draft, $player_id);
+                } else {
+                    // Team does not exist, return error message with 404 status code
+                    $response_data = array(
+                        "code" => "failure",
+                        "message" => "Draft with ID $player_id does not exist."
+                    );
+                    return $this->makeResponse($response, $response_data, 404); // 404 Not Found status code
+                }
             }
 
             $response_data = array(
                 "code" => "success",
-                "message" => "he specified players have been updated successfully"
+                "message" => "The specified drafts have been updated successfully"
             );
-    
-            return $this->makeResponse($response, $response_data, 201);
 
+            return $this->makeResponse($response, $response_data, 201);
         } else {
-            print_r($v->errors());
+            $errors = $v->errors();
+            if (isset($errors['player_id']) && in_array('integer', $errors['player_id'])) {
+                throw new HttpInvalidInputException($request);
+            }
+
+            print_r($errors);
         }
 
         $response_data = array(
             "code" => "failure",
-            "message" => "the specified players have not been updated"
+            "message" => "The list of draft has not been updated."
         );
 
         return $this->makeResponse($response, $response_data, 500);
@@ -230,41 +273,52 @@ class DraftController extends BaseController
 
     public function handleDeleteDraft(Request $request, Response $response, array $uri_args): Response
     {
-        $drafts = $request->getParsedBody();
+        $teams = $request->getParsedBody();
 
-
-         //Check if id exists in the table
-         $v = new Validator($drafts);
-         
-         $rules = array(
-            'player_id' => array(
-                'required'
-            ),
-        );
-
-        $v->mapFieldsRules($rules);
-
-        //How to throw appropriate exception
-        if($v->validate()){
-            foreach ($drafts as $player_id){
-                $this->draft_model->deleteDraft($player_id);
-            }
-    
+        // Check if the request body is empty
+        if (empty($drafts)) {
             $response_data = array(
-                "code" => "success",
-                "message" => "the specified players have been deleted successfully"
+                "code" => "error",
+                "message" => "Empty request body"
             );
-            return $this->makeResponse($response, $response_data, 201);
-
-        } else {
-            print_r($v->errors());
+            return $this->makeResponse($response, $response_data, 400); // 400 Bad Request status code
         }
 
+        $v = new Validator($drafts);
+        $v->rule(function ($field, $value, $params, $fields) {
+            return true;
+        }, "")->message("{field} failed...");
+
+        if ($v->validate()) {
+            foreach ($drafts as $player_id) {
+                // Check if the team exists before attempting to delete
+                if ($this->draft_model->verifyTeamId($player_id)) {
+                    $this->draft_model->deleteTeam($player_id);
+                } else {
+                    // Team does not exist, return error message with 404 status code
+                    $response_data = array(
+                        "code" => "failure",
+                        "message" => "Draft with ID $player_id does not exist."
+                    );
+                    return $this->makeResponse($response, $response_data, 404); // 404 Not Found status code
+                }
+            }
+
+            $response_data = array(
+                "code" => "success",
+                "message" => "The specified draft have been deleted successfully"
+            );
+            return $this->makeResponse($response, $response_data, 201);
+        } else {
+            $errors = $v->errors();
+            print_r($errors);
+        }
 
         $response_data = array(
             "code" => "failure",
-            "message" => "the specified players have not been deleted"
+            "message" => "The list of drafts has not been deleted."
         );
+
         return $this->makeResponse($response, $response_data, 500);
     }
 }
