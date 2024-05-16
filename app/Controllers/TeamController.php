@@ -61,30 +61,53 @@ class TeamController extends BaseController
         $team_info = $this->team_model->getTeamInfo($team_id);
 
         if (empty($team_info)) {
-            throw new HttpInvalidInputException(
-                $request,
-                "No team information found for the supplied team ID"
+            $response_data = array(
+                "code" => "failure",
+                "message" => "No team information found for the supplied team ID"
             );
+            return $this->makeResponse($response, $response_data, 404);
         }
 
         return $this->makeResponse($response, $team_info);
     }
 
-
-
     public function handleGetTeamHistory(Request $request, Response $response, array $uri_args): Response
     {
         $team_id = $uri_args["team_id"];
+
+        $this->assertTeamId($request, $team_id);
+
+        if (!$this->team_model->verifyTeamId($team_id)) {
+            throw new HttpInvalidInputException(
+                $request,
+                "The supplied team ID is not valid"
+            );
+        }
+
         $team_info = $this->team_model->getTeamHistory($team_id);
 
-        $payload = json_encode($team_info);
-        $response->getBody()->write($payload);
+        if (empty($team_info['team'])) {
+            $response_data = array(
+                "code" => "failure",
+                "message" => "No team history found for the supplied team ID"
+            );
+            return $this->makeResponse($response, $response_data, 404);
+        }
 
-        return $response->withHeader('Content-Type', 'application/json');
+        return $this->makeResponse($response, $team_info);
     }
+
     public function handleCreateTeam(Request $request, Response $response, array $uri_args): Response
     {
         $teams = $request->getParsedBody();
+
+        if (empty($teams)) {
+            $response_data = array(
+                "code" => "error",
+                "message" => "Empty request body"
+            );
+            return $this->makeResponse($response, $response_data, 400); // 400 Bad Request status code
+        }
 
         $v = new Validator($teams);
         $rules = array(
@@ -121,7 +144,15 @@ class TeamController extends BaseController
 
         if ($v->validate()) {
             foreach ($teams as $team) {
-                $this->team_model->createTeam($team);
+                if ($this->team_model->verifyTeamId($team['team_id'])) {
+                    $response_data = array(
+                        "code" => "failure",
+                        "message" => "A team with the specified ID already exists"
+                    );
+                    return $this->makeResponse($response, $response_data, 409); // 409 Conflict status code
+                } else {
+                    $this->team_model->createTeam($team);
+                }
             }
 
             $response_data = array(
@@ -136,19 +167,27 @@ class TeamController extends BaseController
                 throw new HttpInvalidInputException($request);
             }
 
-            print_r($errors);
+            $response_data = array(
+                "code" => "validation_error",
+                "message" => "Validation failed.",
+                "errors" => $errors
+            );
+            return $this->makeResponse($response, $response_data, 422);
         }
-
-        $response_data = array(
-            "code" => "failure",
-            "message" => "The list of teams has not been created."
-        );
-
-        return $this->makeResponse($response, $response_data, 500);
     }
+
     public function handleUpdateTeam(Request $request, Response $response, array $uri_args): Response
     {
         $teams = $request->getParsedBody();
+
+        // Check if the request body is empty
+        if (empty($teams)) {
+            $response_data = array(
+                "code" => "error",
+                "message" => "Empty request body"
+            );
+            return $this->makeResponse($response, $response_data, 400); // 400 Bad Request status code
+        }
 
         $v = new Validator($teams);
         $rules = array(
@@ -186,8 +225,18 @@ class TeamController extends BaseController
         if ($v->validate()) {
             foreach ($teams as $team) {
                 $team_id = $team["team_id"];
-                unset($team["team_id"]);
-                $this->team_model->updateTeam($team, $team_id);
+                // Check if the team exists before attempting to update
+                if ($this->team_model->verifyTeamId($team_id)) {
+                    unset($team["team_id"]);
+                    $this->team_model->updateTeam($team, $team_id);
+                } else {
+                    // Team does not exist, return error message with 404 status code
+                    $response_data = array(
+                        "code" => "failure",
+                        "message" => "Team with ID $team_id does not exist."
+                    );
+                    return $this->makeResponse($response, $response_data, 404); // 404 Not Found status code
+                }
             }
 
             $response_data = array(
@@ -213,9 +262,19 @@ class TeamController extends BaseController
         return $this->makeResponse($response, $response_data, 500);
     }
 
+
     public function handleDeleteTeam(Request $request, Response $response, array $uri_args): Response
     {
         $teams = $request->getParsedBody();
+
+        // Check if the request body is empty
+        if (empty($teams)) {
+            $response_data = array(
+                "code" => "error",
+                "message" => "Empty request body"
+            );
+            return $this->makeResponse($response, $response_data, 400); // 400 Bad Request status code
+        }
 
         $v = new Validator($teams);
         $v->rule(function ($field, $value, $params, $fields) {
@@ -224,7 +283,17 @@ class TeamController extends BaseController
 
         if ($v->validate()) {
             foreach ($teams as $team_id) {
-                $this->team_model->deleteTeam($team_id);
+                // Check if the team exists before attempting to delete
+                if ($this->team_model->verifyTeamId($team_id)) {
+                    $this->team_model->deleteTeam($team_id);
+                } else {
+                    // Team does not exist, return error message with 404 status code
+                    $response_data = array(
+                        "code" => "failure",
+                        "message" => "Team with ID $team_id does not exist."
+                    );
+                    return $this->makeResponse($response, $response_data, 404); // 404 Not Found status code
+                }
             }
 
             $response_data = array(
@@ -234,10 +303,6 @@ class TeamController extends BaseController
             return $this->makeResponse($response, $response_data, 201);
         } else {
             $errors = $v->errors();
-            if (isset($errors['team_id']) && in_array('integer', $errors['team_id'])) {
-                throw new HttpInvalidInputException($request);
-            }
-
             print_r($errors);
         }
 

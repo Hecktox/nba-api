@@ -63,16 +63,6 @@ class TeamModel extends BaseModel
         return (array) $this->fetchSingle($sql, ["team_id" => $team_id]);
     }
 
-    //created function like this because exception handling for invalid id was not working, only validating id size was working 
-    // public function getTeamInfo($team_id)
-    // {
-    //     if (!is_numeric($team_id) || strlen($team_id) !== 10) {
-    //         return null;
-    //     }
-
-    //     $sql = "SELECT * FROM team WHERE team_id = :team_id";
-    //     return (array) $this->fetchSingle($sql, ["team_id" => $team_id]);
-    // }
     public function getTeamHistory($team_id, array $filters = []): array
     {
         $result = [];
@@ -92,10 +82,20 @@ class TeamModel extends BaseModel
         return $result;
     }
 
-    public function createTeam(array $team_data): mixed
+    public function createTeam(array $team_data): bool
     {
-        return $this->insert("team", $team_data);
+        try {
+            $result = $this->insert("team", $team_data);
+            if ($result === false) {
+                error_log("Database insert failed for team: " . json_encode($team_data));
+            }
+            return $result !== false;
+        } catch (\Exception $e) {
+            error_log("Exception during team creation: " . $e->getMessage());
+            return false;
+        }
     }
+
 
     public function updateTeam(array $team_data, int $team_id): mixed
     {
@@ -107,13 +107,10 @@ class TeamModel extends BaseModel
         return $this->delete("team", ["team_id" => $team_id]);
     }
 
-    public function verifyTeamId(string $team_id): mixed
+    public function verifyTeamId(string $team_id): bool
     {
-        $sql = "SELECT * FROM team WHERE team_id = $team_id";
-
-        if (empty($sql)) {
-            return false;
-        }
-        return true;
+        $sql = "SELECT COUNT(*) AS count FROM team WHERE team_id = :team_id";
+        $result = $this->fetchSingle($sql, ["team_id" => $team_id]);
+        return $result['count'] > 0;
     }
 }
