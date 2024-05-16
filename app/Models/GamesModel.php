@@ -115,4 +115,11 @@ class GamesModel extends BaseModel
     {
         return $this->delete("game", ["game_id" => $game_id]);
     }
+
+    public function isGameIdDuplicate(string $game_id): bool
+    {
+        $sql = "SELECT COUNT(*) AS count FROM game WHERE game_id = :game_id";
+        $result = $this->fetchSingle($sql, ["game_id" => $game_id]);
+        return $result['count'] > 0;
+    }
 }

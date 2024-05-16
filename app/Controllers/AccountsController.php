@@ -72,7 +72,7 @@ class AccountsController extends BaseController
         //-- 5.a): Prepare the private claims: user_id, email, and role.
         $private_claims = ['user_id' => $db_account['user_id'], 'email' => $db_account['email'], 'role' => $db_account['role']];
 
-        $expires_in = time() + 60; // Expires in 1 minute
+        $expires_in = time() + 600; // Expires in 10 min
         $jwt = JWTManager::generateJWT($private_claims, $expires_in);
 
         // 5.c) Prepare and return a response containing the jwt.
