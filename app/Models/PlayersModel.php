@@ -79,15 +79,15 @@ class PlayersModel extends BaseModel
      */
 
     public function verifyTeamId($team_id): mixed {
-        $sql = "SELECT * FROM team WHERE team_id = :$team_id";
+        $sql = "SELECT * FROM team WHERE team_id = :team_id";
 
         // var_dump($sql);
         // exit;
         //!Statement executes with an error
         $returnValue = (array) $this->fetchSingle($sql, ["team_id" => $team_id]);
         
-        // var_dump($returnValue);
-        // exit;
+        //  var_dump($returnValue);
+        //  exit;
 
         if($returnValue == False){
             return false;

@@ -69,6 +69,28 @@ Welcome! This is a Web service that provides comprehensive access to NBA-related
 | "draft_year":     | "draft_year":       |             |
 | "draft_number":| "draft_number":|                |
 
+#### Example of a player resource
+  
+    "person_id": 76001,
+    "first_name": "Alaa",
+    "last_name": "Abdelnaby",
+    "birthdate": "0000-00-00 00:00:00",
+    "school": "Duke",
+    "country": "USA",
+    "height": "6-10",
+    "weight": "240",
+    "jersey": "30",
+    "position": "Forward",
+    "team_id": 1610612757,
+    "team_name": "Trail Blazers",
+    "team_abbreviation": "POR",
+    "team_code": "blazers",
+    "team_city": "Portland",
+    "from_year": 1990,
+    "to_year": 1994,
+    "draft_year": "1990",
+    "draft_number": "25"
+|
 
 ### Drafts
 

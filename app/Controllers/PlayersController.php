@@ -126,7 +126,10 @@ class PlayersController extends BaseController
         
 
         //2. Validation logic for foreign_key
-        $GLOBALS['team_fk'] = $players["team_id"];
+        if (!empty($players)){
+            $GLOBALS['team_fk'] = $players["team_id"];
+        }
+        
 
         // var_dump($GLOBALS['team_fk']);
         // exit;
@@ -136,6 +139,8 @@ class PlayersController extends BaseController
 
         // $provided_player_id = $player_fk['person_id'];
         
+
+        //Try checking team_id before valitron and then throw regualr exception if team_id exist
 
          Validator::addRule(
              'invalid_foreign_key',
@@ -155,7 +160,7 @@ class PlayersController extends BaseController
 
         $v = new Validator($players);
         $rules = array(
-            'player_id' => array(
+            'person_id' => array(
                 'required'
             ),
             'first_name' => array(
@@ -164,6 +169,33 @@ class PlayersController extends BaseController
             'last_name' => array(
                 array('regex', '/^[A-Z][a-z]+$/')
             ),
+            'birthdate' => array(
+                array('regex', '/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/')
+            ),
+            'school' => [
+                array('regex', '/^[A-Z][a-z]+$/'),
+            ],
+            'height' => [
+                array('regex', '/^\d+-\d+$/')
+            ],
+            'weight' => [
+                array('regex', '/^\d+$/')
+            ],
+            'jersey' => [
+                array('regex', '/^\d+$/')
+            ],
+            'team_abbreviation' => [
+                array('regex', '/^[A-Z]{3}$/')
+            ],
+            'team_code' => [
+                array('regex', '/^[a-z]+$/')
+            ],
+            'team_city' => [
+                array('regex', '/^[A-Z][a-zA-Z\s]+$/')
+            ],
+            'draft_year' => [
+                array('regex', '/^\d{4}$/')
+            ],
             'country' => [
                 array('regex', '/^[A-Z][a-z]+$/'),
             ],
@@ -172,7 +204,7 @@ class PlayersController extends BaseController
             ],
             'team_id' => [
                 'integer',
-                //'invalid_foreign_key'
+                'invalid_foreign_key'
             ],
             'draft_number' => [
                 array('regex', '/^\d+$/')
@@ -223,20 +255,51 @@ class PlayersController extends BaseController
 
         $v = new Validator($players);
         $rules = array(
-            'fist_name' => array(
+            'person_id' => array(
+                'required'
+            ),
+            'first_name' => array(
                 array('regex', '/^[A-Z][a-z]+$/')
             ),
             'last_name' => array(
                 array('regex', '/^[A-Z][a-z]+$/')
             ),
+            'birthdate' => array(
+                array('regex', '/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/')
+            ),
+            'school' => [
+                array('regex', '/^[A-Z][a-z]+$/'),
+            ],
+            'height' => [
+                array('regex', '/^\d+-\d+$/')
+            ],
+            'weight' => [
+                array('regex', '/^\d+$/')
+            ],
+            'jersey' => [
+                array('regex', '/^\d+$/')
+            ],
+            'team_abbreviation' => [
+                array('regex', '/^[A-Z]{3}$/')
+            ],
+            'team_code' => [
+                array('regex', '/^[a-z]+$/')
+            ],
+            'team_city' => [
+                array('regex', '/^[A-Z][a-zA-Z\s]+$/')
+            ],
+            'draft_year' => [
+                array('regex', '/^\d{4}$/')
+            ],
             'country' => [
-                array('regex', '/^[A-Z][a-z]+$/')
+                array('regex', '/^[A-Z][a-z]+$/'),
             ],
             'teamName' => [
                 array('regex', '/^[A-Z][a-z]+$/')
             ],
             'team_id' => [
-                array('regex', '/^\d+$/')
+                'integer',
+                'invalid_foreign_key'
             ],
             'draft_number' => [
                 array('regex', '/^\d+$/')
