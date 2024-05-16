@@ -243,7 +243,7 @@ class PlayersController extends BaseController
             "message" => "The list of players has not been created."
         );
 
-        return $this->makeResponse($response, $response_data, 500);
+        return $this->makeResponse($response, $response_data, 400);
     }
 
     /**
@@ -338,7 +338,7 @@ class PlayersController extends BaseController
             "message" => "the specified players have not been updated"
         );
 
-        return $this->makeResponse($response, $response_data, 500);
+        return $this->makeResponse($response, $response_data, 400);
     }
 
     /**
@@ -381,7 +381,7 @@ class PlayersController extends BaseController
             "code" => "failure",
             "message" => "the specified players have not been deleted"
         );
-        return $this->makeResponse($response, $response_data, 500);
+        return $this->makeResponse($response, $response_data, 400);
     }
 
 

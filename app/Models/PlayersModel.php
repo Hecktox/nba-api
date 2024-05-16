@@ -30,9 +30,9 @@ class PlayersModel extends BaseModel
             $filter_values["first_name"] = $filters["first_name"];
         }
 
-        if (isset($filters["country"])){
-            $sql .= " AND country LIKE CONCAT(:country, '%') ";
-            $filter_values["country"] = $filters["country"];
+        if (isset($filters["last_name"])){
+            $sql .= " AND last_name LIKE CONCAT(:last_name, '%') ";
+            $filter_values["last_name"] = $filters["last_name"];
         }
 
         if (isset($filters["birthdate"])){
@@ -40,9 +40,74 @@ class PlayersModel extends BaseModel
             $filter_values["b_date"] = $filters["birthdate"];
         }
 
+        if (isset($filters["school"])){
+            $sql .= " AND school LIKE CONCAT(:school, '%') ";
+            $filter_values["school"] = $filters["school"];
+        }
+
+        if (isset($filters["height"])){
+            $sql .= " AND height LIKE CONCAT(:height, '%') ";
+            $filter_values["height"] = $filters["height"];
+        }
+
+        if (isset($filters["weight"])){
+            $sql .= " AND weight LIKE CONCAT(:weight, '%') ";
+            $filter_values["weight"] = $filters["weight"];
+        }
+
+        if (isset($filters["jersey"])){
+            $sql .= " AND jersey LIKE CONCAT(:jersey, '%') ";
+            $filter_values["jersey"] = $filters["jersey"];
+        }
+
+        if (isset($filters["team_abbreviation"])){
+            $sql .= " AND team_abbreviation LIKE CONCAT(:team_abbreviation, '%') ";
+            $filter_values["team_abbreviation"] = $filters["team_abbreviation"];
+        }
+
+        if (isset($filters["team_code"])){
+            $sql .= " AND team_code LIKE CONCAT(:team_code, '%') ";
+            $filter_values["team_code"] = $filters["team_code"];
+        }
+
+        if (isset($filters["team_city"])){
+            $sql .= " AND team_city LIKE CONCAT(:team_city, '%') ";
+            $filter_values["team_city"] = $filters["team_city"];
+        }
+
+        if (isset($filters["draft_year"])){
+            $sql .= " AND draft_year LIKE CONCAT(:draft_year, '%') ";
+            $filter_values["draft_year"] = $filters["draft_year"];
+        }
+
+        if (isset($filters["country"])){
+            $sql .= " AND country LIKE CONCAT(:country, '%') ";
+            $filter_values["country"] = $filters["country"];
+        }
+
         if (isset($filters["team_name"])){
             $sql .= " AND team_name LIKE CONCAT(:team_name, '%') ";
             $filter_values["team_name"] = $filters["team_name"];
+        }
+
+        if (isset($filters["team_id"])){
+            $sql .= " AND team_id LIKE CONCAT(:team_id, '%') ";
+            $filter_values["team_id"] = $filters["team_id"];
+        }
+
+        if (isset($filters["draft_number"])){
+            $sql .= " AND draft_number LIKE CONCAT(:draft_number, '%') ";
+            $filter_values["draft_number"] = $filters["draft_number"];
+        }
+
+        if (isset($filters["from_year"])){
+            $sql .= " AND from_year > :from_year";
+            $filter_values["from_year"] = $filters["from_year"];
+        }
+
+        if (isset($filters["to_year"])){
+            $sql .= " AND to_year > :to_year";
+            $filter_values["to_year"] = $filters["to_year"];
         }
 
         if (isset($filters["order"]) && in_array($filters["order"], ["asc", "desc"])) {
