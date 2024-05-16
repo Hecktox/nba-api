@@ -91,7 +91,7 @@ class DraftController extends BaseController
         $v = new Validator($drafts);
         $rules = array(
             'season' => array(
-                array('regex', '/^(18[6-9]\d|19\d\d|20[0-1]\d|202[0-4])$/')
+                array('regex', '/^(?=.*\S)(18[6-9]\d|19\d\d|20[0-1]\d|202[0-4])$/')
             ),
             'player_id' => array(
                 'integer'
@@ -273,7 +273,7 @@ class DraftController extends BaseController
 
     public function handleDeleteDraft(Request $request, Response $response, array $uri_args): Response
     {
-        $teams = $request->getParsedBody();
+        $drafts = $request->getParsedBody();
 
         // Check if the request body is empty
         if (empty($drafts)) {
@@ -292,8 +292,8 @@ class DraftController extends BaseController
         if ($v->validate()) {
             foreach ($drafts as $player_id) {
                 // Check if the team exists before attempting to delete
-                if ($this->draft_model->verifyTeamId($player_id)) {
-                    $this->draft_model->deleteTeam($player_id);
+                if ($this->draft_model->verifyDraftId($player_id)) {
+                    $this->draft_model->deleteDraft($player_id);
                 } else {
                     // Team does not exist, return error message with 404 status code
                     $response_data = array(
