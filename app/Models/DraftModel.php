@@ -92,5 +92,10 @@ class DraftModel extends BaseModel
     {
         return $this->delete("draft_combine_stats", ["player_id" => $player_id]);
     }
-    
+    public function verifyDraftId(string $player_id): bool
+    {
+        $sql = "SELECT COUNT(*) AS count FROM draft_combine_stats WHERE player_id = :player_id";
+        $result = $this->fetchSingle($sql, ["player_id" => $player_id]);
+        return $result['count'] > 0;
+    }
 }
