@@ -104,6 +104,13 @@ $app->post('/token', [AccountsController::class, 'handleGenerateToken']);
 $app->get('/', [AboutController::class, 'handleAboutWebService']);
 //! For logging (example!). We need to implement this in helper and index.
 //* ROUTE: GET Hello
+
+$app->get('/access', function (Request $request, Response $response, $args){
+    
+    
+});
+
+
 $app->get('/hello', function (Request $request, Response $response, $args) {
 
     // 1) Initiate and configure a logger.

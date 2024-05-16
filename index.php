@@ -5,11 +5,12 @@ declare(strict_types=1);
 use Slim\Factory\AppFactory;
 use Vanier\Api\Middleware\ContentNegotiationMiddleware;
 use Vanier\Api\Middleware\JWTAuthMiddleware;
+use Vanier\Api\Middleware\LoggingMiddleware;
 
 define('APP_BASE_DIR', __DIR__);
 
 // App's logs directory
-define('APP_LOGS_DIR', APP_BASE_DIR . '//logs/');
+define('APP_LOGS_DIR', APP_BASE_DIR . '/logs/');
 define('APP_ACCESS_LOG_FILE', 'access.log');
 define('APP_ERROR_LOG_FILE', 'error.log');
 
@@ -31,6 +32,7 @@ $app->addBodyParsingMiddleware();
 $app->addRoutingMiddleware();
 $app->add(new ContentNegotiationMiddleware());
 //$app->add(new JWTAuthMiddleware());
+$app->add(new LoggingMiddleware());
 
 //!NOTE: the error handling middleware MUST be added last.
 $errorMiddleware = $app->addErrorMiddleware(true, true, true);
