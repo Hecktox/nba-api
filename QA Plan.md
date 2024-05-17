@@ -115,6 +115,167 @@ Welcome! This is a Web service that provides comprehensive access to NBA-related
 | "standing_vertical_leap":    | "standing_vertical_leap":    |                |
 | "max_vertical_leap":        | "max_vertical_leap":        |                |
 | "bench_press":       | "bench_press":       |                |
+## Examples of Correct Resources for /games:
+POST /draft:
+```
+[
+    {
+        "season": 2003,
+        "player_id": 2,
+        "first_name": "Jordan",
+        "last_name": "Michel",
+        "player_name": "Jordan Michel",
+        "position": "SG",
+        "weight": 199,
+        "wingspan": 6.5,
+        "standing_reach": "8.2",
+        "hand_length": 7.5,
+        "hand_width": 8.0,
+        "standing_vertical_leap": 35.5,
+        "max_vertical_leap": 40.0,
+        "bench_press": 225
+    }, 
+
+    {
+        "season": 2003,
+        "player_id": 3,
+        "first_name": "David",
+        "last_name": "Jorge",
+        "player_name": "David Jorge",
+        "position": "SG",
+        "weight": 184,
+        "wingspan": 4.5,
+        "standing_reach": "6.2",
+        "hand_length": 5.5,
+        "hand_width": 7.0,
+        "standing_vertical_leap": 23.5,
+        "max_vertical_leap": 30.0,
+        "bench_press": 200
+    }
+]
+```
+PUT /draft:
+```
+[
+    {
+        "season": 2003,
+        "player_id": 3,
+        "first_name": "David",
+        "last_name": "Jorge",
+        "player_name": "David Jorge",
+        "position": "SG",
+        "weight": 184,
+        "wingspan": 4.5,
+        "standing_reach": "6.2",
+        "hand_length": 5.5,
+        "hand_width": 7.0,
+        "standing_vertical_leap": 23.5,
+        "max_vertical_leap": 30.0,
+        "bench_press": 200
+    },
+
+    {
+        "season": 2003,
+        "player_id": 3,
+        "first_name": "David",
+        "last_name": "Jorge",
+        "player_name": "David Jorge",
+        "position": "SG",
+        
+    }
+]
+```
+DELETE /games
+```
+[
+    2, 3
+]
+```
+## Examples of Incorrect Resources for /games:
+POST /draft:
+```
+[
+    {
+        "season": ls,
+        "player_id": ls,
+        "first_name": david123,
+        "last_name": 123Jorge,
+        "player_name": jor12,
+        "position": 123,
+        "weight": a,
+        "wingspan": 2s,
+        "standing_reach": 123a,
+        "hand_length": 12d,
+        "hand_width": 7.0a,
+        "standing_vertical_leap": 23.sd5,
+        "max_vertical_leap": 123d,
+        "bench_press": 123a
+    },
+
+    {
+        "season": ls,
+        "player_id": ls,
+        "first_name": aasd12,
+        "last_name": 214as,
+        "player_name": 1234sadf,
+        "position": 123asd,
+        "weight": 123asd,
+        "wingspan": 123asd,
+        "standing_reach": 123asd,
+        "hand_length": 123asd,
+        "hand_width": 7.12340a,
+        "standing_vertical_leap": 23.sd2135,
+        "max_vertical_leap": sad,
+        "bench_press": 123s
+    }
+]
+```
+PUT /draft
+```
+[
+    {
+        "season": 12312a,
+        "player_id": 31231a,
+        "first_name": 123asd,
+        "last_name": 123asdf,
+        "player_name": 123ad,
+        "position": 124asdf,
+        "weight": 123asd,
+        "wingspan": 123asdx,
+        "standing_reach": "asd12",
+        "hand_length": 12243sd,
+        "hand_width": 2134dsf,
+        "standing_vertical_leap": 1234sd,
+        "max_vertical_leap": 123asdfx,
+        "bench_press": 21ss
+    },
+
+    {
+        "season": 22sd,
+        "player_id": 3sda2,
+        "first_name": 1234d,
+        "last_name": 123sds,
+        "player_name": 123ws,
+        "position": 123s,
+        
+    }
+]
+```
+DELETE /draft
+```
+[
+
+]
+
+
+(or)
+
+
+[
+    21312411
+]
+```
+
 
 ## Games
 
