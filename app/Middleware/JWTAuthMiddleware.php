@@ -18,7 +18,7 @@ class JWTAuthMiddleware implements MiddlewareInterface
     public function __construct(array $options = [])
     {
     }
-    
+
     public function process(Request $request, RequestHandler $handler): ResponseInterface
     {
         /*
@@ -26,10 +26,9 @@ class JWTAuthMiddleware implements MiddlewareInterface
          *    We need to ignore the routes that enable client applications
          *    to create an account and request a JWT token.
          */
-        // Public routes (routes that do not require JWT authorization)
-        $publicRoutes = ['/account', '/token'];
+        $publicRoutes = ['/nba-api/account', '/nba-api/token'];
 
-        if (in_array($request->getUri()->getPath(), $publicRoutes) || $request->getMethod() === 'POST') {
+        if ($request->getMethod() === 'POST' && in_array($request->getUri()->getPath(), $publicRoutes)) {
             return $handler->handle($request);
         }
 
@@ -59,7 +58,7 @@ class JWTAuthMiddleware implements MiddlewareInterface
          * 5) Access to POST, PUT, and DELETE operations must be restricted:
          *    Only admin accounts can be authorized.
          */
-        if (in_array($request->getMethod(), ['POST', 'PUT', 'DELETE']) && $decodedToken->role !== 'admin') {
+        if (in_array($request->getMethod(), ['POST', 'PUT', 'DELETE']) && isset($decodedToken['role']) && $decodedToken['role'] !== 'admin') {
             throw new HttpForbiddenException($request, 'Insufficient permission');
         }
 
