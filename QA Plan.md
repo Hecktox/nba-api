@@ -115,7 +115,7 @@ Welcome! This is a Web service that provides comprehensive access to NBA-related
 | "standing_vertical_leap":    | "standing_vertical_leap":    |                |
 | "max_vertical_leap":        | "max_vertical_leap":        |                |
 | "bench_press":       | "bench_press":       |                |
-## Examples of Correct Resources for /games:
+## Examples of Correct Resources for /draft:
 POST /draft:
 ```
 [
@@ -191,7 +191,7 @@ DELETE /games
     2, 3
 ]
 ```
-## Examples of Incorrect Resources for /games:
+## Examples of Incorrect Resources for /draft:
 POST /draft:
 ```
 [
