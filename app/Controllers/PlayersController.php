@@ -207,9 +207,6 @@ class PlayersController extends BaseController
             'draft_year' => [
                 array('regex', '/^\d{4}$/')
             ],
-            'country' => [
-                array('regex', '/^[A-Z][a-z]+$/'),
-            ],
             'teamName' => [
                 array('regex', '/^[A-Z][a-z]+$/')
             ],
@@ -267,7 +264,7 @@ class PlayersController extends BaseController
         $v = new Validator($players);
         $rules = array(
             'person_id' => array(
-                'required'
+                //'required'
             ),
             'first_name' => array(
                 array('regex', '/^[A-Z][a-z]+$/')
@@ -301,9 +298,6 @@ class PlayersController extends BaseController
             ],
             'draft_year' => [
                 array('regex', '/^\d{4}$/')
-            ],
-            'country' => [
-                array('regex', '/^[A-Z][a-z]+$/'),
             ],
             'teamName' => [
                 array('regex', '/^[A-Z][a-z]+$/')

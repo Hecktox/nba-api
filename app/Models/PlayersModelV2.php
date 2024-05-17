@@ -2,7 +2,7 @@
 
 namespace Vanier\Api\Models;
 
-class PlayersModel extends BaseModel
+class PlayersModelV2 extends BaseModel
 {
     public function __construct(){
         parent::__construct();
