@@ -2,6 +2,7 @@
 
 namespace Vanier\Api\Middleware;
 
+use Exception;
 use LogicException;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -11,6 +12,7 @@ use Slim\Exception\HttpForbiddenException;
 use Slim\Exception\HttpUnauthorizedException;
 use UnexpectedValueException;
 use Firebase\JWT\JWT;
+use Vanier\Api\Controllers\LoggingController;
 use Vanier\Api\Helpers\JWTManager;
 
 class JWTAuthMiddleware implements MiddlewareInterface
@@ -37,7 +39,13 @@ class JWTAuthMiddleware implements MiddlewareInterface
          */
         $authorizationHeader = $request->getHeaderLine('Authorization');
         if (!$authorizationHeader) {
-            throw new HttpForbiddenException($request, 'Missing authorization token');
+            try {
+                throw new HttpForbiddenException($request, 'Missing authorization token');
+            } catch (Exception $ex){
+                LoggingController::logError($ex->getMessage());
+            }
+            
+            
         }
 
         /*
@@ -50,7 +58,8 @@ class JWTAuthMiddleware implements MiddlewareInterface
              * 4) Try to decode the JWT token.
              */
             $decodedToken = JWTManager::decodeJWT($token, JWTManager::SIGNATURE_ALGO);
-        } catch (\Exception $e) {
+        } catch (Exception $ex) {
+            LoggingController::logError($ex->getMessage());
             throw new HttpForbiddenException($request, 'Invalid authorization token');
         }
 
@@ -59,7 +68,12 @@ class JWTAuthMiddleware implements MiddlewareInterface
          *    Only admin accounts can be authorized.
          */
         if (in_array($request->getMethod(), ['POST', 'PUT', 'DELETE']) && isset($decodedToken['role']) && $decodedToken['role'] !== 'admin') {
-            throw new HttpForbiddenException($request, 'Insufficient permission');
+            try {
+                throw new HttpForbiddenException($request, 'Insufficient permission');
+            } catch (Exception $ex){
+                LoggingController::logError($ex->getMessage());
+            }
+            
         }
 
         /*

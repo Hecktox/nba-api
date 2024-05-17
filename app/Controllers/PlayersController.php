@@ -126,8 +126,17 @@ class PlayersController extends BaseController
         
 
         //2. Validation logic for foreign_key
-        if (!empty($players)){
-            $GLOBALS['team_fk'] = $players["team_id"];
+        if (!empty($players) && is_array($players)){
+            // var_dump($players);
+            // exit;
+            foreach ($players as $player){
+                if(isset($player["team_id"])){
+                    $GLOBALS['team_fk'] = $players["team_id"];
+                }
+            }
+
+
+            
         }
         
 
@@ -148,6 +157,8 @@ class PlayersController extends BaseController
                 $team_id = $GLOBALS['team_fk'];
                 $result = $this->player_model->verifyTeamId($team_id);
                 
+                var_dump($result);
+                exit;
 
                 if($result == False){
                     return false;
