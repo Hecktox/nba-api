@@ -90,7 +90,6 @@ Welcome! This is a Web service that provides comprehensive access to NBA-related
     "to_year": 1994,
     "draft_year": "1990",
     "draft_number": "25"
-|
 
 ### Drafts
 
@@ -143,6 +142,162 @@ Welcome! This is a Web service that provides comprehensive access to NBA-related
 | "pts_away":       | "pts_away":       |                |
 | "plus_minus_away":       | "plus_minus_away":       |                |
 | "season_type":       | "season_type":       |                |
+
+## Examples of Correct Resources for /games:
+POST /games:
+```
+[
+    {
+        "season_id": 12005,
+        "team_id_home": 1610612764,
+        "team_abbreviation_home": "WAS",
+        "team_name_home": "Washington Wizards",
+        "game_id": 1,
+        "game_date": "2005-10-10 00:00:00",
+        "pts_home": "94.0",
+        "plus_minus_home": "-22",
+        "team_id_away": 1610612739,
+        "team_abbreviation_away": "CLE",
+        "team_name_away": "Cleveland Cavaliers",
+        "matchup_away": "CLE @ WAS",
+        "wl_away": "W",
+        "pts_away": "116.0",
+        "plus_minus_away": "22",
+        "season_type": "Pre Season"
+    }, 
+
+    {
+        "season_id": 12005,
+        "team_id_home": 1610612755,
+        "team_abbreviation_home": "PHI",
+        "team_name_home": "Philadelphia 76ers",
+        "game_id": 2,
+        "game_date": "2005-10-11 00:00:00",
+        "pts_home": "91.0",
+        "plus_minus_home": "-14",
+        "team_id_away": 1610612745,
+        "team_abbreviation_away": "HOU",
+        "team_name_away": "Houston Rockets",
+        "matchup_away": "HOU @ PHI",
+        "wl_away": "W",
+        "pts_away": "105.0",
+        "plus_minus_away": "14",
+        "season_type": "Pre Season"
+    }
+]
+```
+PUT /games:
+```
+[
+    {
+        "season_id": 123,
+        "team_id_home": 123456,
+        "team_abbreviation_home": "WAS",
+        "team_name_home": "Washington Wizards",
+        "game_id": 1,
+        "game_date": "2005-10-10 00:00:00",
+        "pts_home": "94.0",
+        "plus_minus_home": "-22",
+        "team_id_away": 1610612739,
+        "team_abbreviation_away": "CLE",
+        "team_name_away": "Cleveland Cavaliers",
+        "matchup_away": "CLE @ WAS",
+        "wl_away": "W",
+        "pts_away": "116.0",
+        "plus_minus_away": "22",
+        "season_type": "Pre Season"
+    },
+
+    {
+        "season_id": 123,
+        "team_id_home": 1610612755,
+        "team_abbreviation_home": "MTL",
+        "team_name_home": "Montreal Warriors",
+        "game_id": 2
+    }
+]
+```
+DELETE /games
+```
+[
+    1, 2
+]
+```
+## Examples of Incorrect Resources for /games:
+POST /games:
+```
+[
+    {
+        "game_id": 10500001,
+        "game_date": "2005-10-10 00:00:00",
+        "pts_home": "94.0",
+        "plus_minus_home": "-22",
+        "team_id_away": 1610612739,
+        "team_abbreviation_away": "CLE",
+        "team_name_away": "Cleveland Cavaliers",
+        "matchup_away": "CLE @ WAS",
+        "wl_away": "W",
+        "pts_away": "116.0",
+        "plus_minus_away": "22",
+        "season_type": "Pre Season"
+    },
+
+    {
+        "season_id": "abcdefghigklmnopqestuvwxyz",
+        "team_id_home": 1610612755,
+        "team_abbreviation_home": "PHI",
+        "team_name_home": "Philadelphia 76ers",
+        "game_id": 2,
+        "game_date": "2005-10-11 00:00:00",
+        "pts_home": "91.0",
+        "plus_minus_home": "-14",
+        "team_id_away": 1610612745,
+        "team_abbreviation_away": "HOU",
+        "team_name_away": "Houston Rockets",
+        "matchup_away": "HOU @ PHI",
+        "wl_away": "W",
+        "pts_away": "105.0",
+        "plus_minus_away": "14",
+        "season_type": "Pre Season"
+    }
+]
+```
+PUT /games
+```
+[
+    {
+        "season_id": 12005,
+        "team_id_home": 1610612764,
+        "team_abbreviation_home": "WAS",
+        "team_name_home": "Washington Wizards",
+        "game_date": "2005-10-10 00:00:00",
+        "pts_home": "94.0"
+    },
+
+    {
+        "season_id": 12005,
+        "team_id_home": "abcdefghigklmnopqestuvwxyz",
+        "team_abbreviation_home": "PHI",
+        "team_name_home": "Philadelphia 76ers",
+        "game_id": 2
+    }
+]
+```
+DELETE /games
+```
+[
+
+]
+
+
+(or)
+
+
+[
+    100000000000000000
+]
+```
+
 
 ## Composite Resources
 
