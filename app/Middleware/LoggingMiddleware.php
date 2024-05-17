@@ -32,14 +32,15 @@ class LoggingMiddleware implements MiddlewareInterface
         $extras = $request->getQueryParams();
         LoggingController::logAccess($log_record, $extras);
 
-        //DB log (a bit weird since I had to find a way to verify who the currently logged in user is, thought of using the JWT token but that was going to be pretty crazy to use as a query param for the ws_users table, so i settled for using the body of the request, you have to pass in your email and your JWT token in the headers, = db logging works for get methods only)
-        $rBody = $request->getParsedBody();
+        //DB log (a bit weird since I had to find a way to verify who the currently logged in user is, thought of using the JWT token but that was going to be pretty crazy to use as a query param for the ws_users table, so i settled for using the body of the request, you have to pass in your email and your JWT token in the headers, = db logging should work for get methods only)
         
-        $user_id["id"] = $rBody["id"];
-        $user_email["email"] = $rBody["email"];
-        $user_info = [$user_id["id"], $user_email["email"]];
+        //$rBody = $request->getParsedBody();
 
-        $this->account_log_model->createLogEntry($user_info, $method);
+        // $user_id["id"] = $rBody["id"];
+        // $user_email["email"] = $rBody["email"];
+        // $user_info = [$user_id["id"], $user_email["email"]];
+
+        //$this->account_log_model->createLogEntry($user_info, $method);
         
 
         $response = $handler->handle($request);

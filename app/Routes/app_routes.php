@@ -13,6 +13,7 @@ use Vanier\Api\Controllers\BMIController;
 use Vanier\Api\Controllers\DraftController;
 use Vanier\Api\Controllers\GamesController;
 use Vanier\Api\Controllers\PlayersController;
+use Vanier\Api\Controllers\PlayersControllerV2;
 use Vanier\Api\Controllers\SportDbController;
 use Vanier\Api\Controllers\TvMazeController;
 use Vanier\Api\Helpers\DateTimeHelper;
@@ -69,6 +70,8 @@ $app->delete('/games', [GamesController::class, 'handleDeleteGames']);
 
 //*ROUTE: GET /players
 $app->get('/players', [PlayersController::class, 'handleGetPlayers']);
+
+$app->get('/players/v2', [PlayersControllerV2::class, 'handleGetPlayers']);
 //*ROUTE: POST /players
 $app->post('/players', [PlayersController::class, 'handleCreatePlayers']);
 //*ROUTE: PUT /players
@@ -107,7 +110,7 @@ $app->get('/', [AboutController::class, 'handleAboutWebService']);
 
 $app->get('/access', function (Request $request, Response $response, $args){
     
-    
+
 });
 
 

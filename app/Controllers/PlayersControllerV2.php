@@ -5,18 +5,18 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Vanier\Api\Exceptions\HttpInvalidInputException;
 use Vanier\Api\Helpers\InputsHelper;
-use Vanier\Api\Models\PlayersModel;
+use Vanier\Api\Models\PlayersModelV2;
 use Vanier\Api\Exceptions\HttpNoContentException;
 use Vanier\Api\Exceptions\HttpInvalidPaginationParameterException;
 use Vanier\Api\Validations\Validator;
 require_once("validation/validation/Validator.php");
 
-class PlayersController extends BaseController
+class PlayersControllerV2 extends BaseController
 {
     private $player_model = null;
 
     public function __construct(){
-        $this->player_model = new PlayersModel();
+        $this->player_model = new PlayersModelV2();
     }
 
     /**
@@ -124,50 +124,6 @@ class PlayersController extends BaseController
         //1. Get the information from the body
         $players = $request->getParsedBody();
         
-
-        //2. Validation logic for foreign_key
-        // if (!empty($players) && is_array($players)){
-        //     // var_dump($players);
-        //     // exit;
-        //     foreach ($players as $player){
-        //         if(isset($player["team_id"])){
-        //             $GLOBALS['team_fk'] = $players["team_id"];
-        //         }
-        //     }
-
-
-            
-        // }
-        
-
-        // var_dump($GLOBALS['team_fk']);
-        // exit;
-        // $player_fk = $players[0];
-
-        // $provided_team_id = $player_fk['team_id'];
-
-        // $provided_player_id = $player_fk['person_id'];
-        
-
-        //Try checking team_id before valitron and then throw regualr exception if team_id exist
-
-        //  Validator::addRule(
-        //      'invalid_foreign_key',
-        //      function(){
-        //         $team_id = $GLOBALS['team_fk'];
-        //         $result = $this->player_model->verifyTeamId($team_id);
-                
-        //         var_dump($result);
-        //         exit;
-
-        //         if($result == False){
-        //             return false;
-        //         }
-
-        //         return true;
-        //     },
-        //     'Foreign key provided team_id does not exists'
-        // );
 
         $v = new Validator($players);
         $rules = array(
