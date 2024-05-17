@@ -31,7 +31,7 @@ $app = AppFactory::create();
 $app->addBodyParsingMiddleware();
 $app->addRoutingMiddleware();
 $app->add(new ContentNegotiationMiddleware());
-//$app->add(new JWTAuthMiddleware());
+// $app->add(new JWTAuthMiddleware());
 $app->add(new LoggingMiddleware());
 
 //!NOTE: the error handling middleware MUST be added last.

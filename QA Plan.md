@@ -20,57 +20,88 @@ Welcome! This is a Web service that provides comprehensive access to NBA-related
 
 ### Teams
 
-| Resource     | URI                                                            | Method                 | Filter |
-| ------------ | -------------------------------------------------------------- | ---------------------- | ------ |
-| Teams        | /team | GET, POST, PUT, DELETE | full_name, nickname, abbreviation, city, state, year_founded, year_active_till, owner, page, page_size, order    |
-| Team by ID   | /team/{team_id}                        | GET                    | N/A    |
-| Team History | /team/{team_id}/history                | GET                    | match_result    |
+| Resource     | URI                     | Method                 | Filter                                                                                                        |
+| ------------ | ----------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Teams        | /team                   | GET, POST, PUT, DELETE | full_name, nickname, abbreviation, city, state, year_founded, year_active_till, owner, page, page_size, order |
+| Team by ID   | /team/{team_id}         | GET                    | N/A                                                                                                           |
+| Team History | /team/{team_id}/history | GET                    | N/A                                                                                                           |
 
-| POST           | PUT            | DELETE         |
-|----------------|----------------|----------------|
-| "team_id":     | "team_id":     | team_id        |
-| "full_name":   | "full_name":   |                |
-| "abbreviation":| "abbreviation":|                |
-| "nickname":    | "nickname":    |                |
-| "city":        | "city":        |                |
-| "state":       | "state":       |                |
-| "year_founded":| "year_founded":|                |
-| "owner":       | "owner":       |                |
-| "year_active_till":| "year_active_till":|          |
+### POST
 
+```
+[
+  {
+    "team_id": 1234567890,
+    "full_name": "Kings Might",
+    "abbreviation": "KGX",
+    "nickname": "Kings",
+    "city": "Montreal",
+    "state": "Quebec",
+    "year_founded": "2024",
+    "owner": "Julian Frost",
+    "year_active_till": "2024"
+  }
+]
+```
+
+### PUT
+
+```
+[
+  {
+    "team_id": 1234567890,
+    "full_name": "Kings Might",
+    "abbreviation": "KGX",
+    "nickname": "Kings",
+    "city": "Montreal",
+    "state": "Quebec",
+    "year_founded": "2024",
+    "owner": "Julian Frost",
+    "year_active_till": "2024"
+  }
+]
+```
+
+### DELETE
+
+```
+[
+  1234567890
+]
+```
 
 ### Players
 
-| Resource      | URI                                                                  | Method                 | Filter |
-| ------------- | -------------------------------------------------------------------- | ---------------------- | ------ |
-| Players       | /players | GET, POST, PUT, DELETE | person_id, first_name, last_name, birthdate, school, country, height, weight, jersey, position, team_id, team_name, team_abbreviation, team_code, team_city, from_year, to_year, draft_year, draft_number, order, page, page_size    |
-| Player by ID  | /players/{player_id}                            | GET                    | N/A    |
-| Player Drafts | /players/{player_id}/drafts                     | GET                    | N/A    |
+| Resource      | URI                         | Method                 | Filter                                                                                                                                                                                                                            |
+| ------------- | --------------------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Players       | /players                    | GET, POST, PUT, DELETE | person_id, first_name, last_name, birthdate, school, country, height, weight, jersey, position, team_id, team_name, team_abbreviation, team_code, team_city, from_year, to_year, draft_year, draft_number, order, page, page_size |
+| Player by ID  | /players/{player_id}        | GET                    | N/A                                                                                                                                                                                                                               |
+| Player Drafts | /players/{player_id}/drafts | GET                    | N/A                                                                                                                                                                                                                               |
 
-| POST           | PUT            | DELETE         |
-|----------------|----------------|----------------|
-| "person_id":  |   "person_id":    | person_id
-| "first_name":     | "first_name":     |      |
-| "last_name":   | "last_name":   |                |
-| "birthdate":| "birthdate":|                |
-| "school":    | "school":    |                |
-| "country":        | "country":        |                |
-| "height":       | "height":       |                |
-| "weight":| "weight":|                |
-| "jersey":       | "jersey":       |                |
-| "position":| "position":|          |
-| "team_id":    | "team_id":    |                |
-| "team_name":        | "team_name":        |                |
-| "team_abbreviation":       | "team_abbreviation":       |                |
-| "team_code":| "team_code":|                |
-| "team_city":       | "team_city":       |                |
-| "from_year":| "from_year":|          |
-| "to_year":        | "to_year":        |                |
-| "draft_year":     | "draft_year":       |             |
-| "draft_number":| "draft_number":|                |
+| POST                 | PUT                  | DELETE    |
+| -------------------- | -------------------- | --------- |
+| "person_id":         | "person_id":         | person_id |
+| "first_name":        | "first_name":        |           |
+| "last_name":         | "last_name":         |           |
+| "birthdate":         | "birthdate":         |           |
+| "school":            | "school":            |           |
+| "country":           | "country":           |           |
+| "height":            | "height":            |           |
+| "weight":            | "weight":            |           |
+| "jersey":            | "jersey":            |           |
+| "position":          | "position":          |           |
+| "team_id":           | "team_id":           |           |
+| "team_name":         | "team_name":         |           |
+| "team_abbreviation": | "team_abbreviation": |           |
+| "team_code":         | "team_code":         |           |
+| "team_city":         | "team_city":         |           |
+| "from_year":         | "from_year":         |           |
+| "to_year":           | "to_year":           |           |
+| "draft_year":        | "draft_year":        |           |
+| "draft_number":      | "draft_number":      |           |
 
 #### Example of a player resource
-  
+
     "person_id": 76001,
     "first_name": "Alaa",
     "last_name": "Abdelnaby",
@@ -93,30 +124,33 @@ Welcome! This is a Web service that provides comprehensive access to NBA-related
 
 ### Drafts
 
-| Resource           | URI                                                              | Method                 | Filter |
-| ------------------ | ---------------------------------------------------------------- | ---------------------- | ------ |
-| Drafts             | /draft | GET, POST, PUT, DELETE |  first_name, last_name, player_name, position, weight, wingspan, standing_reach, hand_lenght, hand_width, standing_vertical_leap, max_vertical_leap, bench_press, page, page_size, order   |
-| Draft by ID        | /draft/{draft_id}                        | GET                    | N/A    |
-| Draft by Player ID | /draft/{player_id}                       | GET                    | N/A    |
-| Draft Seasons      | /draft/{player_id}/season                | GET                    | N/A    |
+| Resource           | URI                       | Method                 | Filter                                                                                                                                                                                  |
+| ------------------ | ------------------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Drafts             | /draft                    | GET, POST, PUT, DELETE | first_name, last_name, player_name, position, weight, wingspan, standing_reach, hand_lenght, hand_width, standing_vertical_leap, max_vertical_leap, bench_press, page, page_size, order |
+| Draft by ID        | /draft/{draft_id}         | GET                    | N/A                                                                                                                                                                                     |
+| Draft by Player ID | /draft/{player_id}        | GET                    | N/A                                                                                                                                                                                     |
+| Draft Seasons      | /draft/{player_id}/season | GET                    | N/A                                                                                                                                                                                     |
 
-| POST           | PUT            | DELETE         |
-|----------------|----------------|----------------|
-| "player_id":  |   "player_id":    | player_id
-| "season":     | "season":     |      |
-| "first_name":   | "first_name":   |                |
-| "last_name":| "last_name":|                |
-| "position":    | "position":    |                |
-| "weight":        | "weight":        |                |
-| "wingspan":       | "wingspan":       |                |
-| "standing_reach":| "standing_reach":|                |
-| "hand_length":       | "hand_length":       |                |
-| "hand_width":| "hand_width":|          |
-| "standing_vertical_leap":    | "standing_vertical_leap":    |                |
-| "max_vertical_leap":        | "max_vertical_leap":        |                |
-| "bench_press":       | "bench_press":       |                |
+| POST                      | PUT                       | DELETE    |
+| ------------------------- | ------------------------- | --------- |
+| "player_id":              | "player_id":              | player_id |
+| "season":                 | "season":                 |           |
+| "first_name":             | "first_name":             |           |
+| "last_name":              | "last_name":              |           |
+| "position":               | "position":               |           |
+| "weight":                 | "weight":                 |           |
+| "wingspan":               | "wingspan":               |           |
+| "standing_reach":         | "standing_reach":         |           |
+| "hand_length":            | "hand_length":            |           |
+| "hand_width":             | "hand_width":             |           |
+| "standing_vertical_leap": | "standing_vertical_leap": |           |
+| "max_vertical_leap":      | "max_vertical_leap":      |           |
+| "bench_press":            | "bench_press":            |           |
+
 ## Examples of Correct Resources for /draft:
+
 POST /draft:
+
 ```
 [
     {
@@ -134,7 +168,7 @@ POST /draft:
         "standing_vertical_leap": 35.5,
         "max_vertical_leap": 40.0,
         "bench_press": 225
-    }, 
+    },
 
     {
         "season": 2003,
@@ -154,7 +188,9 @@ POST /draft:
     }
 ]
 ```
+
 PUT /draft:
+
 ```
 [
     {
@@ -181,18 +217,23 @@ PUT /draft:
         "last_name": "Jorge",
         "player_name": "David Jorge",
         "position": "SG",
-        
+
     }
 ]
 ```
-DELETE /games
+
+DELETE /draft
+
 ```
 [
     2, 3
 ]
 ```
+
 ## Examples of Incorrect Resources for /draft:
+
 POST /draft:
+
 ```
 [
     {
@@ -230,7 +271,9 @@ POST /draft:
     }
 ]
 ```
+
 PUT /draft
+
 ```
 [
     {
@@ -257,11 +300,13 @@ PUT /draft
         "last_name": 123sds,
         "player_name": 123ws,
         "position": 123s,
-        
+
     }
 ]
 ```
+
 DELETE /draft
+
 ```
 [
 
@@ -276,36 +321,37 @@ DELETE /draft
 ]
 ```
 
-
 ## Games
 
-| Resource   | URI                                                              | Method                 | Filter |
-| ---------- | ---------------------------------------------------------------- | ---------------------- | ------ |
-| Games      | /games) | GET, POST, PUT, DELETE | season_id, team_id_home, team_abbreviation_home, team_name_home, game_date, matchup_away, wl_away, pts_away, plus_minus_away, season_type, page, page_size, order    |
-| Game by ID | /games/{game_id}                         | GET                    | N/A    |
-| Game Teams | /games/{game_id}/teams                   | GET                    | N/A    |
+| Resource   | URI                    | Method                 | Filter                                                                                                                                                            |
+| ---------- | ---------------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Games      | /games)                | GET, POST, PUT, DELETE | season_id, team_id_home, team_abbreviation_home, team_name_home, game_date, matchup_away, wl_away, pts_away, plus_minus_away, season_type, page, page_size, order |
+| Game by ID | /games/{game_id}       | GET                    | N/A                                                                                                                                                               |
+| Game Teams | /games/{game_id}/teams | GET                    | N/A                                                                                                                                                               |
 
-| POST           | PUT            | DELETE         |
-|----------------|----------------|----------------|
-| "season_id":  |   "season_id":    | game_id
-| "team_id_home":     | "team_id_home":     |      |
-| "team_abbreviation_home":   | "team_abbreviation_home":   |                |
-| "team_name_home":| "team_name_home":|                |
-| "game_id":    | "game_id":    |                |
-| "game_date":        | "game_date":        |                |
-| "pts_home":       | "pts_home":       |                |
-| "plus_minus_home":| "plus_minus_home":|                |
-| "team_id_away":       | "team_id_away":       |                |
-| "team_abbreviation_away":| "team_abbreviation_away":|          |
-| "team_name_away":    | "team_name_away":    |                |
-| "matchup_away":        | "matchup_away":        |                |
-| "wl_away":       | "wl_away":       |                |
-| "pts_away":       | "pts_away":       |                |
-| "plus_minus_away":       | "plus_minus_away":       |                |
-| "season_type":       | "season_type":       |                |
+| POST                      | PUT                       | DELETE  |
+| ------------------------- | ------------------------- | ------- |
+| "season_id":              | "season_id":              | game_id |
+| "team_id_home":           | "team_id_home":           |         |
+| "team_abbreviation_home": | "team_abbreviation_home": |         |
+| "team_name_home":         | "team_name_home":         |         |
+| "game_id":                | "game_id":                |         |
+| "game_date":              | "game_date":              |         |
+| "pts_home":               | "pts_home":               |         |
+| "plus_minus_home":        | "plus_minus_home":        |         |
+| "team_id_away":           | "team_id_away":           |         |
+| "team_abbreviation_away": | "team_abbreviation_away": |         |
+| "team_name_away":         | "team_name_away":         |         |
+| "matchup_away":           | "matchup_away":           |         |
+| "wl_away":                | "wl_away":                |         |
+| "pts_away":               | "pts_away":               |         |
+| "plus_minus_away":        | "plus_minus_away":        |         |
+| "season_type":            | "season_type":            |         |
 
 ## Examples of Correct Resources for /games:
+
 POST /games:
+
 ```
 [
     {
@@ -325,7 +371,7 @@ POST /games:
         "pts_away": "116.0",
         "plus_minus_away": "22",
         "season_type": "Pre Season"
-    }, 
+    },
 
     {
         "season_id": 12005,
@@ -347,7 +393,9 @@ POST /games:
     }
 ]
 ```
+
 PUT /games:
+
 ```
 [
     {
@@ -378,14 +426,19 @@ PUT /games:
     }
 ]
 ```
+
 DELETE /games
+
 ```
 [
     1, 2
 ]
 ```
+
 ## Examples of Incorrect Resources for /games:
+
 POST /games:
+
 ```
 [
     {
@@ -423,7 +476,9 @@ POST /games:
     }
 ]
 ```
+
 PUT /games
+
 ```
 [
     {
@@ -444,7 +499,9 @@ PUT /games
     }
 ]
 ```
+
 DELETE /games
+
 ```
 [
 
@@ -459,20 +516,19 @@ DELETE /games
 ]
 ```
 
-
 ## Composite Resources
 
-| Resource | URI                                                              | Method | Filter |
-| -------- | ---------------------------------------------------------------- | ------ | ------ |
-| Sports    | /sports                       | GET    | c=[Country]    |
-| Shows    | /shows | GET    | N/A    |
-| BMI Computation    | /BMI | POST    | N/A    |
+| Resource        | URI     | Method | Filter      |
+| --------------- | ------- | ------ | ----------- |
+| Sports          | /sports | GET    | c=[Country] |
+| Shows           | /shows  | GET    | N/A         |
+| BMI Computation | /BMI    | POST   | N/A         |
 
 ## BMI
 
-| POST           |
-|----------------|
-| "height":      |
-| "weight":      |
-| "unit":        |  
-| "gender":      |
+| POST      |
+| --------- |
+| "height": |
+| "weight": |
+| "unit":   |
+| "gender": |
