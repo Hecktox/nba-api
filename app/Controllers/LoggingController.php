@@ -2,12 +2,14 @@
 
 namespace Vanier\Api\Controllers;
 
+use Exception;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Vanier\Api\Helpers\DateTimeHelper;
+
 
 class LoggingController
 {
@@ -31,7 +33,7 @@ class LoggingController
         $logger->info($log_info, $extras);
     }
 
-    public static function logError(string $log_info, array $extras=[]){
+    public static function logError(string $exception, array $extras=[]){
         $logger = new Logger('error');
         $logger->pushHandler(
             new StreamHandler(
@@ -39,6 +41,8 @@ class LoggingController
                 Logger::DEBUG
             )
         );
+
+        $logger->error($exception);
     }
 
 }
