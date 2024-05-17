@@ -106,18 +106,27 @@ class TeamController extends BaseController
     {
         $teams = $request->getParsedBody();
 
+        if (empty($teams)) {
+            $response_data = [
+                "code" => "error",
+                "message" => "Wth are u doing? Body is empty!?"
+            ];
+            return $this->makeResponse($response, $response_data, 400); // 400 Bad Request status code
+        }
+
         foreach ($teams as $team) {
             $this->validateCreateTeam($team, $request);
             $this->team_model->createTeam($team);
         }
 
-        $response_data = array(
+        $response_data = [
             "code" => "success",
-            "message" => "The list of team has been created successfully"
-        );
+            "message" => "The list of teams has been created successfully"
+        ];
 
-        return $this->makeResponse($response, $response_data, 201);
+        return $this->makeResponse($response, $response_data, 201); // 201 Created status code
     }
+
 
     private function validateCreateTeam($team, $request)
     {
@@ -179,6 +188,14 @@ class TeamController extends BaseController
     {
         $teams = $request->getParsedBody();
 
+        if (empty($teams)) {
+            $response_data = [
+                "code" => "error",
+                "message" => "Body cannot be empty"
+            ];
+            return $this->makeResponse($response, $response_data, 400); // 400 Bad Request status code
+        }
+
         foreach ($teams as $team) {
             $this->validateUpdateTeam($team, $request);
             $team_id = $team["team_id"];
@@ -186,13 +203,14 @@ class TeamController extends BaseController
             $this->team_model->updateTeam($team, $team_id);
         }
 
-        $response_data = array(
+        $response_data = [
             "code" => "success",
             "message" => "The specified teams have been updated successfully"
-        );
+        ];
 
-        return $this->makeResponse($response, $response_data, 201);
+        return $this->makeResponse($response, $response_data, 201); // 201 Created status code
     }
+
 
     private function validateUpdateTeam($team, $request)
     {
@@ -239,19 +257,13 @@ class TeamController extends BaseController
     {
         $teams = $request->getParsedBody();
 
-        $response_data = array(
-            "code" => "error",
-            "message" => "Field team_id is required and cannot be empty"
-        );
-
-        // Check if team_id field is missing or empty
+        // Check if the body is empty
         if (empty($teams)) {
-            // $response_data = array(
-            //     "code" => "error",
-            //     "message" => "Field team_id is required and cannot be empty"
-            // );
-            // return $this->makeResponse($response, $response_data, 400);
-            throw new HttpRequiredFieldException($request, "Field team_id is required and cannot be empty");
+            $response_data = [
+                "code" => "error",
+                "message" => "Field team_id is required and cannot be empty"
+            ];
+            return $this->makeResponse($response, $response_data, 400); // 400 Bad Request status code
         }
 
         foreach ($teams as $team_id) {
@@ -259,12 +271,12 @@ class TeamController extends BaseController
             $this->team_model->deleteTeam($team_id);
         }
 
-        $response_data = array(
+        $response_data = [
             "code" => "success",
             "message" => "The specified teams have been deleted successfully"
-        );
+        ];
 
-        return $this->makeResponse($response, $response_data, 201);
+        return $this->makeResponse($response, $response_data, 201); // 201 Created status code
     }
 
     private function validateDeleteTeam($team_id, $request)
