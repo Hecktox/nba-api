@@ -8,10 +8,15 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Vanier\Api\Controllers\LoggingController;
 use Vanier\Api\Helpers\DateTimeHelper;
-use Vanier\Api\Models\AccountLogModel;
+use Vanier\Api\Models\AccessLogModel;
 
 class LoggingMiddleware implements MiddlewareInterface
 {
+    private $account_log_model = null;
+
+    public function __construct(){
+        $this->account_log_model = new AccessLogModel();
+    }
 
 
     public function process(Request $request, RequestHandler $handler): ResponseInterface
@@ -22,16 +27,20 @@ class LoggingMiddleware implements MiddlewareInterface
         $uri = $request->getUri()->getPath();
         $log_record = $client_ip . ' ' . $method . ' ' . $uri . ' ' . "Access log:";
 
-        //$log_infoDB = (array) $log_record;
-        // 3) Prepare any extra info.
+
+        //Local log
         $extras = $request->getQueryParams();
-
         LoggingController::logAccess($log_record, $extras);
-        //AccountLogModel->createLogEntry($log_infoDB, $method);
 
-        // $now = DateTimeHelper::getDateAndTime(DateTimeHelper::D_M_Y);
+        //DB log (a bit weird since I had to find a way to verify who the currently logged in user is, thought of using the JWT token but that was going to be pretty crazy to use as a query param for the ws_users table, so i settled for using the body of the request, you have to pass in your email and your JWT token in the headers, = db logging works for get methods only)
+        $rBody = $request->getParsedBody();
+        
+        $user_id["id"] = $rBody["id"];
+        $user_email["email"] = $rBody["email"];
+        $user_info = [$user_id["id"], $user_email["email"]];
 
-        // $response->getBody()->write("Web Service accessed at: " . $now . "Action performed: $method" . "On resource: " . $uri);
+        $this->account_log_model->createLogEntry($user_info, $method);
+        
 
         $response = $handler->handle($request);
         return $response;
