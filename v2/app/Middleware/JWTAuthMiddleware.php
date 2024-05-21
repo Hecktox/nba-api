@@ -28,7 +28,7 @@ class JWTAuthMiddleware implements MiddlewareInterface
          *    We need to ignore the routes that enable client applications
          *    to create an account and request a JWT token.
          */
-        $publicRoutes = ['/nba-api/account', '/nba-api/token'];
+        $publicRoutes = ['/nba-api/v2/account', '/nba-api/v2/token'];
 
         if ($request->getMethod() === 'POST' && in_array($request->getUri()->getPath(), $publicRoutes)) {
             return $handler->handle($request);

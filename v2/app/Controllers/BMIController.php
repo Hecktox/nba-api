@@ -95,13 +95,14 @@ class BMIController extends BaseController
 
 
         } else {
-            print_r($v->errors());
+            // print_r($v->errors());
             
         }
 
         $response_data = array(
             "code" => "failure",
-            "message" => "BMI computation error."
+            "message" => "BMI computation error.",
+            "errors" =>$v->errors()
         );
 
         return $this->makeResponse($response, $response_data, 500);

@@ -1,1 +1,1 @@
-..\..\php\php.exe composer.phar %*
+..\..\..\php\php.exe composer.phar %*
