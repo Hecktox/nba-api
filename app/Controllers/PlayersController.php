@@ -124,55 +124,19 @@ class PlayersController extends BaseController
         //1. Get the information from the body
         $players = $request->getParsedBody();
         
+        if (empty($players)) {
+            $response_data = array(
+                "code" => "error",
+                "message" => "Empty request body"
+            );
+            return $this->makeResponse($response, $response_data, 400); // 400 Bad Request status code
+        }
 
-        //2. Validation logic for foreign_key
-        // if (!empty($players) && is_array($players)){
-        //     // var_dump($players);
-        //     // exit;
-        //     foreach ($players as $player){
-        //         if(isset($player["team_id"])){
-        //             $GLOBALS['team_fk'] = $players["team_id"];
-        //         }
-        //     }
-
-
-            
-        // }
-        
-
-        // var_dump($GLOBALS['team_fk']);
-        // exit;
-        // $player_fk = $players[0];
-
-        // $provided_team_id = $player_fk['team_id'];
-
-        // $provided_player_id = $player_fk['person_id'];
-        
-
-        //Try checking team_id before valitron and then throw regualr exception if team_id exist
-
-        //  Validator::addRule(
-        //      'invalid_foreign_key',
-        //      function(){
-        //         $team_id = $GLOBALS['team_fk'];
-        //         $result = $this->player_model->verifyTeamId($team_id);
-                
-        //         var_dump($result);
-        //         exit;
-
-        //         if($result == False){
-        //             return false;
-        //         }
-
-        //         return true;
-        //     },
-        //     'Foreign key provided team_id does not exists'
-        // );
 
         $v = new Validator($players);
         $rules = array(
             'person_id' => array(
-                //'required'
+                'required'
             ),
             'first_name' => array(
                 array('regex', '/^[A-Z][a-z]+$/')
@@ -227,10 +191,20 @@ class PlayersController extends BaseController
 
         $v->mapFieldsRules($rules);
 
-        //How to throw appropriate exception
+
         if($v->validate()){
             foreach($players as $player){
-                $this->player_model->createPlayer($player);
+                if ($this->player_model->verifyPlayerId($player['person_id'])){
+                    $response_data = array(
+                        "code" => "failure",
+                        "message" => "Player with given ID already exists"
+                    );
+                    return $this->makeResponse(
+                        $response, $response_data, 400
+                    );
+                } else {
+                    $this->player_model->createPlayer($player);
+                }
             }
 
             $response_data = array(
@@ -264,7 +238,7 @@ class PlayersController extends BaseController
         $v = new Validator($players);
         $rules = array(
             'person_id' => array(
-                //'required'
+                'required'
             ),
             'first_name' => array(
                 array('regex', '/^[A-Z][a-z]+$/')

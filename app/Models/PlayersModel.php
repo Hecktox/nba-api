@@ -195,4 +195,11 @@ class PlayersModel extends BaseModel
     public function deletePlayer(int $player_id): mixed {
         return $this->delete("common_player_info", ["person_id" => $player_id]);
     }
+
+    public function verifyPlayerId(string $person_id): bool
+    {
+        $sql = "SELECT COUNT(*) AS count FROM common_player_info WHERE person_id = :person_id";
+        $result = $this->fetchSingle($sql, ["person_id" => $person_id]);
+        return $result['count'] > 0;
+    }
 }
